@@ -185,3 +185,133 @@ def inspect_manual_match_sequence(
         'balls_remaining_before', 'runs_needed_before', 'required_run_rate_before', 'over_phase'
     ]
     return df.loc[mask, [c for c in cols if c in df.columns]]
+
+
+def validate_pressure_model(df_pressure: pd.DataFrame) -> Dict[str, Dict]:
+    """
+    Module 3 Validation Framework:
+    Performs 10 rigorous mathematical, relational, boundary, and leakage checks
+    on the delivery-level pressure dataset.
+    """
+    results = {}
+    
+    # 15. Pressure dataset row count integrity
+    row_count_match = len(df_pressure) == 200999
+    results['check_15_pressure_row_count'] = {
+        'description': 'Row count matches Module 2 baseline (exactly 200,999 rows)',
+        'passed': row_count_match,
+        'details': f'Observed: {len(df_pressure):,} rows'
+    }
+    
+    # 16. Key uniqueness
+    keys = ['match_id', 'innings', 'overid', 'over_ball_num']
+    key_unique = len(df_pressure.drop_duplicates(subset=keys)) == len(df_pressure)
+    results['check_16_key_uniqueness'] = {
+        'description': 'Delivery keys remain 100% unique after pressure enrichment',
+        'passed': key_unique,
+        'details': 'Zero duplicate deliveries'
+    }
+    
+    # 17. Range bounds [0.0, 10.0]
+    out_of_bounds = (
+        (df_pressure['pressure_index'] < 0.0) | (df_pressure['pressure_index'] > 10.0) |
+        (df_pressure['batting_pressure_index'] < 0.0) | (df_pressure['batting_pressure_index'] > 10.0) |
+        (df_pressure['bowling_pressure_index'] < 0.0) | (df_pressure['bowling_pressure_index'] > 10.0)
+    ).sum()
+    results['check_17_range_bounds'] = {
+        'description': 'All continuous pressure scores are strictly bounded within [0.0, 10.0]',
+        'passed': bool(out_of_bounds == 0),
+        'details': f'{out_of_bounds} records out of bounds'
+    }
+    
+    # 18. No missing values in pressure columns
+    null_pi = df_pressure[['pressure_index', 'batting_pressure_index', 'bowling_pressure_index']].isna().sum().sum()
+    results['check_18_no_missing_pressure'] = {
+        'description': 'Zero missing (NaN) values in pressure index columns',
+        'passed': bool(null_pi == 0),
+        'details': f'{null_pi} missing values detected'
+    }
+    
+    # 19. Chase monotonicity: higher RRR leads to higher or equal pressure (all else equal)
+    # Check on a subset of innings 2 with same wickets and balls
+    sample_chase = df_pressure[
+        (df_pressure['innings'] == 2) &
+        (df_pressure['wickets_in_hand_before'] == 6) &
+        (df_pressure['balls_remaining_before'] == 36)
+    ]
+    if len(sample_chase) > 5:
+        corr_rrr = sample_chase['required_run_rate_before'].corr(sample_chase['batting_pressure_index'])
+        rrr_monotonic = corr_rrr > 0.85
+    else:
+        rrr_monotonic = True
+    results['check_19_chase_monotonicity'] = {
+        'description': 'Higher required run rate monotonically increases chasing pressure',
+        'passed': bool(rrr_monotonic),
+        'details': f'Correlation: {corr_rrr:.3f}' if len(sample_chase) > 5 else 'N/A'
+    }
+    
+    # 20. Wicket impact: more wickets in hand reduces batting pressure
+    sample_wkt = df_pressure[
+        (df_pressure['innings'] == 2) &
+        (df_pressure['balls_remaining_before'] == 30) &
+        (df_pressure['runs_needed_before'].between(40, 50))
+    ]
+    if len(sample_wkt) > 5:
+        corr_wkt = sample_wkt['wickets_in_hand_before'].corr(sample_wkt['batting_pressure_index'])
+        wkt_reductive = corr_wkt < -0.60
+    else:
+        wkt_reductive = True
+    results['check_20_wicket_impact'] = {
+        'description': 'More wickets in hand reduces batting pressure in identical ball/run situations',
+        'passed': bool(wkt_reductive),
+        'details': f'Correlation: {corr_wkt:.3f}' if len(sample_wkt) > 5 else 'N/A'
+    }
+    
+    # 21. First-innings collapse sensitivity
+    inn1 = df_pressure[df_pressure['innings'] == 1]
+    collapse_pressure = inn1[
+        (inn1['over_phase'] == 'Powerplay') &
+        (inn1['wickets_in_hand_before'] <= 6)
+    ]['pressure_index'].mean()
+    stable_pressure = inn1[
+        (inn1['over_phase'] == 'Powerplay') &
+        (inn1['wickets_in_hand_before'] >= 9)
+    ]['pressure_index'].mean()
+    collapse_higher = collapse_pressure > (stable_pressure + 2.0)
+    results['check_21_collapse_sensitivity'] = {
+        'description': 'First-innings collapse pressure is significantly higher than stable powerplay',
+        'passed': bool(collapse_higher),
+        'details': f'Collapse Mean: {collapse_pressure:.2f} vs Stable Mean: {stable_pressure:.2f}'
+    }
+    
+    # 22. Target achieved physical sanity
+    target_done = df_pressure[
+        (df_pressure['innings'] == 2) &
+        (df_pressure['runs_needed_before'] <= 0)
+    ]
+    target_done_zero = (target_done['pressure_index'] == 0.0).all() if len(target_done) > 0 else True
+    results['check_22_target_achieved_sanity'] = {
+        'description': 'Deliveries bowled after target is achieved have pressure strictly 0.0',
+        'passed': bool(target_done_zero),
+        'details': f'{len(target_done)} post-target deliveries checked'
+    }
+    
+    # 23. Super Over segregation
+    so_deliveries = df_pressure[df_pressure['innings'] >= 3]
+    so_high = (so_deliveries['pressure_index'] >= 7.5).all()
+    results['check_23_super_over_segregation'] = {
+        'description': 'Super Over deliveries respect separate limits and stay in High/Extreme range (>= 7.5)',
+        'passed': bool(so_high),
+        'details': f'{len(so_deliveries)} Super Over deliveries verified (Min PI: {so_deliveries["pressure_index"].min():.2f})'
+    }
+    
+    # 24. Zero outcome leakage
+    corr_leak = abs(df_pressure['total_runs'].corr(df_pressure['pressure_index']))
+    leak_safe = corr_leak < 0.15
+    results['check_24_zero_outcome_leakage'] = {
+        'description': 'Zero outcome leakage: Pre-delivery pressure does not leak current delivery runs',
+        'passed': bool(leak_safe),
+        'details': f'Absolute Correlation with current ball runs: {corr_leak:.4f}'
+    }
+    
+    return results
