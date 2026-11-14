@@ -1,129 +1,132 @@
-# SupeRR Selector – Cricket Player Performance Intelligence System
-**Rajasthan Royals Sports Analytics Hackathon (Season 2)**
+# SupeRR Selector: Cricket Player Performance Intelligence System
 
-An end-to-end, data-driven sports analytics intelligence platform designed to identify, quantify, and rank the **Most Reliable Cricket Players Under Pressure** across the Indian Premier League (IPL) and T20 Internationals (T20Is) from 2022 to 2026.
+**Competition:** Rajasthan Royals Sports Analytics Hackathon (Season 2)  
+**Author:** Syed Mohammad Hamzah  
 
----
-
-## 📌 Project Overview
-In modern T20 cricket, aggregate statistics like raw batting average or total wickets fail to separate baseline accumulators from true match-winners. A run scored when chasing 120 at 6.0 RRR does not carry the same competitive weight as a boundary scored when needing 14 off 6 balls with 6 wickets down. 
-
-**SupeRR Selector** constructs a rigorous, mathematical framework to:
-1. **Reconstruct Live Match States:** Track cumulative runs, wickets, legal balls, CRR, and RRR on a ball-by-ball level.
-2. **Formulate a Contextual Pressure Index ($PI$):** Model high-leverage situations across both setting (1st innings) and chasing (2nd innings) contexts.
-3. **Evaluate Clutch Performance vs. Baseline:** Quantify deviation from player baseline metrics under pressure.
-4. **Mitigate Sample-Size Bias:** Employ Empirical Bayes shrinkage and competition weighting (IPL vs T20I tiers).
-5. **Deliver Actionable Intelligence:** Generate the Top 10 Clutch Batters and Bowlers supported by an interactive Streamlit intelligence suite and an empirical methodology report.
+SupeRR Selector is a cricket analytics project designed to evaluate and rank player performance under pressure across the Indian Premier League (IPL) and T20 Internationals from 2022 to 2026.
 
 ---
 
-## 🏗️ Repository Architecture
+## Project Overview
+
+In T20 cricket, traditional summary statistics like batting average or overall economy rate treat all match situations equally. A boundary hit when a team needs 10 runs off 30 balls is counted the same as a boundary hit when needing 14 runs off the final over with four wickets down.
+
+This project builds an empirical framework to:
+1. Reconstruct delivery-level match situations, tracking cumulative score, wickets fallen, balls remaining, current run rate (CRR), and required run rate (RRR).
+2. Define a mathematical Pressure Index ($PI$) for both first-innings target setting and second-innings run chases.
+3. Compare how batters and bowlers perform in high-pressure situations relative to their overall baseline.
+4. Apply Bayesian shrinkage and sample-size thresholds so player rankings are not distorted by small samples.
+5. Provide transparent rankings for the top 10 batters and top 10 bowlers under pressure, supported by an interactive Streamlit application and an analytical report.
+
+---
+
+## Repository Structure
 
 ```text
 Rajhstan royals/
 │
-├── Data Pack/                     # Raw datasets provided by Rajasthan Royals (Preserved untouched)
-│   ├── ball_by_ball.csv           # 200,999 delivery event records
-│   ├── matches.csv                # 883 match records & outcomes
-│   ├── competitions.csv           # 141 tournaments (IPL 2022-2026 + T20Is)
-│   ├── playing_eleven.csv         # 28,381 player appearance records (incl. Impact Players)
-│   ├── teams.csv                  # 353 team-competition records
-│   └── competition_team_player_mapping.csv # 6,413 player lookup records
+├── Data Pack/                     # Original CSV datasets provided for the hackathon
+│   ├── ball_by_ball.csv           # 200,999 delivery-level records
+│   ├── matches.csv                # 883 match records and outcomes
+│   ├── competitions.csv           # 141 tournaments across IPL and T20Is
+│   ├── playing_eleven.csv         # 28,381 player appearance records
+│   ├── teams.csv                  # 353 team participation records
+│   └── competition_team_player_mapping.csv # 6,413 player name and ID mappings
 │
-├── notebooks/                     # Educational & analytical research notebooks
-│   ├── 01_data_understanding.ipynb# Module 1: Comprehensive EDA & Schema Audit
-│   ├── 02_match_state.ipynb       # Module 2: State reconstruction (CRR, RRR, Resources)
-│   ├── 03_pressure_index.ipynb    # Module 3: Mathematical Pressure Index modeling
-│   └── 04_ranking_engine.ipynb    # Module 4 & 5: Clutch evaluation & ranking
+├── notebooks/                     # Analytical research notebooks
+│   ├── 01_data_understanding.ipynb# Module 1: Exploratory data analysis and schema audit
+│   ├── 02_match_state.ipynb       # Module 2: Live match-state reconstruction
+│   ├── 03_pressure_index.ipynb    # Module 3: Mathematical pressure index modeling
+│   └── 04_ranking_engine.ipynb    # Module 4 and 5: Performance analysis and rankings
 │
 ├── data/
-│   ├── processed/                 # Feature-engineered state tables (derived)
-│   └── results/                   # Final Top-10 leaderboards and exports
+│   ├── processed/                 # Processed tables with reconstructed match states
+│   └── results/                   # Final leaderboards and metrics exports
 │
-├── src/                           # Modular production Python package
+├── src/                           # Reusable Python modules
 │   ├── __init__.py
-│   ├── data_loader.py             # Data ingestion and schema validation
-│   ├── match_state.py             # Match state reconstruction engine
-│   ├── pressure_model.py          # Pressure index computation algorithms
-│   ├── player_metrics.py          # Baseline vs pressure metrics calculator
-│   └── ranking_engine.py          # Bayesian shrinkage & composite scoring
+│   ├── data_loader.py             # Data loading and schema validation
+│   ├── match_state.py             # State reconstruction logic
+│   ├── pressure_model.py          # Pressure index calculations
+│   ├── player_metrics.py          # Player baseline and pressure metrics
+│   └── ranking_engine.py          # Bayesian shrinkage and scoring functions
 │
 ├── tests/                         # Unit tests and invariant assertions
 │   └── test_data_integrity.py
 │
-├── reports/                       # Formal Hackathon Submission Documentation
+├── reports/                       # Hackathon methodology documentation
 │   └── methodology_report.md
 │
-├── app/                           # Interactive Streamlit Web Application
+├── app/                           # Streamlit interactive application
 │   └── app.py
 │
-└── .gitignore                     # Repository hygiene configuration
+└── .gitignore                     # Git configuration ignoring cache and temporary files
 ```
 
 ---
 
-## 🤖 AI-Assisted Development & Transparency
+## AI-Assisted Development and Transparency
 
 AI tools were used as development assistants throughout this project.
 
-### Tools Used:
-- **Google Antigravity:** AI-assisted coding, project structuring, debugging, and development support.
-- **ChatGPT:** Analytical brainstorming, methodology discussions, learning support, code review guidance, and documentation assistance.
+### Tools used:
+* Google Antigravity: AI-assisted coding, project structuring, debugging and development support.
+* ChatGPT: Analytical brainstorming, methodology discussions, learning support, code review guidance and documentation assistance.
 
 ### Areas where AI assistance was used:
-- Project architecture and module planning.
-- Python code development and debugging assistance.
-- Exploratory Data Analysis workflow guidance.
-- Feature engineering implementation support.
-- Dashboard design and development assistance.
-- Documentation and README preparation.
+* Project architecture and module planning.
+* Python code development and debugging assistance.
+* Exploratory Data Analysis workflow guidance.
+* Feature engineering implementation support.
+* Dashboard design and development assistance.
+* Documentation and README preparation.
 
-### Student Contributions & Responsibilities:
-AI tools were used as assistive accelerators rather than treating their outputs as automatically correct. Core human responsibilities included:
-- Understanding the datasets and their underlying relational relationships.
-- Evaluating analytical approaches and selecting appropriate statistical techniques.
-- Reviewing and mathematically validating calculations and domain invariants.
-- Investigating data-quality issues (e.g. ghost abandoned matches, lineup duplicates).
-- Interpreting statistical results from a cricket perspective.
-- Making critical methodological decisions (e.g. defining Pressure Index parameters).
-- Rigorously testing the application, unit assertions, and outputs.
+### My Contributions and Responsibilities:
+I used these tools as assistants rather than treating their outputs as automatically correct. My responsibilities included:
+* Understanding the datasets and their relationships.
+* Evaluating analytical approaches.
+* Reviewing and validating calculations.
+* Investigating data-quality issues.
+* Interpreting statistical results.
+* Making methodological decisions.
+* Testing the application and its outputs.
 
-> All final analytical findings and player rankings are grounded strictly in the supplied datasets and verified calculations.
+All final analytical findings and player rankings must be based on the supplied datasets and verified calculations. AI-generated suggestions and code were reviewed and tested before being accepted into the project.
 
 ### Learning Objective:
-This project is an intensive, practical learning journey in Data Analytics, Python programming, cricket domain modeling, statistical reasoning, Bayesian methods, and interactive data visualization.
+This project is also a practical learning journey in Data Analytics, Python, cricket statistics, statistical reasoning and interactive data visualization.
 
 ---
 
-## 📊 Development Roadmap
+## Development Roadmap
 
-- [x] **Module 0:** Environment Setup, Raw Data Preservation & Repository Hygiene
-- [x] **Module 1:** Data Understanding, Schema Audit, Forensic Verification & Baseline EDA
-- [ ] **Module 2:** Dynamic Match-State Reconstruction (Cumulative scores, CRR, RRR, Resource calculations)
-- [ ] **Module 3:** Pressure Index ($PI$) Mathematical Modeling (Chase dynamics, Collapse hazards, Death acceleration)
-- [ ] **Module 4:** Pressure Performance vs. Player Baseline Evaluation
-- [ ] **Module 5:** Bayesian Shrinkage, Composite Scoring & Definitive Top-10 Rankings
-- [ ] **Module 6:** Statistical Validation, Sensitivity Testing & Hackathon Report
-- [ ] **Module 7:** Interactive SupeRR Selector Streamlit Intelligence Suite
+- [x] Module 1: Data Understanding and Exploratory Data Analysis
+- [ ] Module 2: Dynamic Match-State Reconstruction (Cumulative scores, CRR, RRR, resource calculations)
+- [ ] Module 3: Pressure Index ($PI$) Mathematical Modeling
+- [ ] Module 4: Player Performance Under Pressure vs Baseline
+- [ ] Module 5: Bayesian Shrinkage, Composite Scoring, and Top 10 Rankings
+- [ ] Module 6: Statistical Validation, Sensitivity Analysis, and Submission Report
+- [ ] Module 7: Interactive Streamlit Intelligence Dashboard
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
-- Python 3.10+
-- Recommended virtual environment:
-```bash
+* Python 3.10 or higher
+* Recommended virtual environment:
+
+```powershell
 python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+.\venv\Scripts\activate
 ```
 
 ### Installation
-```bash
+```powershell
 pip install pandas numpy matplotlib seaborn scikit-learn streamlit plotly nbformat
 ```
 
-### Running Module 1 Notebook
-```bash
+### Running the Notebooks
+```powershell
 jupyter notebook notebooks/01_data_understanding.ipynb
 ```

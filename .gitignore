@@ -43,3 +43,12 @@ __MACOSX/
 # Matplotlib temp
 .matplotlib/
 
+
+# Private module reports and handover summaries
+reports/
+reports/*
+
+
+# Temporary files
+*.log
+*.tmp
