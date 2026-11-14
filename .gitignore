@@ -27,7 +27,7 @@ wheels/
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 
-# macOS system files
+# macOS and Windows system files
 .DS_Store
 .DS_Store?
 ._*
@@ -37,17 +37,22 @@ ehthumbs.db
 Thumbs.db
 __MACOSX/
 
-# Environment variables & secrets
+# Environment variables and secrets
 .env
 
-# Matplotlib temp
+# Matplotlib temp cache
 .matplotlib/
 
-
-# Private module reports and handover summaries
+# Private module summaries and handover reports
 reports/
 reports/*
 
+# Scratch directory
+scratch/
+scratch/*
+
+# Avoid staging redundant uncompressed CSV copies when Parquet is available
+data/processed/*.csv
 
 # Temporary files
 *.log
