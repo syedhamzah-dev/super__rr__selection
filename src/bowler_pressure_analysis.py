@@ -8,7 +8,9 @@ Key Rules:
 2. Bowler Conceded Runs: Excludes byes, leg-byes, and penalty extras.
 3. Bowler Wickets: Excludes run-outs, retire-outs, and obstructing the field.
    Only Bowled, Caught, LBW, Stumped, and Hit Wicket count.
-4. Dot Balls: Deliveries where bowler_conceded_runs == 0.
+4. Dot Balls (Bifurcated):
+   - True Team Dots: Legal deliveries where total_runs == 0 (zero runs scored by batting side).
+   - Bowler Scoreless Balls: Legal deliveries where bowler_conceded_runs == 0 (zero bowler runs).
 5. Boundaries Conceded: Deliveries with a four or six off the bowler.
 6. Pressure Tiers: Low (<3.5), Medium (3.5-6.0), High (6.0-8.0), Extreme (>=8.0), Clutch (>=6.0).
    Evaluated strictly using bowling_pressure_index.
@@ -34,39 +36,46 @@ def classify_bowling_role(pct_pp: float, pct_death: float, pct_mid: float) -> st
 
 
 def _aggregate_bowler_subset(subset: pd.DataFrame, prefix: str = "") -> pd.DataFrame:
-    """Helper to aggregate bowling volume, economy, dot%, and wickets for a slice."""
+    """Helper to aggregate bowling volume, economy, dot%, scoreless%, and wickets for a slice."""
+    cols = [
+        "bowler_id", f"legal_balls_{prefix}", f"total_balls_{prefix}",
+        f"runs_conceded_{prefix}", f"economy_{prefix}", f"true_dot_pct_{prefix}",
+        f"scoreless_pct_{prefix}", f"dot_pct_{prefix}", f"bnd_pct_{prefix}",
+        f"wickets_{prefix}", f"bowling_sr_{prefix}",
+        f"pp_balls_{prefix}", f"mid_balls_{prefix}", f"death_balls_{prefix}"
+    ]
     if len(subset) == 0:
-        return pd.DataFrame(columns=[
-            "bowler_id", f"legal_balls_{prefix}", f"total_balls_{prefix}",
-            f"runs_conceded_{prefix}", f"economy_{prefix}", f"dot_pct_{prefix}",
-            f"bnd_pct_{prefix}", f"wickets_{prefix}", f"bowling_sr_{prefix}"
-        ])
+        return pd.DataFrame(columns=cols)
 
     grouped = subset.groupby("bowler_id")
     agg = grouped.agg(
         legal_balls=("is_legal_ball", "sum"),
         total_balls=("is_legal_ball", "count"),
         runs_conceded=("bowler_conceded_runs", "sum"),
-        dot_balls=("is_dot_bowler", "sum"),
+        true_dots=("is_true_dot", "sum"),
+        scoreless_balls=("is_scoreless_ball", "sum"),
         boundary_balls=("is_boundary_conceded", "sum"),
-        wickets=("is_bowler_wicket", "sum")
+        wickets=("is_bowler_wicket", "sum"),
+        pp_balls=("is_pp_legal", "sum"),
+        mid_balls=("is_mid_legal", "sum"),
+        death_balls=("is_death_legal", "sum")
     ).reset_index()
 
     agg[f"legal_balls_{prefix}"] = agg["legal_balls"]
     agg[f"total_balls_{prefix}"] = agg["total_balls"]
     agg[f"runs_conceded_{prefix}"] = agg["runs_conceded"]
     agg[f"economy_{prefix}"] = np.round((agg["runs_conceded"] / np.maximum(agg["legal_balls"], 1)) * 6.0, 2)
-    agg[f"dot_pct_{prefix}"] = np.round((agg["dot_balls"] / np.maximum(agg["total_balls"], 1)) * 100.0, 2)
-    agg[f"bnd_pct_{prefix}"] = np.round((agg["boundary_balls"] / np.maximum(agg["total_balls"], 1)) * 100.0, 2)
+    agg[f"true_dot_pct_{prefix}"] = np.round((agg["true_dots"] / np.maximum(agg["legal_balls"], 1)) * 100.0, 2)
+    agg[f"scoreless_pct_{prefix}"] = np.round((agg["scoreless_balls"] / np.maximum(agg["legal_balls"], 1)) * 100.0, 2)
+    agg[f"dot_pct_{prefix}"] = agg[f"true_dot_pct_{prefix}"] # Default dot_pct is True Dot %
+    agg[f"bnd_pct_{prefix}"] = np.round((agg["boundary_balls"] / np.maximum(agg["legal_balls"], 1)) * 100.0, 2)
     agg[f"wickets_{prefix}"] = agg["wickets"]
     agg[f"bowling_sr_{prefix}"] = np.round(agg["legal_balls"] / np.maximum(agg["wickets"], 1), 2)
+    agg[f"pp_balls_{prefix}"] = agg["pp_balls"]
+    agg[f"mid_balls_{prefix}"] = agg["mid_balls"]
+    agg[f"death_balls_{prefix}"] = agg["death_balls"]
 
-    keep_cols = [
-        "bowler_id", f"legal_balls_{prefix}", f"total_balls_{prefix}",
-        f"runs_conceded_{prefix}", f"economy_{prefix}", f"dot_pct_{prefix}",
-        f"bnd_pct_{prefix}", f"wickets_{prefix}", f"bowling_sr_{prefix}"
-    ]
-    return agg[keep_cols]
+    return agg[cols]
 
 
 def calculate_bowler_pressure_metrics(df_deliveries: pd.DataFrame) -> pd.DataFrame:
@@ -77,14 +86,15 @@ def calculate_bowler_pressure_metrics(df_deliveries: pd.DataFrame) -> pd.DataFra
     df = df_deliveries.copy()
 
     # Cricket delivery flags
-    df["is_dot_bowler"] = df["bowler_conceded_runs"] == 0
+    df["is_true_dot"] = df["is_legal_ball"] & (df["total_runs"] == 0)
+    df["is_scoreless_ball"] = df["is_legal_ball"] & (df["bowler_conceded_runs"] == 0)
     df["is_boundary_conceded"] = df["is_four"] | df["is_six"]
     df["is_bowler_wicket"] = (df["is_wicket"] == True) & (df["dismissal_type"].isin(BOWLER_WICKET_TYPES))
 
-    # Phase allocation flags
-    df["is_pp"] = df["over_phase"] == "Powerplay"
-    df["is_mid"] = df["over_phase"] == "Middle"
-    df["is_death"] = df["over_phase"] == "Death"
+    # Phase allocation flags (on legal balls)
+    df["is_pp_legal"] = df["is_legal_ball"] & (df["over_phase"] == "Powerplay")
+    df["is_mid_legal"] = df["is_legal_ball"] & (df["over_phase"] == "Middle")
+    df["is_death_legal"] = df["is_legal_ball"] & (df["over_phase"] == "Death")
 
     # Player profile metadata
     player_meta = df.groupby("bowler_id").agg(
@@ -93,9 +103,9 @@ def calculate_bowler_pressure_metrics(df_deliveries: pd.DataFrame) -> pd.DataFra
         pace_or_spin=("pace_or_spin", "last"),
         matches_played=("match_id", "nunique"),
         comps_played=("comp_id", "nunique") if "comp_id" in df.columns else ("match_id", lambda x: 1),
-        pp_balls=("is_pp", "sum"),
-        mid_balls=("is_mid", "sum"),
-        death_balls=("is_death", "sum"),
+        pp_balls=("is_pp_legal", "sum"),
+        mid_balls=("is_mid_legal", "sum"),
+        death_balls=("is_death_legal", "sum"),
         total_legal=("is_legal_ball", "sum")
     ).reset_index()
 
@@ -135,10 +145,10 @@ def calculate_bowler_pressure_metrics(df_deliveries: pd.DataFrame) -> pd.DataFra
     merged = merged.merge(clutch_agg, on="bowler_id", how="left")
 
     # Fill NaN for tiers where bowler bowled 0 balls
-    fill_zero_cols = [c for c in merged.columns if c.startswith(("legal_balls_", "total_balls_", "runs_conceded_", "wickets_"))]
+    fill_zero_cols = [c for c in merged.columns if c.startswith(("legal_balls_", "total_balls_", "runs_conceded_", "wickets_", "pp_balls_", "mid_balls_", "death_balls_"))]
     merged[fill_zero_cols] = merged[fill_zero_cols].fillna(0).astype(int)
 
-    fill_nan_cols = [c for c in merged.columns if c.startswith(("economy_", "dot_pct_", "bnd_pct_", "bowling_sr_"))]
+    fill_nan_cols = [c for c in merged.columns if c.startswith(("economy_", "true_dot_pct_", "scoreless_pct_", "dot_pct_", "bnd_pct_", "bowling_sr_"))]
     merged[fill_nan_cols] = merged[fill_nan_cols].fillna(0.0)
 
     # Sort by total legal balls bowled

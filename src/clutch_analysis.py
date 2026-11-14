@@ -10,9 +10,13 @@ Key Principles:
 1. Multi-dimensional: Evaluates strike rate/economy, dot-ball discipline, boundary rate, and wickets.
 2. Contextual Fairness: If a player has sparse low-pressure observations (e.g. a finisher),
    the low-pressure baseline blends with the role-specific population mean.
-3. Empirical Bayes Shrinkage: Shrinks raw differentials toward population expectations based
-   on sample size: w = n / (n + 30).
-4. Strict Reliability Tiers: Flags High, Moderate, and Insufficient evidence.
+3. Credibility-Weighted Shrinkage: Shrinks raw differentials toward population expectations based
+   on sample size using the classical Bühlmann credibility formula:
+       w = n / (n + k), where k = 30.0 (credibility stability parameter).
+   This avoids overfitting small-sample fluctuations while giving full credit to established performers.
+4. Phase-Adjusted Bowling Economy: Eliminates phase confounding (Death vs Middle vs Powerplay)
+   by evaluating clutch economy against the bowler's expected economy given their actual phase delivery mix.
+5. Strict Reliability Tiers: Flags High, Moderate, and Insufficient evidence.
 """
 
 import numpy as np
@@ -34,6 +38,13 @@ BOWLER_ROLE_LOW_BASELINES = {
     "All-Phase Bowler": {"econ": 7.45, "dot_pct": 41.5, "bnd_pct": 16.2, "wkt_pct": 5.0}
 }
 
+# Empirical benchmark clutch economy rates across phases (evaluated on deliveries with bowling PI >= 6.0)
+GLOBAL_PHASE_CLUTCH_ECONOMY = {
+    "Powerplay": 9.18,
+    "Middle": 9.01,
+    "Death": 10.52
+}
+
 
 def calculate_batting_clutch_index(batter_df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -45,11 +56,12 @@ def calculate_batting_clutch_index(batter_df: pd.DataFrame) -> pd.DataFrame:
     - Delta Bnd% = Bnd%_clutch - Bnd%_low (higher is better)
     - Delta RPD = RPD_clutch - RPD_low (higher is better)
     
-    Applies Empirical Bayes shrinkage and bounds score within [0.0, 10.0], with 5.0 as neutral.
+    Applies Credibility-Weighted Shrinkage (Bühlmann model, k=30) and bounds score within [0.0, 10.0],
+    with 5.0 as neutral.
     """
     df = batter_df.copy()
 
-    # Blend low-pressure baseline with role benchmark if individual low sample is sparse (< 20 balls)
+    # Blend low-pressure baseline with role benchmark if individual low sample is sparse (< 25 balls)
     sr_low_adj = []
     dot_low_adj = []
     bnd_low_adj = []
@@ -84,7 +96,6 @@ def calculate_batting_clutch_index(batter_df: pd.DataFrame) -> pd.DataFrame:
     df["delta_rpd"] = np.round(df["rpd_clutch"] - df["rpd_low_effective"], 2)
 
     # Composite Raw Clutch Score
-    # Typical std: Delta SR ~ 25, Delta Dot ~ 10, Delta Bnd ~ 8, Delta RPD ~ 15
     raw_score = (
         0.40 * (df["delta_strike_rate"] / 25.0)
         + 0.30 * (df["delta_dot_pct"] / 10.0)
@@ -92,7 +103,7 @@ def calculate_batting_clutch_index(batter_df: pd.DataFrame) -> pd.DataFrame:
         + 0.10 * np.clip(df["delta_rpd"] / 15.0, -1.0, 1.0)
     )
 
-    # Empirical Bayes Shrinkage based on clutch balls faced
+    # Credibility-Weighted Shrinkage based on clutch balls faced: w = n / (n + 30.0)
     n_clutch = df["bf_clutch"]
     credibility_weight = n_clutch / (n_clutch + 30.0)
     df["credibility_weight"] = np.round(credibility_weight, 3)
@@ -117,17 +128,19 @@ def calculate_bowling_clutch_index(bowler_df: pd.DataFrame) -> pd.DataFrame:
     """
     Calculates the multi-dimensional Bowling Clutch Differential Index.
     
-    Differentials:
-    - Delta Econ = Econ_low - Econ_clutch (higher is better: lower economy under pressure)
-    - Delta Dot% = Dot%_clutch - Dot%_low (higher is better: more dots under pressure)
+    Eliminates phase confounding by evaluating economy against expected economy given
+    the bowler's actual phase delivery distribution in clutch pressure:
+    - Delta Econ (Phase-Adjusted) = Econ_clutch_expected - Econ_clutch_observed (higher is better)
+    - Delta True Dot% = True_Dot%_clutch - True_Dot%_low (higher is better: more team dots)
     - Delta Bnd% = Bnd%_low - Bnd%_clutch (higher is better: fewer boundaries conceded)
     - Delta WktRate = WktRate_clutch - WktRate_low (higher is better: higher wicket strike rate)
     
-    Applies Empirical Bayes shrinkage and bounds score within [0.0, 10.0], with 5.0 as neutral.
+    Applies Credibility-Weighted Shrinkage (Bühlmann model, k=30) and bounds score within [0.0, 10.0],
+    with 5.0 as neutral.
     """
     df = bowler_df.copy()
 
-    # Blend low-pressure baseline with role benchmark if individual low sample is sparse (< 20 balls)
+    # Blend low-pressure baseline with role benchmark if individual low sample is sparse (< 25 balls)
     econ_low_adj = []
     dot_low_adj = []
     bnd_low_adj = []
@@ -143,13 +156,14 @@ def calculate_bowling_clutch_index(bowler_df: pd.DataFrame) -> pd.DataFrame:
 
         if n_low >= 25:
             econ_low_adj.append(row["economy_low"])
-            dot_low_adj.append(row["dot_pct_low"])
+            dot_low_adj.append(row["true_dot_pct_low"] if "true_dot_pct_low" in row else row["dot_pct_low"])
             bnd_low_adj.append(row["bnd_pct_low"])
             wkt_pct_low_adj.append(ind_wkt_pct_low)
         else:
             weight_ind = n_low / 25.0
+            actual_dot = row["true_dot_pct_low"] if "true_dot_pct_low" in row else row["dot_pct_low"]
             econ_low_adj.append(weight_ind * row["economy_low"] + (1.0 - weight_ind) * bm["econ"])
-            dot_low_adj.append(weight_ind * row["dot_pct_low"] + (1.0 - weight_ind) * bm["dot_pct"])
+            dot_low_adj.append(weight_ind * actual_dot + (1.0 - weight_ind) * bm["dot_pct"])
             bnd_low_adj.append(weight_ind * row["bnd_pct_low"] + (1.0 - weight_ind) * bm["bnd_pct"])
             wkt_pct_low_adj.append(weight_ind * ind_wkt_pct_low + (1.0 - weight_ind) * bm["wkt_pct"])
 
@@ -161,25 +175,45 @@ def calculate_bowling_clutch_index(bowler_df: pd.DataFrame) -> pd.DataFrame:
     # Clutch wicket percentage
     df["wkt_pct_clutch"] = np.round((df["wickets_clutch"] / np.maximum(df["legal_balls_clutch"], 1)) * 100.0, 2)
 
-    # Differentials
-    # Since average economy gets worse by ~1.5 under pressure, we add 1.5 to center neutral expectation at 0
-    df["delta_economy"] = np.round(df["econ_low_effective"] - df["economy_clutch"], 2) # positive = better economy
-    df["delta_dot_pct"] = np.round(df["dot_pct_clutch"] - df["dot_pct_low_effective"], 2)
-    df["delta_bnd_pct"] = np.round(df["bnd_pct_low_effective"] - df["bnd_pct_clutch"], 2) # positive = fewer bnds
+    # Phase-expected economy under clutch pressure (eliminates Death vs PP bias)
+    n_clutch = np.maximum(df["legal_balls_clutch"], 1)
+    pp_b = df["pp_balls_clutch"] if "pp_balls_clutch" in df.columns else pd.Series(0, index=df.index)
+    mid_b = df["mid_balls_clutch"] if "mid_balls_clutch" in df.columns else pd.Series(0, index=df.index)
+    death_b = df["death_balls_clutch"] if "death_balls_clutch" in df.columns else pd.Series(0, index=df.index)
+
+    phase_sum = pp_b + mid_b + death_b
+    econ_clutch_exp = (
+        pp_b * GLOBAL_PHASE_CLUTCH_ECONOMY["Powerplay"]
+        + mid_b * GLOBAL_PHASE_CLUTCH_ECONOMY["Middle"]
+        + death_b * GLOBAL_PHASE_CLUTCH_ECONOMY["Death"]
+    ) / np.maximum(phase_sum, 1)
+
+    default_econ = df["primary_bowling_role"].map(lambda r: BOWLER_ROLE_LOW_BASELINES.get(r, {}).get("econ", 8.0))
+    df["econ_clutch_expected"] = np.round(np.where(phase_sum > 0, econ_clutch_exp, default_econ), 2)
+
+    # Phase-adjusted economy differential (positive = conceded fewer runs than phase benchmark)
+    df["delta_econ_phase_adj"] = np.round(df["econ_clutch_expected"] - df["economy_clutch"], 2)
+
+    # Unadjusted economy differential (contextual metric)
+    df["delta_economy"] = np.round(df["econ_low_effective"] - df["economy_clutch"], 2)
+
+    # Dot, boundary, and wicket differentials
+    clutch_dot = df["true_dot_pct_clutch"] if "true_dot_pct_clutch" in df.columns else df["dot_pct_clutch"]
+    df["delta_dot_pct"] = np.round(clutch_dot - df["dot_pct_low_effective"], 2)
+    df["delta_bnd_pct"] = np.round(df["bnd_pct_low_effective"] - df["bnd_pct_clutch"], 2)
     df["delta_wkt_rate"] = np.round(df["wkt_pct_clutch"] - df["wkt_pct_low_effective"], 2)
 
     # Composite Raw Bowling Clutch Score
-    # Average delta_economy is -1.5 in population, so (delta_economy + 1.5) centers at 0.0
+    # delta_econ_phase_adj naturally centers at ~0.0 (std 1.53), eliminating arbitrary offset constants
     raw_score = (
-        0.40 * ((df["delta_economy"] + 1.5) / 2.5)
+        0.40 * (df["delta_econ_phase_adj"] / 1.50)
         + 0.25 * (df["delta_dot_pct"] / 8.0)
         + 0.20 * (df["delta_bnd_pct"] / 6.0)
         + 0.15 * (df["delta_wkt_rate"] / 3.0)
     )
 
-    # Empirical Bayes Shrinkage based on clutch legal balls bowled
-    n_clutch = df["legal_balls_clutch"]
-    credibility_weight = n_clutch / (n_clutch + 30.0)
+    # Credibility-Weighted Shrinkage based on clutch legal balls: w = n / (n + 30.0)
+    credibility_weight = df["legal_balls_clutch"] / (df["legal_balls_clutch"] + 30.0)
     df["credibility_weight"] = np.round(credibility_weight, 3)
 
     # Standardized 0-10 Bowling Clutch Index (5.0 is neutral)

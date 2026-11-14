@@ -4,11 +4,14 @@ SupeRR Selector - Batter Performance Under Pressure Module
 
 This module evaluates batting performance across pressure tiers.
 Key Rules:
-1. Balls Faced: Wides are excluded. No-balls, byes, leg-byes, and standard deliveries count.
-2. Dot Balls: Balls faced where batter_runs == 0.
-3. Boundaries: Balls faced with four or six off the bat.
-4. Dismissals: Deliveries where is_wicket == True and dismissed_player_id == striker_id.
-5. Pressure Tiers: Low (<3.5), Medium (3.5-6.0), High (6.0-8.0), Extreme (>=8.0), Clutch (>=6.0).
+1. Balls Faced: Official cricket scorecard definition. Excludes wides AND no-balls.
+   Only legal deliveries faced advance the batter's balls faced counter.
+2. Batter Runs: All runs scored off the bat across all deliveries faced (including no-balls).
+3. Dot Balls: Legal balls faced where batter_runs == 0.
+4. Boundaries: Balls faced with four or six off the bat.
+5. Dismissals: Deliveries where is_wicket == True and dismissed_player_id == striker_id.
+6. Pressure Tiers: Low (<3.5), Medium (3.5-6.0), High (6.0-8.0), Extreme (>=8.0), Clutch (>=6.0).
+   Evaluated strictly using batting_pressure_index.
 """
 
 import numpy as np
@@ -80,17 +83,18 @@ def calculate_batter_pressure_metrics(df_deliveries: pd.DataFrame) -> pd.DataFra
     """
     df = df_deliveries.copy()
 
-    # Cricket delivery flags
-    df["is_ball_faced"] = df["extras_type"] != "wide"
-    df["is_dot_batter"] = df["is_ball_faced"] & (df["batter_runs"] == 0)
-    df["is_boundary_batter"] = df["is_ball_faced"] & (df["is_four"] | df["is_six"])
-    df["is_batter_dismissed"] = (df["is_wicket"] == True) & (df["dismissed_player_id"] == df["striker_id"])
+    # Striker deliveries: Wides are not faceable by the striker.
+    # No-balls are faceable deliveries, but under cricket scoring laws (MCC Law 24),
+    # no-balls do NOT count as balls faced on the batter's personal scorecard.
+    # However, runs scored off the bat on no-balls DO count towards the batter's career runs.
+    df_faced = df[df["extras_type"] != "wide"].copy()
+    df_faced["is_ball_faced"] = df_faced["is_legal_ball"] # strictly legal balls faced
+    df_faced["is_dot_batter"] = df_faced["is_ball_faced"] & (df_faced["batter_runs"] == 0)
+    df_faced["is_boundary_batter"] = df_faced["is_four"] | df_faced["is_six"]
+    df_faced["is_batter_dismissed"] = (df_faced["is_wicket"] == True) & (df_faced["dismissed_player_id"] == df_faced["striker_id"])
 
     # Batting role
-    df["batting_role"] = classify_batting_role(df["batting_order"])
-
-    # Filter to deliveries faced
-    df_faced = df[df["is_ball_faced"]].copy()
+    df_faced["batting_role"] = classify_batting_role(df_faced["batting_order"])
 
     # Player profile metadata
     player_meta = df_faced.groupby("striker_id").agg(

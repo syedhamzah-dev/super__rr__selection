@@ -2,7 +2,7 @@
 Data cleaning and anomaly resolution module.
 
 Addresses verified data quality anomalies identified during exploratory analysis:
-1. Deduplicating player entries in match 13613.
+1. Deduplicating player entries in playing_eleven (matches 13613, 21176, and 28962).
 2. Correcting non-wicket false-positive and missing dismissal targets.
 3. Extracting a unique team lookup to prevent cartesian join products.
 """
@@ -14,12 +14,16 @@ import pandas as pd
 def clean_playing_eleven(df: pd.DataFrame) -> pd.DataFrame:
     """Resolve duplicate player records in playing_eleven.csv.
     
-    Match 13613 (Australia vs Sri Lanka, 2022-02-13 at Sydney) was a tied fixture decided
-    by a Super Over. The raw data appended Super Over batting orders alongside regulation
-    batting orders, causing 12 players to appear twice.
+    Raw data contains duplicate player records in three matches:
+    - Match 13613 (Australia vs Sri Lanka, 2022-02-13 at Sydney, Super Over fixture):
+      Appended Super Over batting orders alongside regulation orders (24 duplicate rows, 12 players).
+    - Match 21176: Duplicate lineup records (22 duplicate rows, 11 players).
+    - Match 28962: Duplicate lineup records (29 duplicate rows, 17 players).
+    Across the dataset, exactly 40 duplicate player-match instances (75 rows total) are dropped.
     
     We retain the first occurrence for each (match_id, player_id) pair to preserve the
-    canonical regulation 11-player lineup and eliminate cartesian row multiplication during merges.
+    canonical regulation 11-player lineup (28,341 unique records) and eliminate cartesian
+    row multiplication during merges.
     """
     cleaned_df = df.copy()
     return cleaned_df.drop_duplicates(subset=['match_id', 'player_id'], keep='first')

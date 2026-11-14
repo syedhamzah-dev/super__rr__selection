@@ -15,7 +15,7 @@ This project builds an empirical framework to:
 1. Reconstruct delivery-level match situations, tracking cumulative score, wickets fallen, balls remaining, current run rate (CRR), and required run rate (RRR).
 2. Define a mathematical Pressure Index ($PI \in [0.0, 10.0]$) for both first-innings target setting and second-innings run chases.
 3. Compare how batters and bowlers perform in high-pressure situations relative to their overall baseline.
-4. Apply Bayesian shrinkage and sample-size thresholds so player rankings are not distorted by small samples.
+4. Apply credibility-weighted shrinkage (Bühlmann model) and sample-size thresholds so player rankings are not distorted by small samples.
 5. Provide transparent rankings for the top 10 batters and top 10 bowlers under pressure, supported by an interactive Streamlit application and an analytical report.
 
 ---
@@ -44,8 +44,8 @@ Rajhstan royals/
 │       ├── playing_eleven_clean.parquet     # Deduplicated 11s (28,341 rows)
 │       ├── ball_by_ball_state.parquet       # Match-state reconstructed deliveries (200,999 rows)
 │       ├── ball_by_ball_pressure.parquet    # Pressure-labeled deliveries (200,999 rows, 68 cols)
-│       ├── batter_pressure_metrics.parquet  # Batter pressure tier metrics (888 players)
-│       └── bowler_pressure_metrics.parquet  # Bowler pressure tier metrics (647 players)
+│       ├── batter_pressure_metrics.parquet  # Batter pressure tier metrics (888 players, 77 metrics)
+│       └── bowler_pressure_metrics.parquet  # Bowler pressure tier metrics (647 players, 85 metrics)
 │
 ├── src/                                     # Production Python modules
 │   ├── __init__.py
@@ -54,9 +54,9 @@ Rajhstan royals/
 │   ├── match_state.py                       # Vectorized live match-state engine
 │   ├── pressure_calibration.py              # Empirical baseline calibration & cross-validation
 │   ├── pressure_model.py                    # Multi-component Pressure Index calculation
-│   ├── batter_pressure_analysis.py          # Batter metrics across pressure tiers
-│   ├── bowler_pressure_analysis.py          # Bowler metrics across pressure tiers
-│   ├── clutch_analysis.py                   # Multi-dimensional clutch differentials & shrinkage
+│   ├── batter_pressure_analysis.py          # Batter metrics across pressure tiers (MCC Law 24 compliant)
+│   ├── bowler_pressure_analysis.py          # Bowler metrics across pressure tiers (bifurcated dot balls)
+│   ├── clutch_analysis.py                   # Multi-dimensional clutch differentials, phase adjustments & credibility shrinkage
 │   └── data_validator.py                    # 24-point automated validation framework
 │
 ├── reports/                                 # Private handover documentation & technical notes (Git ignored)
@@ -111,7 +111,7 @@ This project is also a practical learning journey in Data Analytics, Python, cri
 - [x] **Module 1 — Data Understanding & Exploratory Data Analysis:** Schema audit, invariant checks, relational key validation, and baseline cricket distributions.
 - [x] **Module 2 — Data Cleaning, Integration & Match-State Reconstruction:** Deduplicated lineups (match 13613), corrected dismissal edge cases, and vectorized live cumulative match states before and after each delivery.
 - [x] **Module 3 — Pressure Index ($PI$) Mathematical Modelling:** Built format-aware Duckworth-Lewis style empirical resource baselines ($R^2 > 0.83$) with GroupKFold cross-validation, evaluating pre-delivery tension for chases, 1st innings, bowling, and Super Overs.
-- [x] **Module 4 — Player Performance Under Pressure:** Granular performance metrics across 5 pressure tiers, multi-dimensional clutch differentials, contextual role blending, and Empirical Bayes credibility shrinkage.
+- [x] **Module 4 — Player Performance Under Pressure:** Granular performance metrics across 5 pressure tiers, MCC Law 24 scorecard compliance, bifurcated team dots vs bowler scoreless deliveries, phase-adjusted bowling clutch economy, and Bühlmann credibility-weighted shrinkage.
 - [ ] **Module 5 — Player Reliability Scores & Rankings:** Develop transparent, statistically defensible player reliability scores using pressure-performance metrics, sample-size controls and appropriate shrinkage.
 - [ ] **Module 6 — Statistical Validation & Robustness:** Test ranking stability, sensitivity to thresholds and weights, format differences, role effects and sample-size assumptions.
 - [ ] **Module 7 — Rajasthan Royals Squad Fit & Auction Strategy:** Evaluate player suitability against RR's squad composition, role requirements, team balance and IPL 2027 auction strategy.
