@@ -146,7 +146,7 @@ Combining the top shortlisted targets into an executive recruitment matrix.
     nb.cells.append(nbf.v4.new_code_cell("""matrix_path = "../data/processed/recruitment_recommendation_matrix.parquet" if os.path.exists("../data/processed/recruitment_recommendation_matrix.parquet") else "data/processed/recruitment_recommendation_matrix.parquet"
 matrix_df = pd.read_parquet(matrix_path)
 
-display_cols = ["player_name", "discipline", "country", "tactical_role", "performance_rating", "statistical_stability_score", "tactical_squad_fit_score", "acquisition_risk_score", "recruitment_decision_score", "player_archetype", "recommendation_priority"]
+display_cols = ["player_name", "discipline", "country", "tactical_role", "candidate_category", "recruitment_decision_score", "player_archetype", "recommendation_priority"]
 matrix_df[display_cols].head(15)
 """))
 

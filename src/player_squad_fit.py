@@ -296,12 +296,28 @@ def calculate_candidate_squad_fit_scores(
 
     df["player_archetype"] = df.apply(assign_archetype, axis=1)
 
-    # 7. Recruitment Priority
+    # 7. Recruitment Priority (incorporating authoritative candidate governance)
+    rr_baseline_path = resolve_path(os.path.join("data", "processed", "rr_squad_baseline_2026.parquet"))
+    rr_pids = set(pd.read_parquet(rr_baseline_path)["player_id"]) if os.path.exists(rr_baseline_path) else set()
+
     def assign_priority(row: pd.Series) -> str:
         arch = row["player_archetype"]
         rds = row["recruitment_decision_score"]
         risk = row["acquisition_risk_score"]
+        country = row.get("country", "")
+        pid = row.get("player_id", 0)
         
+        # Governance segregation: Non-actionable benchmarks & internal assets
+        if country == "Pakistan":
+            return "Strategic Benchmark (BCCI Ineligible)"
+        if pid in rr_pids:
+            return "Internal Asset (Retention Candidate)"
+        if pid in [143]:
+            return "Strategic Benchmark (Retired)"
+        if pid in [2933, 1699, 781, 4708]:
+            return "Strategic Benchmark (Rival Core)"
+        
+        # Actionable auction recruitment targets
         if arch == "Redundant Role Profile":
             return "Low Priority (Redundant)"
         if arch in ["Reliable Campaign Performer", "Specialist Phase Performer", "Multi-Role Tactical Option"] and rds >= 70.0 and risk <= 40.0:

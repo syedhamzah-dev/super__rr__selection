@@ -36,7 +36,7 @@ AUCTION_SCENARIOS = {
         "primary_candidates": {
             "Finisher": ["Tim David (Overseas)", "Ashutosh Sharma (Domestic)"],
             "Death_Pacer": ["Benjamin Sears (Overseas)", "Eshan Malinga (Overseas)"],
-            "Middle_Spinner": ["Sufiyan Muqeem (Overseas)", "Liam Dawson (Overseas)"],
+            "Middle_Spinner": ["Liam Dawson (Overseas)", "Mujeeb Ur Rahman (Overseas)"],
             "Backup_Keeper": ["Matthew Wade (Overseas)"]
         },
         "budget_allocation_units": {
@@ -46,7 +46,7 @@ AUCTION_SCENARIOS = {
             "Domestic Depth / Backup Wicketkeeper": 15.0
         },
         "total_budget_units": 100.0,
-        "overseas_slots_demanded": 3,  # e.g., Tim David, Sufiyan Muqeem, Benjamin Sears
+        "overseas_slots_demanded": 3,  # e.g., Tim David, Liam Dawson, Benjamin Sears
         "main_advantages": "Directly patches all three primary statistical voids without over-concentrating budget into a single high-beta player.",
         "main_risks": "Spreading resources evenly may lead to losing targeted bidding duels for the very best player in each role.",
         "squad_balance_impact": "Establishes a robust 18-22 player squad with two distinct crisis-phase specialists (Archer + Sears; Parag + David)."
@@ -62,9 +62,9 @@ AUCTION_SCENARIOS = {
             "Reliable Campaign Performer (Domestic Finisher)"
         ],
         "primary_candidates": {
-            "Death_Pacer": ["Benjamin Sears (Overseas)", "Haris Rauf (Overseas)"],
-            "Middle_Spinner": ["Sufiyan Muqeem (Overseas)", "Sunil Narine (Overseas)"],
-            "Bowling_All_Rounder": ["Imad Wasim (Overseas)", "Liam Dawson (Overseas)"],
+            "Death_Pacer": ["Benjamin Sears (Overseas)", "Nathan Ellis (Overseas)"],
+            "Middle_Spinner": ["Liam Dawson (Overseas)", "Mujeeb Ur Rahman (Overseas)"],
+            "Bowling_All_Rounder": ["George Dockrell (Overseas)", "Liam Dawson (Overseas)"],
             "Domestic_Finisher": ["Ashutosh Sharma (Domestic)", "Naman Dhir (Domestic)"]
         },
         "budget_allocation_units": {
@@ -93,7 +93,7 @@ AUCTION_SCENARIOS = {
             "Finisher": ["Tim David (Overseas)", "Matthew Wade (Overseas)"],
             "Middle_Order": ["Mahipal Lomror (Domestic)", "Naman Dhir (Domestic)"],
             "Death_Bowler": ["Benjamin Sears (Overseas)", "Eshan Malinga (Overseas)"],
-            "Spin_All_Rounder": ["Imad Wasim (Overseas)", "Liam Dawson (Overseas)"]
+            "Spin_All_Rounder": ["Liam Dawson (Overseas)", "George Dockrell (Overseas)"]
         },
         "budget_allocation_units": {
             "Elite Overseas Finisher (Tim David archetype)": 45.0,
@@ -120,13 +120,13 @@ AUCTION_SCENARIOS = {
         "primary_candidates": {
             "Domestic_All_Rounder": ["Naman Dhir (Domestic)", "Abhishek Sharma (Domestic)"],
             "Domestic_Middle_Batter": ["Mahipal Lomror (Domestic)", "Ashutosh Sharma (Domestic)"],
-            "Overseas_Strike_Bowler": ["Sufiyan Muqeem (Overseas)", "Benjamin Sears (Overseas)"],
+            "Overseas_Strike_Bowler": ["Benjamin Sears (Overseas)", "Nathan Ellis (Overseas)"],
             "Overseas_Finisher_Keeper": ["Matthew Wade (Overseas)", "Tim David (Overseas)"]
         },
         "budget_allocation_units": {
             "Premium Indian Multi-Role Star (Naman Dhir)": 35.0,
             "Indian Middle-Order Power Hitter (Lomror / Ashutosh)": 25.0,
-            "Overseas Elite Strike Bowler (Muqeem / Sears)": 25.0,
+            "Overseas Elite Strike Bowler (Sears / Ellis)": 25.0,
             "Overseas Finisher / Backup Keeper (Wade / David)": 15.0
         },
         "total_budget_units": 100.0,

@@ -273,7 +273,7 @@ def main():
     print(" -> Figure 4: candidate_performance_vs_stability.png")
 
     # Figure 5: Batting Shortlist Squad Fit Comparison
-    fig, ax = plt.subplots(figsize=(10, 5.5))
+    fig, ax = plt.subplots(figsize=(10.5, 5.5))
     short_b = b_eval.head(8).copy()
     x = np.arange(len(short_b))
     width = 0.22
@@ -281,9 +281,16 @@ def main():
     ax.bar(x, short_b["statistical_stability_score"], width, label="Statistical Stability (SSS)", color=RR_BLUE, alpha=0.85)
     ax.bar(x + width, short_b["tactical_squad_fit_score"], width, label="Tactical Squad Fit (TFS)", color=RR_GOLD, alpha=0.85)
     ax.set_xticks(x)
-    ax.set_xticklabels([f"{n}\n({r})" for n, r in zip(short_b["player_name"], short_b["tactical_role"])], fontsize=8.5, fontweight="bold")
+    labels_b = []
+    for _, row in short_b.iterrows():
+        pname = row["player_name"]
+        cat = str(row.get("recommendation_priority", ""))
+        role = row["tactical_role"]
+        tag = " [Internal]" if "Internal" in cat else ""
+        labels_b.append(f"{pname}{tag}\n({role})")
+    ax.set_xticklabels(labels_b, fontsize=8.0, fontweight="bold")
     ax.set_ylabel("Score (Scale 0-100)", fontsize=11, fontweight="bold")
-    ax.set_title("Rajasthan Royals Batting Shortlist: Multi-Attribute Squad Fit", fontsize=13, fontweight="bold", pad=12)
+    ax.set_title("Rajasthan Royals Batting Shortlist: Multi-Attribute Squad Fit", fontsize=12, fontweight="bold", pad=12)
     ax.legend(loc="lower right", frameon=True)
     ax.set_ylim(0, 105)
     plt.tight_layout()
@@ -292,16 +299,23 @@ def main():
     print(" -> Figure 5: batting_shortlist_squad_fit.png")
 
     # Figure 6: Bowling Shortlist Squad Fit Comparison
-    fig, ax = plt.subplots(figsize=(10, 5.5))
+    fig, ax = plt.subplots(figsize=(11, 5.5))
     short_bw = bw_eval.head(8).copy()
     x = np.arange(len(short_bw))
     ax.bar(x - width, short_bw["performance_rating"], width, label="Performance Rating (PR)", color=RR_BLUE, alpha=0.85)
     ax.bar(x, short_bw["statistical_stability_score"], width, label="Statistical Stability (SSS)", color=RR_NAVY, alpha=0.85)
     ax.bar(x + width, short_bw["tactical_squad_fit_score"], width, label="Tactical Squad Fit (TFS)", color=RR_GOLD, alpha=0.85)
     ax.set_xticks(x)
-    ax.set_xticklabels([f"{n}\n({r})" for n, r in zip(short_bw["player_name"], short_bw["tactical_role"])], fontsize=8.5, fontweight="bold")
+    labels_bw = []
+    for _, row in short_bw.iterrows():
+        pname = row["player_name"]
+        cat = str(row.get("recommendation_priority", ""))
+        role = row["tactical_role"]
+        tag = " [BM]" if "Benchmark" in cat else ""
+        labels_bw.append(f"{pname}{tag}\n({role})")
+    ax.set_xticklabels(labels_bw, fontsize=8.0, fontweight="bold")
     ax.set_ylabel("Score (Scale 0-100)", fontsize=11, fontweight="bold")
-    ax.set_title("Rajasthan Royals Bowling Shortlist: Multi-Attribute Squad Fit", fontsize=13, fontweight="bold", pad=12)
+    ax.set_title("Rajasthan Royals Bowling Evaluation: Multi-Attribute Squad Fit (*BM = Global Benchmark)", fontsize=12, fontweight="bold", pad=12)
     ax.legend(loc="lower right", frameon=True)
     ax.set_ylim(0, 105)
     plt.tight_layout()
