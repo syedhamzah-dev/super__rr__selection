@@ -53,16 +53,17 @@ class TestModule4Corrections(unittest.TestCase):
             "bowling_pressure_index": [2.0, 2.5, 4.0, 4.0, 5.0, 5.5, 6.5, 7.0, 8.5, 9.0],
         })
 
-    def test_batter_balls_faced_excludes_no_balls(self):
-        """Verify that balls faced counts strictly legal balls and excludes no-balls."""
+    def test_batter_balls_faced_scorecard_convention(self):
+        """Verify that balls faced includes no-balls, byes, leg-byes, and standard balls, but excludes wides."""
         batter_metrics = calculate_batter_pressure_metrics(self.sample_df)
         b = batter_metrics.iloc[0]
 
         # In our 10 deliveries:
-        # Wides: 1 (ball 4) -> excluded from striker deliveries
-        # No-balls: 2 (balls 5 and 9) -> faced by striker, but illegal deliveries
+        # Wides: 1 (ball 4) -> excluded from balls faced
+        # No-balls: 2 (balls 5 and 9) -> faced by striker, counts as balls faced
         # Legal balls faced: 7 (balls 1, 2, 3, 6, 7, 8, 10)
-        self.assertEqual(b["bf_overall"], 7, "Balls faced must exclude no-balls and wides")
+        # Total balls faced = 10 - 1 = 9
+        self.assertEqual(b["bf_overall"], 9, "Balls faced must exclude wides and include no-balls/byes/legbyes")
 
     def test_batter_runs_preserves_runs_on_no_balls(self):
         """Verify that bat runs scored on no-balls are credited to career runs."""
@@ -71,18 +72,17 @@ class TestModule4Corrections(unittest.TestCase):
 
         # Total bat runs: 0 + 1 + 4 + 0 + 4 (on no-ball!) + 0 + 0 + 0 + 0 (on no-ball) + 6 = 15 runs
         self.assertEqual(b["runs_overall"], 15, "Bat runs on no-balls must be credited to batter runs")
-        # Strike rate = (15 / 7) * 100 = 214.29
-        self.assertAlmostEqual(b["sr_overall"], 214.29, places=2)
+        # Strike rate = (15 / 9) * 100 = 166.67
+        self.assertAlmostEqual(b["sr_overall"], 166.67, places=2)
 
     def test_batter_dots_definition(self):
-        """Verify dot balls are legal deliveries faced where batter runs == 0."""
+        """Verify dot balls are deliveries faced where batter runs == 0."""
         batter_metrics = calculate_batter_pressure_metrics(self.sample_df)
         b = batter_metrics.iloc[0]
 
-        # Legal balls where batter runs == 0:
-        # Ball 1 (dot), Ball 6 (byes), Ball 7 (legbyes), Ball 8 (wicket bowled) -> 4 dot balls
-        # (Ball 9 had 0 bat runs, but was a no-ball, so it cannot be a legal dot ball)
-        self.assertEqual(b["dot_pct_overall"], round((4 / 7) * 100.0, 2))
+        # Deliveries faced where batter runs == 0:
+        # Ball 1 (dot), Ball 6 (byes), Ball 7 (legbyes), Ball 8 (wicket bowled), Ball 9 (no-ball with 0 bat runs) -> 5 dot balls
+        self.assertEqual(b["dot_pct_overall"], round((5 / 9) * 100.0, 2))
 
     def test_bowler_dots_bifurcation(self):
         """Verify distinction between True Team Dots (total_runs == 0) and Bowler Scoreless Balls."""

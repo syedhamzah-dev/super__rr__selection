@@ -4,10 +4,10 @@ SupeRR Selector - Batter Performance Under Pressure Module
 
 This module evaluates batting performance across pressure tiers.
 Key Rules:
-1. Balls Faced: Official cricket scorecard definition. Excludes wides AND no-balls.
-   Only legal deliveries faced advance the batter's balls faced counter.
-2. Batter Runs: All runs scored off the bat across all deliveries faced (including no-balls).
-3. Dot Balls: Legal balls faced where batter_runs == 0.
+1. Balls Faced: Official T20 cricket scorecard definition. Excludes wides.
+   No-balls, byes, leg-byes, and standard deliveries all count as balls faced (193,285 total).
+2. Batter Runs: All runs scored off the bat across all deliveries faced (269,550 total).
+3. Dot Balls: Balls faced where batter_runs == 0 (71,673 total).
 4. Boundaries: Balls faced with four or six off the bat.
 5. Dismissals: Deliveries where is_wicket == True and dismissed_player_id == striker_id.
 6. Pressure Tiers: Low (<3.5), Medium (3.5-6.0), High (6.0-8.0), Extreme (>=8.0), Clutch (>=6.0).
@@ -83,13 +83,13 @@ def calculate_batter_pressure_metrics(df_deliveries: pd.DataFrame) -> pd.DataFra
     """
     df = df_deliveries.copy()
 
-    # Striker deliveries: Wides are not faceable by the striker.
-    # No-balls are faceable deliveries, but under cricket scoring laws (MCC Law 24),
-    # no-balls do NOT count as balls faced on the batter's personal scorecard.
-    # However, runs scored off the bat on no-balls DO count towards the batter's career runs.
+    # Striker deliveries: Wides are not faceable by the striker and do not count as balls faced.
+    # No-balls (both Overstep and other), byes, leg-byes, and standard deliveries count as balls faced
+    # in standard T20 cricket scorecard conventions (193,285 balls faced total).
+    # All bat runs scored on no-balls (1,264 runs) are fully credited to batter runs.
     df_faced = df[df["extras_type"] != "wide"].copy()
-    df_faced["is_ball_faced"] = df_faced["is_legal_ball"] # strictly legal balls faced
-    df_faced["is_dot_batter"] = df_faced["is_ball_faced"] & (df_faced["batter_runs"] == 0)
+    df_faced["is_ball_faced"] = True
+    df_faced["is_dot_batter"] = df_faced["batter_runs"] == 0
     df_faced["is_boundary_batter"] = df_faced["is_four"] | df_faced["is_six"]
     df_faced["is_batter_dismissed"] = (df_faced["is_wicket"] == True) & (df_faced["dismissed_player_id"] == df_faced["striker_id"])
 

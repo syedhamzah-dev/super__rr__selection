@@ -10,12 +10,15 @@ Key Principles:
 1. Multi-dimensional: Evaluates strike rate/economy, dot-ball discipline, boundary rate, and wickets.
 2. Contextual Fairness: If a player has sparse low-pressure observations (e.g. a finisher),
    the low-pressure baseline blends with the role-specific population mean.
-3. Credibility-Weighted Shrinkage: Shrinks raw differentials toward population expectations based
-   on sample size using the classical Bühlmann credibility formula:
-       w = n / (n + k), where k = 30.0 (credibility stability parameter).
-   This avoids overfitting small-sample fluctuations while giving full credit to established performers.
-4. Phase-Adjusted Bowling Economy: Eliminates phase confounding (Death vs Middle vs Powerplay)
-   by evaluating clutch economy against the bowler's expected economy given their actual phase delivery mix.
+3. Sample-Size Credibility Shrinkage: Shrinks raw differentials toward neutral expectation using a heuristic
+   credibility weighting function:
+       w = n / (n + k), with stability constant k = 30.0.
+   Note: This adopts the functional form of credibility weighting to dampen small-sample noise, but is not
+   a formally estimated Bühlmann empirical Bayes model (variance components are not estimated via marginal likelihood).
+4. Phase-Adjusted Bowling Economy: Controls for macro phase composition differences (Death vs Middle vs Powerplay)
+   by comparing clutch economy against the bowler's expected economy given their actual phase delivery mix.
+   Note: While this mitigates phase bias, it does not eliminate all situational confounding (such as opponent
+   strength, collapse game states, or venue pitch variations).
 5. Strict Reliability Tiers: Flags High, Moderate, and Insufficient evidence.
 """
 

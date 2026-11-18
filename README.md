@@ -37,7 +37,8 @@ Rajhstan royals/
 │   ├── 01_data_understanding.ipynb          # Module 1: Exploratory data analysis and schema audit
 │   ├── 02_data_cleaning_and_integration.ipynb # Module 2: Match-state reconstruction & cleaning
 │   ├── 03_pressure_index_framework.ipynb    # Module 3: Pressure Index mathematical modeling
-│   └── 04_player_performance_under_pressure.ipynb # Module 4: Batter & bowler clutch evaluation
+│   ├── 04_player_performance_under_pressure.ipynb # Module 4: Batter & bowler clutch evaluation
+│   └── 05_player_reliability_and_rankings.ipynb   # Module 5: Decoupled ratings, evidence tiers & rankings
 │
 ├── data/
 │   └── processed/                           # Processed Parquet & CSV analytical datasets
@@ -45,7 +46,12 @@ Rajhstan royals/
 │       ├── ball_by_ball_state.parquet       # Match-state reconstructed deliveries (200,999 rows)
 │       ├── ball_by_ball_pressure.parquet    # Pressure-labeled deliveries (200,999 rows, 68 cols)
 │       ├── batter_pressure_metrics.parquet  # Batter pressure tier metrics (888 players, 77 metrics)
-│       └── bowler_pressure_metrics.parquet  # Bowler pressure tier metrics (647 players, 85 metrics)
+│       ├── bowler_pressure_metrics.parquet  # Bowler pressure tier metrics (647 players, 102 metrics)
+│       ├── batter_player_ratings.parquet    # Multi-dimensional batter ratings & ERS (888 players)
+│       ├── bowler_player_ratings.parquet    # Multi-dimensional bowler ratings & ERS (647 players)
+│       ├── batter_player_rankings.csv       # Official eligible batter leaderboard (304 players)
+│       ├── bowler_player_rankings.csv       # Official eligible bowler leaderboard (290 players)
+│       └── player_ranking_sensitivity.csv   # Robustness and rank shift validation summary
 │
 ├── src/                                     # Production Python modules
 │   ├── __init__.py
@@ -54,19 +60,29 @@ Rajhstan royals/
 │   ├── match_state.py                       # Vectorized live match-state engine
 │   ├── pressure_calibration.py              # Empirical baseline calibration & cross-validation
 │   ├── pressure_model.py                    # Multi-component Pressure Index calculation
-│   ├── batter_pressure_analysis.py          # Batter metrics across pressure tiers (MCC Law 24 compliant)
+│   ├── batter_pressure_analysis.py          # Batter metrics across pressure tiers (scorecard compliant)
 │   ├── bowler_pressure_analysis.py          # Bowler metrics across pressure tiers (bifurcated dot balls)
-│   ├── clutch_analysis.py                   # Multi-dimensional clutch differentials, phase adjustments & credibility shrinkage
-│   └── data_validator.py                    # 24-point automated validation framework
+│   ├── clutch_analysis.py                   # Clutch differentials, phase adjustments & credibility weighting
+│   ├── reliability_scoring.py               # Multi-factor Evidence Reliability Score (ERS) engine
+│   ├── player_rating.py                     # Multi-dimensional batting and bowling performance ratings
+│   ├── player_ranking.py                    # Stratified rankings, role boards & specialized cohorts
+│   ├── ranking_validation.py                # Robustness, sensitivity & Spearman stability auditor
+│   └── data_validator.py                    # Automated validation framework
 │
-├── reports/                                 # Private handover documentation & technical notes (Git ignored)
+├── tests/                                   # Automated test suite
+│   ├── test_module4_corrections.py          # Scorecard balls-faced, dot-ball & run tests
+│   └── test_module5_ratings.py              # ERS bounds, rating monotonicity & sensitivity tests
+│
+├── reports/                                 # Handover documentation & technical reports (Git ignored)
 │   ├── module_01_completion_summary.md
 │   ├── module_02_completion_summary.md
 │   ├── module_02_data_quality_report.md
 │   ├── module_03_pressure_methodology_report.md
 │   ├── module_03_completion_summary.md
 │   ├── module_04_methodology_report.md
-│   └── module_04_completion_summary.md
+│   ├── module_04_completion_summary.md
+│   ├── module_05_methodology_report.md
+│   └── module_05_completion_summary.md
 │
 └── .gitignore                               # Git configuration ignoring cache and temporary files
 ```
@@ -112,7 +128,7 @@ This project is also a practical learning journey in Data Analytics, Python, cri
 - [x] **Module 2 — Data Cleaning, Integration & Match-State Reconstruction:** Deduplicated lineups (match 13613), corrected dismissal edge cases, and vectorized live cumulative match states before and after each delivery.
 - [x] **Module 3 — Pressure Index ($PI$) Mathematical Modelling:** Built format-aware Duckworth-Lewis style empirical resource baselines ($R^2 > 0.83$) with GroupKFold cross-validation, evaluating pre-delivery tension for chases, 1st innings, bowling, and Super Overs.
 - [x] **Module 4 — Player Performance Under Pressure:** Granular performance metrics across 5 pressure tiers, MCC Law 24 scorecard compliance, bifurcated team dots vs bowler scoreless deliveries, phase-adjusted bowling clutch economy, and Bühlmann credibility-weighted shrinkage.
-- [ ] **Module 5 — Player Reliability Scores & Rankings:** Develop transparent, statistically defensible player reliability scores using pressure-performance metrics, sample-size controls and appropriate shrinkage.
+- [x] **Module 5 — Player Reliability Scores & Rankings:** Decoupled performance ratings ($[0.0, 100.0]$) from evidence reliability scores ($[0.0, 100.0]$), transparent eligibility filtering (304 eligible batters, 290 eligible bowlers), specialized tactical cohorts (Standouts, Watchlist, Regression Risks), and sensitivity verification ($\rho \ge 0.9635$).
 - [ ] **Module 6 — Statistical Validation & Robustness:** Test ranking stability, sensitivity to thresholds and weights, format differences, role effects and sample-size assumptions.
 - [ ] **Module 7 — Rajasthan Royals Squad Fit & Auction Strategy:** Evaluate player suitability against RR's squad composition, role requirements, team balance and IPL 2027 auction strategy.
 - [ ] **Module 8 — Interactive Streamlit Dashboard:** Build a dashboard for exploring pressure metrics, player comparisons, reliability scores and squad-fit insights.
@@ -142,4 +158,5 @@ jupyter notebook notebooks/01_data_understanding.ipynb
 jupyter notebook notebooks/02_data_cleaning_and_integration.ipynb
 jupyter notebook notebooks/03_pressure_index_framework.ipynb
 jupyter notebook notebooks/04_player_performance_under_pressure.ipynb
+jupyter notebook notebooks/05_player_reliability_and_rankings.ipynb
 ```
