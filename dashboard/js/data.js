@@ -280,6 +280,40 @@ const DataManager = {
   },
 
   /**
+   * Get Module 5 Top 10 Historical Batting Performers (Ranked by PR)
+   */
+  getHistoricalBatters(filter = "all") {
+    let top10 = [];
+    if (this.data.overview && this.data.overview.top_10_historical_batters) {
+      top10 = [...this.data.overview.top_10_historical_batters];
+    } else {
+      top10 = [...(this.data.batters || [])].sort((a, b) => b.performance_rating - a.performance_rating).slice(0, 10);
+    }
+
+    if (!filter || filter === "all") return top10;
+    if (filter === "domestic") return top10.filter(p => !p.is_overseas);
+    if (filter === "overseas") return top10.filter(p => p.is_overseas);
+    return top10.filter(p => p.tactical_role === filter);
+  },
+
+  /**
+   * Get Module 5 Top 10 Historical Bowling Performers (Ranked by PR)
+   */
+  getHistoricalBowlers(filter = "all") {
+    let top10 = [];
+    if (this.data.overview && this.data.overview.top_10_historical_bowlers) {
+      top10 = [...this.data.overview.top_10_historical_bowlers];
+    } else {
+      top10 = [...(this.data.bowlers || [])].sort((a, b) => b.performance_rating - a.performance_rating).slice(0, 10);
+    }
+
+    if (!filter || filter === "all") return top10;
+    if (filter === "domestic") return top10.filter(p => !p.is_overseas);
+    if (filter === "overseas") return top10.filter(p => p.is_overseas);
+    return top10.filter(p => p.tactical_role === filter);
+  },
+
+  /**
    * Get Strategic Comparative Benchmarks
    */
   getStrategicBenchmarks(discipline = "ALL") {

@@ -46,6 +46,12 @@ const App = {
   // State for Auction Strategy
   selectedAuctionScenarioIndex: 0,
 
+  // State for Dedicated Top 10 Picks
+  topBattersView: "actionable",
+  topBattersFilter: "all",
+  topBowlersView: "actionable",
+  topBowlersFilter: "all",
+
   /**
    * Bootstraps the dashboard application
    */
@@ -78,6 +84,18 @@ const App = {
         this.switchTab(hash);
       } else {
         this.switchTab("overview");
+      }
+
+      // Check query params for deep-linked modal
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const modalPid = urlParams.get("modal");
+        const modalDisc = urlParams.get("disc") || "Batting";
+        if (modalPid) {
+          setTimeout(() => this.openPlayerModal(parseInt(modalPid, 10), modalDisc), 250);
+        }
+      } catch (e) {
+        console.warn("Could not parse query parameters:", e);
       }
 
     } catch (err) {
@@ -391,6 +409,26 @@ const App = {
       });
     });
 
+    // Top 10 Batters View Switcher (Actionable vs Historical)
+    document.querySelectorAll(".top-batters-view-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".top-batters-view-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        this.topBattersView = btn.getAttribute("data-view");
+        this.renderTop10Batters(this.topBattersFilter);
+      });
+    });
+
+    // Top 10 Bowlers View Switcher (Actionable vs Historical)
+    document.querySelectorAll(".top-bowlers-view-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".top-bowlers-view-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        this.topBowlersView = btn.getAttribute("data-view");
+        this.renderTop10Bowlers(this.topBowlersFilter);
+      });
+    });
+
     // Top 10 Batters Filter Chips
     const bChips = document.querySelectorAll("#top10-batters-filter-chips .filter-chip");
     bChips.forEach(chip => {
@@ -502,20 +540,25 @@ const App = {
   // ---------------------------------------------------------------------------
   // PAGE 2: Top 10 Batters
   // ---------------------------------------------------------------------------
-  renderTop10Batters(filter = "all") {
+  renderTop10Batters(filter = null) {
+    if (filter !== null) this.topBattersFilter = filter;
     const grid = document.getElementById("top10-batters-grid");
     if (!grid) return;
 
-    const list = DataManager.getTop10Batters(filter);
+    const isHistorical = this.topBattersView === "historical";
+    const list = isHistorical
+      ? DataManager.getHistoricalBatters(this.topBattersFilter)
+      : DataManager.getTop10Batters(this.topBattersFilter);
+
     const counter = document.getElementById("top10-batters-counter");
     if (counter) {
-      counter.textContent = `Showing ${list.length} of 10 actionable batting picks`;
+      counter.textContent = `Showing ${list.length} of 10 ${isHistorical ? 'historical batting leaders' : 'actionable batting picks'}`;
     }
 
     if (list.length === 0) {
       grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 30px; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-md);">No batting picks matched this filter.</div>`;
     } else {
-      grid.innerHTML = list.map(p => this.buildScoutCard(p, "Batting", p.rank)).join("");
+      grid.innerHTML = list.map((p, idx) => this.buildScoutCard(p, "Batting", p.rank || (idx + 1), isHistorical)).join("");
     }
 
     // Render Strategic Benchmarks
@@ -529,20 +572,25 @@ const App = {
   // ---------------------------------------------------------------------------
   // PAGE 3: Top 10 Bowlers
   // ---------------------------------------------------------------------------
-  renderTop10Bowlers(filter = "all") {
+  renderTop10Bowlers(filter = null) {
+    if (filter !== null) this.topBowlersFilter = filter;
     const grid = document.getElementById("top10-bowlers-grid");
     if (!grid) return;
 
-    const list = DataManager.getTop10Bowlers(filter);
+    const isHistorical = this.topBowlersView === "historical";
+    const list = isHistorical
+      ? DataManager.getHistoricalBowlers(this.topBowlersFilter)
+      : DataManager.getTop10Bowlers(this.topBowlersFilter);
+
     const counter = document.getElementById("top10-bowlers-counter");
     if (counter) {
-      counter.textContent = `Showing ${list.length} of 10 actionable bowling picks`;
+      counter.textContent = `Showing ${list.length} of 10 ${isHistorical ? 'historical bowling leaders' : 'actionable bowling picks'}`;
     }
 
     if (list.length === 0) {
       grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 30px; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-md);">No bowling picks matched this filter.</div>`;
     } else {
-      grid.innerHTML = list.map(p => this.buildScoutCard(p, "Bowling", p.rank)).join("");
+      grid.innerHTML = list.map((p, idx) => this.buildScoutCard(p, "Bowling", p.rank || (idx + 1), isHistorical)).join("");
     }
 
     // Render Strategic Benchmarks
@@ -556,7 +604,7 @@ const App = {
   /**
    * Builds rich scout player card HTML with dynamic initials/avatar fallback
    */
-  buildScoutCard(p, discipline, rank) {
+  buildScoutCard(p, discipline, rank, isHistorical = false) {
     const isBat = discipline === "Batting";
     const inComp = DataManager.comparisonList.some(item => item.player_id === p.player_id && item.discipline === discipline);
     const rankNum = rank || p.rank || 1;
@@ -565,11 +613,32 @@ const App = {
     const avatarBg = isBat ? "batting" : "bowling";
     const clutchStats = p.key_stats || {};
 
+    const scoreBanner = isHistorical
+      ? `
+        <div class="scout-score-banner">
+          <div>
+            <div class="score-label">Historical Pressure Rating</div>
+            <div class="score-sub">Module 5 Performance Rating (0.00 – 100.00)</div>
+          </div>
+          <div class="score-val">${p.performance_rating.toFixed(2)}</div>
+        </div>
+      `
+      : `
+        <div class="scout-score-banner">
+          <div>
+            <div class="score-label">Recruitment Decision Score</div>
+            <div class="score-sub">RDH (0.00 – 90.00 Scale)</div>
+          </div>
+          <div class="score-val">${p.recruitment_decision_score !== undefined && p.recruitment_decision_score !== null ? p.recruitment_decision_score.toFixed(2) : '—'}</div>
+        </div>
+      `;
+
     return `
       <div class="scout-card ${rankClass}">
         <div class="scout-card-header">
           <div class="scout-avatar-wrap">
-            <div class="scout-avatar ${avatarBg}">
+            <img class="scout-avatar-img" loading="lazy" src="${p.image_url || ''}" alt="${p.image_alt || ('Photograph of ' + p.player_name)}" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';" style="${p.image_url ? '' : 'display:none;'}" />
+            <div class="scout-avatar ${avatarBg}" style="${p.image_url ? 'display:none;' : 'display:flex;'}">
               ${initials}
             </div>
             <div class="scout-rank-badge">#${rankNum}</div>
@@ -586,16 +655,13 @@ const App = {
               </span>
               <span class="scout-role-pill">${p.tactical_role}</span>
             </div>
+            <div style="margin-top: 5px;">
+              ${this.getCategoryBadge(p.candidate_category || 'Viable Auction Target')}
+            </div>
           </div>
         </div>
 
-        <div class="scout-score-banner">
-          <div>
-            <div class="score-label">Recruitment Decision Score</div>
-            <div class="score-sub">RDH (0.00 – 90.00 Scale)</div>
-          </div>
-          <div class="score-val">${p.recruitment_decision_score.toFixed(2)}</div>
-        </div>
+        ${scoreBanner}
 
         <div class="scout-metrics-grid">
           <div class="scout-metric-cell" title="Pressure Performance under Leverage Index >= 1.0">
@@ -608,15 +674,15 @@ const App = {
           </div>
           <div class="scout-metric-cell" title="Performance Stability: Top-Tier Impact Retention Index">
             <div class="label" style="color: #fbbf24;">Stability (SSS)</div>
-            <div class="val text-gold">${p.statistical_stability_score.toFixed(1)}</div>
+            <div class="val text-gold">${p.statistical_stability_score ? p.statistical_stability_score.toFixed(1) : '—'}</div>
           </div>
           <div class="scout-metric-cell" title="Tactical Squad Fit for Rajasthan Royals">
             <div class="label" style="color: #34d399;">Squad Fit (TFS)</div>
-            <div class="val text-emerald">${p.tactical_squad_fit_score.toFixed(1)}</div>
+            <div class="val text-emerald">${p.tactical_squad_fit_score ? p.tactical_squad_fit_score.toFixed(1) : '—'}</div>
           </div>
           <div class="scout-metric-cell" title="Acquisition Risk (Bidding Inflation & Overseas Penalty)">
             <div class="label" style="color: #f87171;">Risk (ARS)</div>
-            <div class="val text-rose">${p.acquisition_risk_score.toFixed(1)}</div>
+            <div class="val text-rose">${p.acquisition_risk_score ? p.acquisition_risk_score.toFixed(1) : '—'}</div>
           </div>
           <div class="scout-metric-cell" title="Evidence Tier Category">
             <div class="label">Reliability Tier</div>
@@ -673,7 +739,8 @@ const App = {
       <div class="scout-card" style="border-left: 3px solid ${b.candidate_category.includes('Ineligible') ? '#f43f5e' : '#f59e0b'};">
         <div class="scout-card-header">
           <div class="scout-avatar-wrap">
-            <div class="scout-avatar ${avatarBg}" style="opacity: 0.9;">
+            <img class="scout-avatar-img" loading="lazy" src="${b.image_url || ''}" alt="${b.image_alt || ('Photograph of ' + b.player_name)}" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';" style="${b.image_url ? '' : 'display:none;'}" />
+            <div class="scout-avatar ${avatarBg}" style="${b.image_url ? 'display:none;' : 'display:flex;'}">
               ${initials}
             </div>
           </div>
@@ -702,6 +769,12 @@ const App = {
           <strong>Comparative Benchmark Role:</strong>
           ${b.scouting_rationale}
         </div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: auto; padding-top: 8px;">
+          * Strict Governance: Non-actionable for recruitment.
+        </div>
+      </div>
+    `;
+  },
         <div style="font-size: 11px; color: var(--text-muted); margin-top: auto; padding-top: 8px;">
           * Strict Governance: Non-actionable for recruitment.
         </div>
@@ -1052,8 +1125,38 @@ const App = {
     if (!bodyEl) return;
 
     const isBat = discipline === "Batting";
+    const initials = p.initials || (p.player_name ? p.player_name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase() : "RR");
+    const avatarBg = isBat ? "batting" : "bowling";
 
     bodyEl.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding: 12px 16px; background: rgba(30, 41, 59, 0.4); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        <div class="scout-avatar-wrap" style="width: 64px; height: 64px;">
+          <img class="scout-avatar-img" loading="lazy" src="${p.image_url || ''}" alt="${p.image_alt || ('Photograph of ' + p.player_name)}" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';" style="${p.image_url ? '' : 'display:none;'}" />
+          <div class="scout-avatar ${avatarBg}" style="${p.image_url ? 'display:none;' : 'display:flex;'} font-size: 22px;">
+            ${initials}
+          </div>
+        </div>
+        <div style="flex: 1;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <h3 style="font-size: 22px; font-weight: 800; color: #fff; margin: 0;">${p.player_name}</h3>
+            ${this.getCategoryBadge(p.candidate_category)}
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center; margin-top: 6px; font-size: 13px; color: var(--text-secondary);">
+            <span class="badge ${p.is_overseas ? 'badge-rival' : 'badge-tier-2'}">${p.country} (${p.is_overseas ? 'Overseas' : 'Domestic'})</span>
+            <span class="badge badge-role">${p.tactical_role}</span>
+            <span>•</span>
+            <span>${p.evidence_tier_label}</span>
+          </div>
+        </div>
+      </div>
+
+      ${p.scouting_rationale ? `
+        <div class="scout-rationale-box" style="margin-bottom: 20px; font-size: 13px; line-height: 1.6;">
+          <strong>Why this player? (Recruitment Rationale)</strong>
+          ${p.scouting_rationale}
+        </div>
+      ` : ''}
+
       <div class="metrics-summary-banner">
         <div class="metric-box">
           <div class="label">Performance Rating</div>

@@ -655,7 +655,7 @@
     "squad_gap_addressed": "Fill Wicketkeeper-Batter Void",
     "candidate_category": "Viable Auction Target",
     "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
-    "scouting_rationale": "Ultra-aggressive top-order wicketkeeper-batter with 180+ strike rate in the powerplay; dismantles new-ball bowling attacks.",
+    "scouting_rationale": "Ultra-aggressive top-order wicketkeeper-batter with 84.42 PR and 180+ strike rate in the powerplay; dismantles new-ball bowling attacks.",
     "clutch_stats": {
       "bf_clutch": 85,
       "runs_clutch": 162,
@@ -900,7 +900,7 @@
     "squad_gap_addressed": "Fill Middle-Overs Spinner Void",
     "candidate_category": "Strategic Benchmark (BCCI Ineligible)",
     "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)",
-    "scouting_rationale": "BCCI Regulatory Benchmark (Non-Actionable): Elite international wrist-spinner with exceptional clutch turn; analytical model benchmark for world-class middle-overs spin.",
+    "scouting_rationale": "BCCI Regulatory Benchmark (Non-Actionable): Elite international wrist-spinner with exceptional clutch turn (88.28 PR); analytical model benchmark for world-class middle-overs spin.",
     "clutch_stats": {
       "legal_balls_clutch": 126,
       "economy_clutch": 5.71,
@@ -935,7 +935,7 @@
     "squad_gap_addressed": "Fill Bowling All-Rounder Void",
     "candidate_category": "Strategic Benchmark (BCCI Ineligible)",
     "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)",
-    "scouting_rationale": "BCCI Regulatory Benchmark (Non-Actionable): World-class left-arm orthodox powerplay control spinner; comparative benchmark for restrictive opening bowling.",
+    "scouting_rationale": "BCCI Regulatory Benchmark (Non-Actionable): World-class left-arm orthodox powerplay control spinner (81.42 PR); comparative benchmark for restrictive opening bowling.",
     "clutch_stats": {
       "legal_balls_clutch": 114,
       "economy_clutch": 6.0,
@@ -1460,7 +1460,7 @@
     "squad_gap_addressed": "Fill All-Phase Bowler Void",
     "candidate_category": "Viable Auction Target",
     "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
-    "scouting_rationale": "Young international left-arm spinner with sharp drift and restrictive line-and-length control under high match pressure.",
+    "scouting_rationale": "Young international left-arm spinner with 77.56 PR; sharp drift and restrictive line-and-length control under high match pressure.",
     "clutch_stats": {
       "legal_balls_clutch": 71,
       "economy_clutch": 6.68,

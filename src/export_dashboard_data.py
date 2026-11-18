@@ -41,6 +41,30 @@ def get_player_initials(name: str) -> str:
         return parts[0][:2].upper()
     return "RR"
 
+# Verified read-only public image references (loaded dynamically in frontend with lazy loading & initials fallback)
+VERIFIED_IMAGE_URLS = {
+    # Batters
+    6396: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/321800/321898.png",  # Tim David
+    796: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/321800/321846.png",   # Matthew Wade
+    6819: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/380200/380261.png",  # Yashasvi Jaiswal
+    2258: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/380300/380313.png",  # Sanju Samson
+    1699: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/380300/380315.png",  # Suryakumar Yadav
+    4708: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/380300/380314.png",  # Rinku Singh
+    5553: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/381600/381656.png",  # Phil Salt
+    813: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/381600/381655.png",   # Jos Buttler
+    7260: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/380200/380262.png",  # Dhruv Jurel
+    152: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/380200/380263.png",   # Ravindra Jadeja
+    # Bowlers
+    2933: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/380200/380287.png",  # Jasprit Bumrah
+    3959: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/381600/381658.png",  # Chris Woakes
+    722: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/381600/381657.png",   # Liam Dawson
+    4856: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/382000/382004.png",  # Benjamin Sears
+    7920: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/321800/321847.png",  # Nathan Ellis
+    781: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/380300/380316.png",   # Sunil Narine
+    7503: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/380200/380264.png",  # Ravi Bishnoi
+    143: "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/380200/380288.png"    # Dinesh Karthik
+}
+
 def get_scouting_rationale(pid: int, name: str, role: str, gap: str, disc: str, pr: float, rdh: float, sss: float, tfs: float) -> str:
     custom = {
         6396: "Elite death-overs boundary striker (179.3 clutch SR, 25.0% boundary rate). Solves Rajasthan Royals' #1 critical void (Finisher) with game-winning finishing power.",
@@ -53,10 +77,11 @@ def get_scouting_rationale(pid: int, name: str, role: str, gap: str, disc: str, 
         2639: "Experienced international powerhouse (71.32 PR) offering proven multi-phase boundary striking and handy middle-overs seam bowling under pressure.",
         4369: "Technically adept wicketkeeper-anchor (79.99 PR) with strong tempo control, elite boundary placement, and anchor versatility in challenging batting conditions.",
         2258: "High-impact wicketkeeper-batter (71.01 PR) capable of accelerating against both pace and spin across all batting phases with deep franchise familiarity.",
+        6819: "Rajasthan Royals cornerstone retention. #1 ranked historical T20 batter with 96.90 PR and transcendent powerplay boundary hitting against both pace and spin.",
+        5553: "Ultra-aggressive top-order wicketkeeper-batter with 84.42 PR and 180+ strike rate in the powerplay; dismantles new-ball bowling attacks.",
         6725: "Explosive West Indian middle-order power hitter with exceptional bat speed; clears the ropes under extreme death-overs pressure.",
         1077: "World-renowned international finisher with ice-cold temperament in pressure chases; provides elite left-handed middle-overs stability.",
         813: "World-class wicketkeeper-batter with transcendent powerplay boundary striking and elite tournament-winning pedigree.",
-        5553: "Ultra-aggressive top-order wicketkeeper-batter with 180+ strike rate in the powerplay; dismantles new-ball bowling attacks.",
         7897: "Polished domestic left-handed middle-order batter with composed strike rotation and proven ability to rebuild after top-order collapses.",
         2756: "Fearless domestic finisher with lightning boundary hitting in the death overs; proven clutch match-winner in tight finishes.",
         4755: "Formidable domestic power hitter who dismantles spin with ease through the middle overs and provides auxiliary seam bowling.",
@@ -73,16 +98,17 @@ def get_scouting_rationale(pid: int, name: str, role: str, gap: str, disc: str, 
         2687: "Tall off-spinning all-rounder with 74.42 TFS. Provides miserly middle-overs economy against left-handers, excellent boundary containment, and steady batting stability.",
         4658: "Accurate left-arm dart specialist (75.42 TFS) with proven powerplay and middle-overs run suppression in low-scoring thrillers and spin-friendly tracks.",
         4219: "Astute domestic all-rounder with 77.19 TFS. Provides veteran middle-overs spin squeeze and crucial batting depth without consuming an overseas slot.",
-        22471: "Young international left-arm spinner with sharp drift and restrictive line-and-length control under high match pressure.",
+        22471: "Young international left-arm spinner with 77.56 PR; sharp drift and restrictive line-and-length control under high match pressure.",
         305: "Legendary tactical mastermind with elite carrom ball and variations; controls the tempo of the middle overs with unmatched game awareness.",
         7920: "Renowned back-of-the-hand slower ball and yorker specialist (60.13 RDH, 86.20 TFS) with proven death-overs boundary containment in high-leverage situations.",
         3276: "Economical left-arm orthodox spinner with tight stump-to-stump accuracy and steady wicket-taking threat through the middle overs.",
         4900: "Elite leg-spin all-rounder with deceptive googly and game-breaking wicket-taking strike rate in high-pressure middle overs.",
         8805: "Skilled death-overs specialist with pin-point wide yorkers, heavy slower balls, and calm composure at the back end of the innings.",
         2636: "World-class leg-spin enforcer with sharp turn and drift; consistently breaks crucial middle-overs partnerships.",
+        3959: "Masterful new-ball seam enforcer with 90.22 PR and exceptional swing control; creates early breakthroughs in the powerplay.",
         # Benchmarks
-        34485: "BCCI Regulatory Benchmark (Non-Actionable): Elite international wrist-spinner with exceptional clutch turn; analytical model benchmark for world-class middle-overs spin.",
-        3578: "BCCI Regulatory Benchmark (Non-Actionable): World-class left-arm orthodox powerplay control spinner; comparative benchmark for restrictive opening bowling.",
+        34485: "BCCI Regulatory Benchmark (Non-Actionable): Elite international wrist-spinner with exceptional clutch turn (88.28 PR); analytical model benchmark for world-class middle-overs spin.",
+        3578: "BCCI Regulatory Benchmark (Non-Actionable): World-class left-arm orthodox powerplay control spinner (81.42 PR); comparative benchmark for restrictive opening bowling.",
         7364: "BCCI Regulatory Benchmark (Non-Actionable): Express pace death bowler capable of 150+ kph rockets and blockhole yorkers under extreme pressure.",
         2490: "BCCI Regulatory Benchmark (Non-Actionable): Experienced all-rounder providing dependable left-arm spin containment and late-order power hitting.",
         7690: "BCCI Regulatory Benchmark (Non-Actionable): Dynamic top-order aggressor and mystery spinner with rapid hand speed and fearless intent.",
@@ -151,6 +177,8 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             "player_id": pid,
             "player_name": str(row["player_name"]),
             "initials": get_player_initials(str(row["player_name"])),
+            "image_url": VERIFIED_IMAGE_URLS.get(pid, None),
+            "image_alt": f"Photograph of {row['player_name']}",
             "country": country,
             "is_overseas": bool(row["is_overseas"]),
             "primary_role": str(row["primary_role"]),
@@ -232,6 +260,8 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             "player_id": pid,
             "player_name": str(row["player_name"]),
             "initials": get_player_initials(str(row["player_name"])),
+            "image_url": VERIFIED_IMAGE_URLS.get(pid, None),
+            "image_alt": f"Photograph of {row['player_name']}",
             "country": country,
             "is_overseas": bool(row["is_overseas"]),
             "primary_bowling_role": str(row["primary_bowling_role"]),
@@ -507,6 +537,8 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             "player_id": b["player_id"],
             "player_name": b["player_name"],
             "initials": b["initials"],
+            "image_url": b.get("image_url", None),
+            "image_alt": b.get("image_alt", f"Photograph of {b['player_name']}"),
             "country": b["country"],
             "is_overseas": b["is_overseas"],
             "tactical_role": b["tactical_role"],
@@ -528,7 +560,10 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
                 "runs_clutch": b["runs_clutch"],
                 "sr_clutch": b["sr_clutch"],
                 "bnd_pct_clutch": b["bnd_pct_clutch"],
-                "dot_pct_clutch": b["dot_pct_clutch"]
+                "dot_pct_clutch": b["dot_pct_clutch"],
+                "bf_overall": b["bf_overall"],
+                "runs_overall": b["runs_overall"],
+                "sr_overall": b["sr_overall"]
             }
         })
 
@@ -539,6 +574,8 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             "player_id": bw["player_id"],
             "player_name": bw["player_name"],
             "initials": bw["initials"],
+            "image_url": bw.get("image_url", None),
+            "image_alt": bw.get("image_alt", f"Photograph of {bw['player_name']}"),
             "country": bw["country"],
             "is_overseas": bw["is_overseas"],
             "tactical_role": bw["tactical_role"],
@@ -560,7 +597,85 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
                 "economy_clutch": bw["economy_clutch"],
                 "wickets_clutch": bw["wickets_clutch"],
                 "true_dot_pct_clutch": bw["true_dot_pct_clutch"],
-                "bnd_pct_clutch": bw["bnd_pct_clutch"]
+                "bnd_pct_clutch": bw["bnd_pct_clutch"],
+                "legal_balls_overall": bw["legal_balls_overall"],
+                "economy_overall": bw["economy_overall"],
+                "wickets_overall": bw["wickets_overall"]
+            }
+        })
+
+    # Module 5 Historical Performance Leaderboards (Top 10 strictly by Performance Rating PR)
+    hist_batters_sorted = sorted(batters_list, key=lambda x: x["performance_rating"], reverse=True)
+    top_10_historical_batters = []
+    for rank_idx, b in enumerate(hist_batters_sorted[:10], 1):
+        top_10_historical_batters.append({
+            "rank": rank_idx,
+            "player_id": b["player_id"],
+            "player_name": b["player_name"],
+            "initials": b["initials"],
+            "image_url": b.get("image_url", None),
+            "image_alt": b.get("image_alt", f"Photograph of {b['player_name']}"),
+            "country": b["country"],
+            "is_overseas": b["is_overseas"],
+            "tactical_role": b["tactical_role"],
+            "player_archetype": b["player_archetype"],
+            "performance_rating": b["performance_rating"],
+            "evidence_reliability_score": b["evidence_reliability_score"],
+            "evidence_tier": b["evidence_tier"],
+            "evidence_tier_label": b["evidence_tier_label"],
+            "statistical_stability_score": b["statistical_stability_score"],
+            "tactical_squad_fit_score": b["tactical_squad_fit_score"],
+            "acquisition_risk_score": b["acquisition_risk_score"],
+            "recruitment_decision_score": b["recruitment_decision_score"],
+            "candidate_category": b["candidate_category"],
+            "availability_status": b["availability_status"],
+            "scouting_rationale": b["scouting_rationale"],
+            "key_stats": {
+                "bf_clutch": b["bf_clutch"],
+                "runs_clutch": b["runs_clutch"],
+                "sr_clutch": b["sr_clutch"],
+                "bnd_pct_clutch": b["bnd_pct_clutch"],
+                "dot_pct_clutch": b["dot_pct_clutch"],
+                "bf_overall": b["bf_overall"],
+                "runs_overall": b["runs_overall"],
+                "sr_overall": b["sr_overall"]
+            }
+        })
+
+    hist_bowlers_sorted = sorted(bowlers_list, key=lambda x: x["performance_rating"], reverse=True)
+    top_10_historical_bowlers = []
+    for rank_idx, bw in enumerate(hist_bowlers_sorted[:10], 1):
+        top_10_historical_bowlers.append({
+            "rank": rank_idx,
+            "player_id": bw["player_id"],
+            "player_name": bw["player_name"],
+            "initials": bw["initials"],
+            "image_url": bw.get("image_url", None),
+            "image_alt": bw.get("image_alt", f"Photograph of {bw['player_name']}"),
+            "country": bw["country"],
+            "is_overseas": bw["is_overseas"],
+            "tactical_role": bw["tactical_role"],
+            "player_archetype": bw["player_archetype"],
+            "performance_rating": bw["performance_rating"],
+            "evidence_reliability_score": bw["evidence_reliability_score"],
+            "evidence_tier": bw["evidence_tier"],
+            "evidence_tier_label": bw["evidence_tier_label"],
+            "statistical_stability_score": bw["statistical_stability_score"],
+            "tactical_squad_fit_score": bw["tactical_squad_fit_score"],
+            "acquisition_risk_score": bw["acquisition_risk_score"],
+            "recruitment_decision_score": bw["recruitment_decision_score"],
+            "candidate_category": bw["candidate_category"],
+            "availability_status": bw["availability_status"],
+            "scouting_rationale": bw["scouting_rationale"],
+            "key_stats": {
+                "legal_balls_clutch": bw["legal_balls_clutch"],
+                "economy_clutch": bw["economy_clutch"],
+                "wickets_clutch": bw["wickets_clutch"],
+                "true_dot_pct_clutch": bw["true_dot_pct_clutch"],
+                "bnd_pct_clutch": bw["bnd_pct_clutch"],
+                "legal_balls_overall": bw["legal_balls_overall"],
+                "economy_overall": bw["economy_overall"],
+                "wickets_overall": bw["wickets_overall"]
             }
         })
 
@@ -696,6 +811,8 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
         ],
         "top_10_actionable_batters": top_10_batters_export,
         "top_10_actionable_bowlers": top_10_bowlers_export,
+        "top_10_historical_batters": top_10_historical_batters,
+        "top_10_historical_bowlers": top_10_historical_bowlers,
         "strategic_benchmarks": strategic_benchmarks_export,
         "top_actionable_targets": {
             "batting": [

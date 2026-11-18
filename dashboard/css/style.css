@@ -1303,6 +1303,16 @@ body {
   flex-shrink: 0;
 }
 
+.scout-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  display: block;
+}
+
 .scout-avatar {
   width: 100%;
   height: 100%;

@@ -113,6 +113,39 @@
         </div>
       </div>
 
+      <!-- First-Time Visitor Quick Guide -->
+      <div class="dashboard-card" style="margin-bottom: 24px; border-left: 4px solid var(--rr-pink);">
+        <div class="card-header">
+          <span class="card-title">📖 New to SupeRR Selector? Quick User Guide</span>
+          <span class="badge badge-viable">Scouting Platform Overview</span>
+        </div>
+        <div class="card-body">
+          <div class="grid-3" style="gap: 16px;">
+            <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <strong style="color: var(--rr-pink); display: block; font-size: 13.5px; margin-bottom: 6px;">1. What This Platform Does</strong>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+                SupeRR Selector analyzes 200,999 ball-by-ball deliveries (2022–2026) to measure how players perform under extreme match pressure (Leverage Index &ge; 1.0), separating genuine clutch skill from short-term form.
+              </p>
+            </div>
+            <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <strong style="color: #60a5fa; display: block; font-size: 13.5px; margin-bottom: 6px;">2. What Top 10 Picks Represent</strong>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+                The <strong>Top 10 Batters</strong> and <strong>Top 10 Bowlers</strong> are prioritized candidates calibrated to solve Rajasthan Royals' specific squad voids (finishers, middle-order hitting, and death bowling). Historical rankings and actionable shortlists are clearly distinguished.
+              </p>
+            </div>
+            <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <strong style="color: #34d399; display: block; font-size: 13.5px; margin-bottom: 6px;">3. Inspecting & Comparing Players</strong>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+                Click <strong>"View Profile &rarr;"</strong> on any player to examine overall vs. clutch splits, bootstrap confidence intervals, and sensitivity ranks. Click <strong>"+ Compare"</strong> to pin up to 3 players side-by-side in the comparison tray.
+              </p>
+            </div>
+          </div>
+          <div style="margin-top: 14px; padding: 10px 14px; background: rgba(15, 23, 42, 0.7); border-radius: 6px; font-size: 12px; color: var(--text-muted);">
+            ⚠️ <strong>Crucial Recruitment Principle:</strong> Historical pressure performance is evaluated on audited multi-tournament data (2022–2026) and is not a guarantee of future IPL performance. All actionable picks are potential candidates subject to official IPL 2027 auction registration.
+          </div>
+        </div>
+      </div>
+
       <!-- Top 3 Spotlight Showcase (Home Quick Preview) -->
       <div class="grid-2" style="margin-bottom: 24px;">
         <div class="dashboard-card" style="margin-bottom: 0;">
@@ -352,6 +385,22 @@
         </div>
       </div>
 
+      <!-- View Mode Selector (Actionable vs Historical) -->
+      <div style="display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;">
+        <span style="font-size: 13px; font-weight: 700; color: #fff;">Evaluation Mode:</span>
+        <button class="btn btn-sm top-batters-view-btn active" data-view="actionable" style="font-weight: 700;">
+          🎯 Actionable Recruitment Targets (by RDH, 0–90)
+        </button>
+        <button class="btn btn-sm top-batters-view-btn" data-view="historical" style="font-weight: 700;">
+          📜 Historical Performance Leaderboard (by Module 5 PR, 0–100)
+        </button>
+      </div>
+
+      <!-- Historical Context & Regulatory Disclaimer -->
+      <div style="background: rgba(15, 23, 42, 0.7); border-left: 3px solid #38bdf8; border-radius: 4px; padding: 10px 14px; margin-bottom: 18px; font-size: 12px; color: var(--text-secondary);">
+        ⚠️ <strong>Notice on Historical Performance:</strong> Historical pressure performance is evaluated on audited multi-tournament data (2022–2026) and is not an absolute guarantee of future IPL performance. Highly ranked historical performers (such as Yashasvi Jaiswal, RR internal asset) are fully visible in the Historical Leaderboard, while actionable recommendations are restricted to viable targets.
+      </div>
+
       <!-- Filter Chips Row -->
       <div class="filter-chips-row" id="top10-batters-filter-chips">
         <span style="font-size: 12.5px; font-weight: 700; color: var(--text-muted); margin-right: 4px;">Filter Candidates:</span>
@@ -423,6 +472,22 @@
           <span style="color: var(--rr-blue); font-weight: 800; font-size: 16px;">🏆</span>
           <div><strong>Decision Score (RDH, 0–90 scale):</strong> Composite recruitment priority score.</div>
         </div>
+      </div>
+
+      <!-- View Mode Selector (Actionable vs Historical) -->
+      <div style="display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;">
+        <span style="font-size: 13px; font-weight: 700; color: #fff;">Evaluation Mode:</span>
+        <button class="btn btn-sm top-bowlers-view-btn active" data-view="actionable" style="font-weight: 700;">
+          🎯 Actionable Recruitment Targets (by RDH, 0–90)
+        </button>
+        <button class="btn btn-sm top-bowlers-view-btn" data-view="historical" style="font-weight: 700;">
+          📜 Historical Performance Leaderboard (by Module 5 PR, 0–100)
+        </button>
+      </div>
+
+      <!-- Historical Context & Regulatory Disclaimer -->
+      <div style="background: rgba(15, 23, 42, 0.7); border-left: 3px solid #38bdf8; border-radius: 4px; padding: 10px 14px; margin-bottom: 18px; font-size: 12px; color: var(--text-secondary);">
+        ⚠️ <strong>Notice on Historical Performance:</strong> Historical pressure performance is evaluated on audited multi-tournament data (2022–2026) and is not an absolute guarantee of future IPL performance. Highly ranked historical performers (including Chris Woakes at #1, and Sufiyan Muqeem / Imad Wasim as BCCI-ineligible benchmarks) are fully visible in the Historical Leaderboard, while actionable recommendations are restricted to viable targets.
       </div>
 
       <!-- Filter Chips Row -->

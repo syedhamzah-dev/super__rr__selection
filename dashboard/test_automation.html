@@ -148,7 +148,26 @@
         assert(top10B.every(b => b.scouting_rationale && b.scouting_rationale.length > 20), "All Top 10 Batters have comprehensive scouting rationales");
         assert(top10Bw.every(bw => bw.scouting_rationale && bw.scouting_rationale.length > 20), "All Top 10 Bowlers have comprehensive scouting rationales");
 
-        // 11. Test Developer Attribution & Metadata
+        // 11. Test Historical Top 10 Leaderboards (Module 5 Ground Truth)
+        const hist10B = DataManager.getHistoricalBatters("all");
+        const hist10Bw = DataManager.getHistoricalBowlers("all");
+        assert(hist10B.length === 10, `Historical Batters has 10 performers (Found: ${hist10B.length})`);
+        assert(hist10Bw.length === 10, `Historical Bowlers has 10 performers (Found: ${hist10Bw.length})`);
+        assert(hist10B[0].player_name === "Yashasvi Jaiswal", `Historical Batter #1 is Yashasvi Jaiswal (Found: ${hist10B[0].player_name})`);
+        assert(Math.abs(hist10B[0].performance_rating - 96.90) < 0.1, `Yashasvi Jaiswal PR is ~96.90 (Found: ${hist10B[0].performance_rating})`);
+        assert(hist10Bw[0].player_name === "Chris Woakes", `Historical Bowler #1 is Chris Woakes (Found: ${hist10Bw[0].player_name})`);
+        assert(Math.abs(hist10Bw[0].performance_rating - 90.22) < 0.1, `Chris Woakes PR is ~90.22 (Found: ${hist10Bw[0].performance_rating})`);
+        assert(hist10Bw[1].player_name === "Sufiyan Muqeem", `Historical Bowler #2 is Sufiyan Muqeem (Found: ${hist10Bw[1].player_name})`);
+        assert(hist10Bw[1].candidate_category.includes("Ineligible"), "Sufiyan Muqeem retains non-actionable benchmark category in historical list");
+
+        // 12. Test Read-Only Image Metadata & Fallback Integrity
+        const jaiswalImg = hist10B[0].image_url;
+        assert(jaiswalImg && jaiswalImg.startsWith("https://"), "Yashasvi Jaiswal has verified public CDN photo URL");
+        assert(hist10B[0].image_alt.includes("Yashasvi Jaiswal"), "Yashasvi Jaiswal has accessible alt text");
+        const davidImg = top10B[0].image_url;
+        assert(davidImg && davidImg.startsWith("https://"), "Tim David has verified public CDN photo URL");
+
+        // 13. Test Developer Attribution & Metadata
         const meta = DataManager.data.overview.metadata;
         assert(meta && meta.lead_analytics_engineer.includes("Syed Mohammad Hamzah"), "Lead Analyst persona is Syed Mohammad Hamzah");
         assert(meta && meta.system_title.includes("Cricket Intelligence"), "System title contains slogan");
