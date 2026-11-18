@@ -220,7 +220,7 @@ Rajhstan royals/
 * **Core Outputs:**
   * Evaluated 888 batters and 647 bowlers across independent disciplines.
   * Computed Evidence Reliability Score ($ERS$) across 4 exposure dimensions.
-  * Enforced eligibility criteria ($\ge 20$ clutch balls AND $ERS \ge 20.0$), qualifying **304 eligible batters** and **290 eligible bowlers**.
+  * Enforced eligibility criteria ($\ge 20$ clutch balls AND $ERS \ge 35.0$ / Moderate+ Evidence), qualifying **304 eligible batters** and **290 eligible bowlers**.
   * Generated stratified role boards, Standout Performers, High-Upside Watchlist, and Regression Risks.
   * Exports: `batter_player_ratings.parquet` (888 rows), `bowler_player_ratings.parquet` (647 rows), `batter_player_rankings.csv` (304 rows), `bowler_player_rankings.csv` (290 rows), `player_ranking_sensitivity.csv` (6 scenarios).
 

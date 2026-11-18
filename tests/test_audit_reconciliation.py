@@ -113,10 +113,22 @@ class TestAuditReconciliation(unittest.TestCase):
         self.assertEqual(bowler_scoreless - true_team_dots, 3277)
 
     def test_wickets_breakdown(self):
-        """Verify bowler-credited wickets, run-outs, and total dismissals."""
-        bowler_types = ["Caught", "Bowled", "LBW", "Stump", "Hit Wicket"]
-        bowler_wkts = self.df_pressure["dismissal_type"].isin(bowler_types).sum()
-        self.assertEqual(bowler_wkts, 10272)
+        """Verify bowler-credited wickets, individual dismissal modes, run-outs, and total dismissals."""
+        caught = (self.df_pressure["dismissal_type"] == "Caught").sum()
+        bowled = (self.df_pressure["dismissal_type"] == "Bowled").sum()
+        lbw = (self.df_pressure["dismissal_type"] == "LBW").sum()
+        stump = (self.df_pressure["dismissal_type"] == "Stump").sum()
+        hit_wicket = (self.df_pressure["dismissal_type"] == "Hit Wicket").sum()
+
+        # Exact delivery counts for bowler-credited dismissals
+        self.assertEqual(caught, 7557, "Caught wickets must be exactly 7,557 (not 7,577)")
+        self.assertEqual(bowled, 1775, "Bowled wickets must be exactly 1,775")
+        self.assertEqual(lbw, 709, "LBW wickets must be exactly 709")
+        self.assertEqual(stump, 214, "Stumped wickets must be exactly 214")
+        self.assertEqual(hit_wicket, 17, "Hit Wicket dismissals must be exactly 17")
+
+        bowler_wkts = caught + bowled + lbw + stump + hit_wicket
+        self.assertEqual(bowler_wkts, 10272, "Total bowler-credited wickets must be exactly 10,272")
 
         run_outs = (self.df_pressure["dismissal_type"] == "RunOut").sum()
         self.assertEqual(run_outs, 600)
@@ -211,6 +223,38 @@ class TestAuditReconciliation(unittest.TestCase):
         self.assertEqual(len(bw_sub20), 29)
         self.assertTrue((bw_sub20["is_eligible_for_ranking"] == False).all())
         self.assertTrue(bw_sub20["evidence_tier"].isin(["Insufficient Evidence", "Not Eligible"]).all())
+
+    def test_ers_targets_and_tier_reconciliation(self):
+        """Verify linear ERS saturation targets (120, 300, 25, 3) and exact evidence tier distributions."""
+        df_b = pd.read_parquet("data/processed/batter_player_ratings.parquet")
+        df_bw = pd.read_parquet("data/processed/bowler_player_ratings.parquet")
+
+        # Batter evidence tiers
+        b_tiers = df_b["evidence_tier"].value_counts().to_dict()
+        self.assertEqual(b_tiers.get("Strong Evidence", 0), 201)
+        self.assertEqual(b_tiers.get("Moderate Evidence", 0), 103)
+        self.assertEqual(b_tiers.get("Insufficient Evidence", 0), 163)
+        self.assertEqual(b_tiers.get("Not Eligible", 0), 421)
+        self.assertEqual(len(df_b), 888)
+        self.assertEqual(df_b["is_eligible_for_ranking"].sum(), 304)
+
+        # Bowler evidence tiers
+        bw_tiers = df_bw["evidence_tier"].value_counts().to_dict()
+        self.assertEqual(bw_tiers.get("Strong Evidence", 0), 206)
+        self.assertEqual(bw_tiers.get("Moderate Evidence", 0), 84)
+        self.assertEqual(bw_tiers.get("Insufficient Evidence", 0), 156)
+        self.assertEqual(bw_tiers.get("Not Eligible", 0), 201)
+        self.assertEqual(len(df_bw), 647)
+        self.assertEqual(df_bw["is_eligible_for_ranking"].sum(), 290)
+
+        # Verify linear ERS formulation on top batter
+        top_b = df_b[df_b["striker_name"] == "Yashasvi Jaiswal"].iloc[0]
+        s_clutch = min(top_b["bf_clutch"] / 120.0 * 100.0, 100.0)
+        s_overall = min(top_b["bf_overall"] / 300.0 * 100.0, 100.0)
+        s_matches = min(top_b["matches_played"] / 25.0 * 100.0, 100.0)
+        s_comps = min(top_b["comps_played"] / 3.0 * 100.0, 100.0)
+        expected_ers = round(0.40 * s_clutch + 0.25 * s_overall + 0.20 * s_matches + 0.15 * s_comps, 2)
+        self.assertAlmostEqual(top_b["evidence_reliability_score"], expected_ers, places=2)
 
 
 if __name__ == "__main__":
