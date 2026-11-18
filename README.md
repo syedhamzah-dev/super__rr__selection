@@ -234,14 +234,12 @@ The Evidence Reliability Score ($ERS \in [0.0, 100.0]$) quantifies statistical e
 
 $$ERS = 0.40 \cdot S_{\text{clutch}} + 0.25 \cdot S_{\text{overall}} + 0.20 \cdot S_{\text{matches}} + 0.15 \cdot S_{\text{comps}}$$
 
-Where each sub-score uses non-linear logarithmic saturation to reward match breadth while avoiding runaway scores for volume compilers:
+Where each sub-score uses linear saturation benchmarks calibrated to professional T20 exposure distributions:
 
-$$S(n, N_{\text{target}}) = 100.0 \times \min\left(1.0, \frac{\ln(1 + n)}{\ln(1 + N_{\text{target}})}\right)$$
-
-* Clutch Volume Target: $N_{\text{target}} = 150$ balls (domain reasoning / top-quartile clutch exposure).
-* Overall Volume Target: $N_{\text{target}} = 600$ balls (domain reasoning / ~30 T20 innings).
-* Match Breadth Target: $N_{\text{target}} = 40$ matches (domain reasoning / multi-season experience).
-* Competition Depth Target: $N_{\text{target}} = 4$ tournaments (domain reasoning / cross-league versatility).
+$$S_{\text{clutch}} = \text{clip}\left(\frac{n_{\text{clutch}}}{120.0} \times 100.0, 0.0, 100.0\right) \quad [\text{Target: 120 clutch balls, top-quartile exposure}]$$
+$$S_{\text{overall}} = \text{clip}\left(\frac{n_{\text{overall}}}{300.0} \times 100.0, 0.0, 100.0\right) \quad [\text{Target: 300 total balls, ~15-20 T20 innings}]$$
+$$S_{\text{matches}} = \text{clip}\left(\frac{m}{25.0} \times 100.0, 0.0, 100.0\right) \quad [\text{Target: 25 matches, multi-season presence}]$$
+$$S_{\text{comps}} = \text{clip}\left(\frac{c}{3.0} \times 100.0, 0.0, 100.0\right) \quad [\text{Target: 3 competitions, cross-league versatility}]$$
 
 **Critical Conceptual Boundary:** ERS is an exposure coverage index. It is **not** a probability that a player is good, **not** a confidence interval, **not** a Bayesian posterior, and **not** a future performance guarantee.
 
@@ -279,16 +277,18 @@ $$BPR_{\text{bowl}} = 0.25 \cdot S_{\text{run\_control}} + 0.20 \cdot S_{\text{d
 
 ## 16. Reliability and Eligibility Framework
 
-Players are segmented into discrete evidence tiers based on their $ERS$ and minimum clutch exposure:
+Players are segmented into discrete evidence tiers based on their $ERS$ and conjunctional sample floors:
 
 | Evidence Tier | Criteria | Batters Count | Bowlers Count | Treatment in Recruitment Strategy |
 | :--- | :--- | :---: | :---: | :--- |
-| **Strong Evidence** | $ERS \ge 50.0$ | **201** | **206** | Core auction targets with extensive multi-tournament proof. |
-| **Moderate Evidence** | $20.0 \le ERS < 50.0$ | **103** | **84** | Viable targets with role-specific contextualization. |
-| **Insufficient Evidence** | $ERS < 20.0$ and clutch balls $\ge 5$ | **163** | **156** | Emerging talents; isolated on Watchlist if performance is high. |
-| **Not Eligible** | Clutch balls $< 5$ | **421** | **201** | Excluded from player rankings due to negligible exposure. |
+| **Strong Evidence** | $ERS \ge 60.0$ AND $n_{\text{clutch}} \ge 40$ AND $\text{matches} \ge 10$ | **201** | **206** | Core auction targets with extensive multi-tournament proof. |
+| **Moderate Evidence** | $ERS \ge 35.0$ AND $n_{\text{clutch}} \ge 20$ AND $\text{matches} \ge 5$ | **103** | **84** | Viable targets with role-specific contextualization. |
+| **Insufficient Evidence** | $n_{\text{overall}} \ge 30$ AND $n_{\text{clutch}} \ge 10$ (not Strong/Mod) | **163** | **156** | Emerging talents; isolated on Watchlist if performance is high. |
+| **Not Eligible** | $n_{\text{overall}} < 30$ OR $n_{\text{clutch}} < 10$ | **421** | **201** | Excluded from player rankings due to negligible exposure. |
 
-**Official Leaderboard Cutoff:** Players must have $\ge 20$ clutch deliveries faced or bowled AND be classified in `Strong Evidence` or `Moderate Evidence`. This establishes **304 eligible batters** and **290 eligible bowlers**.
+**Sub-20 Clutch Deliveries Classification:** Exactly 44 batters and 29 bowlers have between 5 and 19 clutch deliveries and $ERS \ge 20.0$. Because Moderate Evidence strictly enforces $n_{\text{clutch}} \ge 20$, 100% of these players have `is_eligible_for_ranking == False`. High-upside talents among them are monitored on the Watchlist.
+
+**Official Leaderboard Cutoff:** Players must have `is_eligible_for_ranking == True` (`Strong Evidence` or `Moderate Evidence`), satisfying $n_{\text{clutch}} \ge 20$. This establishes **304 eligible batters** and **290 eligible bowlers**.
 
 ---
 
@@ -308,6 +308,7 @@ To ensure rankings are not artifacts of specific weight choices, the models were
 **Robustness Findings:**
 * High relative rank stability: all Spearman correlations exceed **0.9635**.
 * Top 20 retention ranges from **70% to 90%**, with lower retention in aggressive stress scenarios reflecting expected tactical divergence (strike bowlers advancing over run-containment spinners) rather than mathematical instability.
+* **Scope Boundary:** These scenarios test parameter specification robustness; full statistical uncertainty quantification (bootstrapping and Bayesian posteriors) will be conducted in Module 6.
 
 ---
 
@@ -320,10 +321,10 @@ python -m pytest tests/ -v
 ```
 
 ### Test Suite Coverage:
-* `tests/test_audit_reconciliation.py` (7 tests): Run reconciliation identities, balls-faced counts, dot-ball bifurcations, anomalous deliveries, wicket breakdowns, eligibility counts, and sensitivity ranges.
+* `tests/test_audit_reconciliation.py` (9 tests): Run reconciliation identities, balls-faced counts, dot-ball bifurcations, anomalous deliveries, wicket breakdowns, eligibility counts, 6-dimension bowling model verification, sub-20 clutch exclusions, and sensitivity ranges.
 * `tests/test_module4_corrections.py` (6 tests): Scorecard balls faced, bat runs on no-balls, dot definitions, phase adjustment, and credibility weighting bounds.
 * `tests/test_module5_ratings.py` (5 tests): ERS calculation bounds, performance rating monotonicity, role filtering, and rank sensitivity.
-* **Test Outcome:** **18 passed in 3.29s** (100% pass rate).
+* **Test Outcome:** **20 passed in 4.06s** (100% pass rate).
 
 ---
 

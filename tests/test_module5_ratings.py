@@ -22,8 +22,8 @@ from src.player_ranking import (
     generate_bowler_rankings
 )
 from src.ranking_validation import (
-    test_batter_weight_sensitivity,
-    test_bowler_weight_sensitivity
+    test_batter_weight_sensitivity as validate_batter_weight_sensitivity,
+    test_bowler_weight_sensitivity as validate_bowler_weight_sensitivity
 )
 
 
@@ -128,11 +128,19 @@ class TestModule5Ratings(unittest.TestCase):
         """Verify that alternative weighting scenarios produce coherent Spearman rank correlation."""
         df_b_rel = calculate_batter_evidence_reliability(self.sample_batters)
         df_b_rated = calculate_batting_performance_rating(df_b_rel)
-        eligible = df_b_rated[df_b_rated["is_eligible_for_ranking"]].copy()
+        eligible_b = df_b_rated[df_b_rated["is_eligible_for_ranking"]].copy()
         
-        summary_df, rank_comp = test_batter_weight_sensitivity(eligible)
-        self.assertGreater(len(summary_df), 0)
-        self.assertTrue((summary_df["Spearman_Rho"] >= 0.50).all())
+        summary_b, _ = validate_batter_weight_sensitivity(eligible_b)
+        self.assertGreater(len(summary_b), 0)
+        self.assertTrue((summary_b["Spearman_Rho"] >= 0.50).all())
+
+        df_bw_rel = calculate_bowler_evidence_reliability(self.sample_bowlers)
+        df_bw_rated = calculate_bowling_performance_rating(df_bw_rel)
+        eligible_bw = df_bw_rated[df_bw_rated["is_eligible_for_ranking"]].copy()
+
+        summary_bw, _ = validate_bowler_weight_sensitivity(eligible_bw)
+        self.assertGreater(len(summary_bw), 0)
+        self.assertTrue((summary_bw["Spearman_Rho"] >= 0.50).all())
 
 
 if __name__ == "__main__":
