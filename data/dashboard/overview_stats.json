@@ -1,0 +1,223 @@
+{
+  "dataset_scope": {
+    "total_matches_in_metadata": 883,
+    "total_matches_with_deliveries": 867,
+    "abandoned_fixtures_count": 16,
+    "total_deliveries_analyzed": 200999,
+    "total_batter_runs": 269550,
+    "total_bowler_wickets": 10272,
+    "total_balls_faced": 193285,
+    "total_legal_balls": 192445,
+    "total_wides": 7714,
+    "total_no_balls": 840,
+    "competitions_covered": [
+      {
+        "name": "Indian Premier League (IPL)",
+        "code": "IPL",
+        "seasons": "2022, 2023, 2024, 2025, 2026",
+        "matches": 371
+      },
+      {
+        "name": "International T20s (T20I)",
+        "code": "T20I",
+        "seasons": "2022-2026",
+        "matches": 486
+      },
+      {
+        "name": "Emerging Teams & Rising Stars Asia Cups",
+        "code": "Asia Cups",
+        "seasons": "2024, 2025",
+        "matches": 26
+      }
+    ],
+    "temporal_range": "2022 - 2026"
+  },
+  "candidate_pool": {
+    "total_batters_evaluated": 1091,
+    "eligible_batters_count": 304,
+    "strong_evidence_batters": 201,
+    "moderate_evidence_batters": 103,
+    "total_bowlers_evaluated": 734,
+    "eligible_bowlers_count": 290,
+    "strong_evidence_bowlers": 206,
+    "moderate_evidence_bowlers": 84
+  },
+  "rr_squad_baseline": {
+    "total_registered_players": 27,
+    "active_playing_xi_rotation": 20,
+    "bench_reserve_specialists": 6,
+    "administrative_registrations": 1,
+    "domestic_players_count": 19,
+    "overseas_players_count": 8,
+    "retention_scenarios": {
+      "Scenario_A": {
+        "name": "Core Continuity Baseline",
+        "retained": 14,
+        "open_slots": 11,
+        "overseas_retained": 4
+      },
+      "Scenario_B": {
+        "name": "Moderate Refresh",
+        "retained": 10,
+        "open_slots": 15,
+        "overseas_retained": 3
+      },
+      "Scenario_C": {
+        "name": "Radical Reset",
+        "retained": 6,
+        "open_slots": 19,
+        "overseas_retained": 2
+      }
+    }
+  },
+  "tactical_gaps": [
+    {
+      "role": "Death-Overs Specialist",
+      "discipline": "Bowling",
+      "severity": "Critical",
+      "criticality": 90.0,
+      "status": "Critical Void"
+    },
+    {
+      "role": "Finisher",
+      "discipline": "Batting",
+      "severity": "Critical",
+      "criticality": 87.5,
+      "status": "Critical Void"
+    },
+    {
+      "role": "New-Ball / Powerplay Fast Bowler",
+      "discipline": "Bowling",
+      "severity": "Low",
+      "criticality": 85.0,
+      "status": "Adequate Depth"
+    },
+    {
+      "role": "Middle-Overs Spinner",
+      "discipline": "Bowling",
+      "severity": "High",
+      "criticality": 80.0,
+      "status": "Limited Depth"
+    },
+    {
+      "role": "Middle-Order Batter",
+      "discipline": "Batting",
+      "severity": "Critical",
+      "criticality": 70.0,
+      "status": "Critical Void"
+    },
+    {
+      "role": "Top-Order Batter",
+      "discipline": "Batting",
+      "severity": "Critical",
+      "criticality": 65.0,
+      "status": "Critical Void"
+    }
+  ],
+  "top_actionable_targets": {
+    "batting": [
+      {
+        "name": "Tim David",
+        "role": "Finisher",
+        "country": "Australia",
+        "is_overseas": true,
+        "rdh": 72.65,
+        "pr": 80.98,
+        "tfs": 83.84,
+        "ars": 13.58
+      },
+      {
+        "name": "Naman Dhir",
+        "role": "Batting All-Rounder",
+        "country": "India",
+        "is_overseas": false,
+        "rdh": 72.54,
+        "pr": 84.48,
+        "tfs": 79.96,
+        "ars": 16.69
+      },
+      {
+        "name": "Matthew Wade",
+        "role": "Wicketkeeper-Batter",
+        "country": "Australia",
+        "is_overseas": true,
+        "rdh": 69.82,
+        "pr": 81.39,
+        "tfs": 65.33,
+        "ars": 12.6
+      },
+      {
+        "name": "Ashutosh Sharma",
+        "role": "Finisher",
+        "country": "India",
+        "is_overseas": false,
+        "rdh": 66.09,
+        "pr": 74.92,
+        "tfs": 84.44,
+        "ars": 32.1
+      },
+      {
+        "name": "Mahipal Lomror",
+        "role": "Middle-Order Batter",
+        "country": "India (Domestic)",
+        "is_overseas": false,
+        "rdh": 65.98,
+        "pr": 85.26,
+        "tfs": 84.5,
+        "ars": 20.72
+      }
+    ],
+    "bowling": [
+      {
+        "name": "Benjamin Sears",
+        "role": "All-Phase Bowler",
+        "country": "New Zealand",
+        "is_overseas": true,
+        "rdh": 65.27,
+        "pr": 75.3,
+        "tfs": 71.41,
+        "ars": 17.14
+      },
+      {
+        "name": "Liam Dawson",
+        "role": "Middle-Overs Spinner",
+        "country": "England",
+        "is_overseas": true,
+        "rdh": 65.26,
+        "pr": 72.68,
+        "tfs": 74.81,
+        "ars": 17.05
+      },
+      {
+        "name": "Eshan Malinga",
+        "role": "Death-Overs Specialist",
+        "country": "Sri Lanka",
+        "is_overseas": true,
+        "rdh": 63.07,
+        "pr": 62.75,
+        "tfs": 80.89,
+        "ars": 18.17
+      },
+      {
+        "name": "Sikandar Raza",
+        "role": "Bowling All-Rounder",
+        "country": "Zimbabwe",
+        "is_overseas": true,
+        "rdh": 62.99,
+        "pr": 66.46,
+        "tfs": 75.27,
+        "ars": 26.09
+      },
+      {
+        "name": "Taskin Ahmed",
+        "role": "New-Ball / Powerplay Fast Bowler",
+        "country": "Bangladesh",
+        "is_overseas": true,
+        "rdh": 62.27,
+        "pr": 69.81,
+        "tfs": 61.14,
+        "ars": 16.83
+      }
+    ]
+  }
+}

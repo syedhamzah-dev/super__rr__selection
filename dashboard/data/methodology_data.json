@@ -1,0 +1,126 @@
+{
+  "metric_definitions": {
+    "PR": {
+      "name": "Performance Rating",
+      "scale": "0.00 to 100.00",
+      "summary": "Combines pressure-adjusted baseline scoring/economy with clutch performance multipliers and Empirical Bayes credibility shrinkage toward tournament prior mean.",
+      "formula": "PR = Credibility_Weight * Raw_Pressure_Score + (1 - Credibility_Weight) * Prior_Mean"
+    },
+    "ERS": {
+      "name": "Evidence Reliability Score",
+      "scale": "0.00 to 100.00",
+      "summary": "Multi-dimensional exposure metric capturing volume, clutch sample size, matches played, and tournament breadth through linear saturation functions.",
+      "formula": "ERS = 0.40 * S_clutch + 0.25 * S_overall + 0.20 * S_matches + 0.15 * S_comps",
+      "benchmarks": "Saturation caps: 120 clutch deliveries, 300 total deliveries, 25 matches, 3 competitions.",
+      "tiers": "Strong Evidence: ERS >= 60.0 & Clutch >= 40 & Matches >= 10 | Moderate Evidence: ERS >= 35.0 & Clutch >= 20 & Matches >= 5 | Insufficient: Sample too small for primary ranking"
+    },
+    "SSS": {
+      "name": "Statistical Stability Score (Top-Tier Impact Retention Index)",
+      "scale": "0.00 to 100.00",
+      "summary": "Calibrated Top-Tier Impact Retention Index evaluating candidate resilience across 1,000 bootstrap resamples, rank volatility (Top-20 retention frequency), match volume concentration (HHI), and leave-one-match-out (LOMO) rating shifts.",
+      "formula": "SSS = 0.35 * Boot_Rel + 0.30 * Top20_Freq + 0.20 * (1 - HHI) + 0.15 * LOMO_Res",
+      "note": "Specifically calibrated to measure a player's ability to retain elite top-tier impact across resampled tournament states without single-match sample dependency."
+    },
+    "TFS": {
+      "name": "Tactical Squad Fit Score",
+      "scale": "0.00 to 100.00",
+      "summary": "Measures direct alignment between player tactical role and Rajasthan Royals squad voids across retention scenarios, applying a 0.90x modifier to overseas players to reflect international roster limits."
+    },
+    "ARS": {
+      "name": "Acquisition Risk Score",
+      "scale": "0.00 to 100.00 (Higher = Higher Risk)",
+      "summary": "Quantifies auction bidding inflation risk, overseas slot scarcity, statistical volatility, and historical availability constraints.",
+      "penalty": "Includes a +6.0 risk penalty for overseas candidates."
+    },
+    "RDH": {
+      "name": "Recruitment Decision Holistic Score",
+      "scale": "0.00 to 90.00 (Theoretical Maximum: 90.00)",
+      "summary": "Synthesizes performance, reliability, stability, and tactical fit while penalizing acquisition risk. Operates on a strict 0.00 to 90.00 theoretical scale because positive weights sum to 0.90.",
+      "formula": "RDH = clip(0.30 * PR + 0.20 * ERS + 0.20 * SSS + 0.20 * TFS - 0.10 * ARS, 0.0, 90.0)",
+      "critical_rule": "Theoretical range is strictly [0.0, 90.0]. Never display RDH as a percentage or win probability."
+    }
+  },
+  "candidate_governance_rules": [
+    {
+      "category": "Viable Auction Target",
+      "badge_class": "badge-viable",
+      "description": "Actionable recruitment recommendations for Rajasthan Royals. Availability unconfirmed pending official IPL 2027 auction player registration."
+    },
+    {
+      "category": "Strategic Benchmark (BCCI Ineligible)",
+      "badge_class": "badge-ineligible",
+      "description": "Pakistani players (e.g., Sufiyan Muqeem, Imad Wasim, Haris Rauf). Ineligible for IPL under long-standing regulatory policy. Displayed strictly as international analytical benchmarks, never as actionable auction recommendations."
+    },
+    {
+      "category": "Strategic Benchmark (Rival Core)",
+      "badge_class": "badge-rival",
+      "description": "Elite franchise cornerstones (e.g., Jasprit Bumrah, Suryakumar Yadav, Sunil Narine, Rinku Singh) highly likely to be retained by rival teams. Included for comparative performance benchmarking."
+    },
+    {
+      "category": "Strategic Benchmark (Retired)",
+      "badge_class": "badge-retired",
+      "description": "Veterans retired from IPL competition (e.g., Dinesh Karthik) serving as historical reference benchmarks."
+    },
+    {
+      "category": "Existing RR Player (Internal Asset)",
+      "badge_class": "badge-internal",
+      "description": "Current Rajasthan Royals roster players (e.g., Dhruv Jurel, Ravindra Jadeja, Riyan Parag, Ravi Bishnoi, Yashasvi Jaiswal) evaluated as internal retention assets."
+    }
+  ],
+  "assumptions_register": [
+    {
+      "item_id": "REG-01",
+      "category": "Historical Squad Roster",
+      "description": "Rajasthan Royals 2026 squad composition (27 registered players, 16 matches played)",
+      "source": "Competition Data Pack (competition_team_player_mapping.csv, playing_eleven.csv)",
+      "verification_date": "2026-11-18",
+      "status": "Confirmed Historical Fact",
+      "impact_on_model": "Establishes baseline squad depth, role distribution, and performance baselines."
+    },
+    {
+      "item_id": "REG-02",
+      "category": "Tournament Governance",
+      "description": "IPL squad size limits (18-25 players) and overseas player cap (max 8 in squad, max 4 in playing XI)",
+      "source": "BCCI / IPL Governing Council Tournament Regulations",
+      "verification_date": "2026-11-18",
+      "status": "Confirmed Official Rule",
+      "impact_on_model": "Hard constraints on recruitment pool selection and scenario squad building."
+    },
+    {
+      "item_id": "REG-03",
+      "category": "Wicketkeeper Mandate",
+      "description": "Playing XI must include at least 1 verified wicketkeeper; squad must possess minimum 2 viable wicketkeepers",
+      "source": "BCCI / IPL Match Playing Conditions (Clause 1.2)",
+      "verification_date": "2026-11-18",
+      "status": "Confirmed Official Rule",
+      "impact_on_model": "Evaluates Dhruv Jurel's wicketkeeper retention and backup keeper requirements."
+    },
+    {
+      "item_id": "REG-04",
+      "category": "IPL 2027 Retentions & Releases",
+      "description": "Official player retentions and releases for IPL 2027 have not been declared by BCCI as of late 2026",
+      "source": "Official BCCI / IPL Public Notice Audit",
+      "verification_date": "2026-11-18",
+      "status": "Provisional / Not Yet Published",
+      "impact_on_model": "Mandates explicit retention scenario modeling (Scenarios A, B, C) rather than speculative assertions."
+    },
+    {
+      "item_id": "REG-05",
+      "category": "Auction Purse & Player Prices",
+      "description": "Official remaining purse, base prices, and expected auction values for IPL 2027 are unpublished",
+      "source": "Official IPL Auction Register Audit",
+      "verification_date": "2026-11-18",
+      "status": "Provisional / Not Yet Published",
+      "impact_on_model": "Prohibits fabricated financial values; models auction strategy using 100 Budget Allocation Units / percentage shares."
+    },
+    {
+      "item_id": "REG-06",
+      "category": "Player Availability & Registration",
+      "description": "Player auction registration list for IPL 2027 is unpublished; historical candidates are evaluated conditionally on availability",
+      "source": "IPL Governing Council Auction Protocols",
+      "verification_date": "2026-11-18",
+      "status": "Provisional / Conditional",
+      "impact_on_model": "Shortlists are labelled as recruitment targets subject to confirmed auction entry."
+    }
+  ]
+}

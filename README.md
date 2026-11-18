@@ -2,9 +2,10 @@
 
 ### A Cricket Player Intelligence System for Identifying Reliable Match-Winners Under Pressure
 
-[![Tests](https://img.shields.io/badge/tests-38%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-45%20passed-brightgreen.svg)](tests/)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Dashboard](https://img.shields.io/badge/dashboard-live-ff2a85.svg)](dashboard/index.html)
 
 ---
 
@@ -41,14 +42,19 @@ SupeRR Selector provides four core analytical capabilities:
 
 ## 4. Explore the Dashboard
 
-An interactive scouting dashboard (Module 8) is being built to make these insights intuitive and easy to explore in a web browser:
+An interactive cricket analytics dashboard (**Module 8**) is built directly in the repository using clean HTML5, CSS3, and Vanilla JavaScript with Chart.js:
 
-* **Player Scouting Cards:** Search and filter over 300 batters and 290 bowlers by role, origin (Domestic vs. Overseas), and performance level.
-* **Performance vs. Reliability Quadrants:** Quickly spot proven core targets, emerging high-potential picks, and volatile performers.
-* **Squad Gap Explorer:** Review Rajasthan Royals' current depth chart across 12 specific on-field roles.
-* **Auction Strategy Simulator:** Explore different squad-building scenarios to see how capital can be allocated across priority positions.
+* **Batter & Bowler Explorers:** Search, filter, and inspect 304 eligible batters and 290 eligible bowlers by role, origin (Domestic vs. Overseas), and evidence tier, with full overall vs. clutch metric splits.
+* **Side-by-Side Player Comparison:** Compare up to 3 candidates simultaneously across Performance Rating (PR), Evidence Reliability (ERS), Statistical Stability (SSS), Tactical Squad Fit (TFS), and Acquisition Risk (ARS).
+* **Rajasthan Royals Squad Analysis:** Review Rajasthan Royals' audited 2026 baseline roster (27 registered players) and evaluate tactical depth gaps across Scenarios A, B, and C.
+* **Recruitment Recommendation Matrix:** Authoritative 50-player candidate decision matrix clearly separating actionable auction targets from non-actionable strategic benchmarks (Pakistani stars, rival franchise core retentions, and retired veterans).
+* **Auction Strategy Simulator:** Interactive 100 Budget Allocation Units (BAU) scenario simulator across 5 squad-building strategies with candidate buy lists and overseas slot demand.
 
-> **Live Dashboard Status:** The interactive web dashboard is currently in active development for Module 8 and will be hosted live on Netlify. In the meantime, all charts and outputs can be viewed in the `reports/figures/` folder or explored interactively using the notebooks in `notebooks/`.
+> **How to Run the Dashboard Locally:**
+> ```powershell
+> python -m http.server 8000
+> ```
+> Then navigate your web browser to: **`http://localhost:8000/dashboard/index.html`** (or `http://localhost:8000/`).
 
 ---
 
@@ -69,20 +75,21 @@ The system processes and evaluates players through five clear steps:
 * **Top Batting Target (Overseas):** **Tim David** (Finisher). Proven multi-match death-overs boundary hitter with 400 pressure balls of experience and high statistical stability.
 * **Top Batting Target (Domestic):** **Naman Dhir** (Batting All-Rounder). Combines high-pressure scoring power with useful bowling overs, saving a valuable overseas roster spot.
 * **Dual-Role Depth:** **Matthew Wade** (Wicketkeeper-Finisher). Solves Rajasthan Royals' backup wicketkeeping need while adding experienced lower-order finishing power.
-* **Top Bowling Target (Overseas):** **Sufiyan Muqeem** (Middle-Overs Spinner). Elite middle-overs run containment with a 5.71 clutch economy rate across 25 matches.
-* **Defensive Bowling Anchor:** **Imad Wasim** (Bowling All-Rounder). Outstanding economy under pressure combined with reliable lower-order batting.
-* **Primary Death Pacer:** **Benjamin Sears** (Death Specialist). High-pace enforcer with 15 clutch wickets to partner Jofra Archer in closing out innings.
-* **Smart Redundancy Avoidance:** Outstanding openers like **Finn Allen** are deprioritized because Rajasthan Royals already has elite young opening talent in Yashasvi Jaiswal and Vaibhav Sooryavanshi.
+* **Top Bowling Target (Overseas):** **Benjamin Sears** (Death-Overs Specialist). High-pace enforcer with 15 clutch wickets to partner Jofra Archer in closing out tight innings.
+* **Strategic Spin Target:** **Liam Dawson** (Middle-Overs Control Spinner). Elite containment spinner with high tournament pedigree and lower-order batting capability.
+* **International Tactical Benchmarks:** Players like **Sufiyan Muqeem** (5.71 clutch economy) and **Imad Wasim** are retained strictly as global comparative benchmarks; under BCCI regulatory policy, Pakistani players are ineligible for IPL auction recruitment.
+* **Smart Redundancy Avoidance:** Outstanding openers like **Finn Allen** are deprioritized because Rajasthan Royals already possesses elite opening talent in Yashasvi Jaiswal and Vaibhav Sooryavanshi.
 * **Volatility Warnings:** High-rated players whose numbers depend heavily on a single match (such as **Chris Woakes**) are clearly flagged for caution.
 
 ---
 
 ## 7. Technology Used
 
-* **Language:** Python 3.10+
-* **Data Processing:** pandas, NumPy, PyArrow (Parquet format)
-* **Statistical Modeling:** scikit-learn, SciPy
-* **Automated Testing:** pytest (38 unit and governance tests, 100% pass rate)
+* **Languages:** Python 3.10+, HTML5, CSS3, Vanilla JavaScript (ES6+)
+* **Interactive Dashboard:** HTML5, CSS3 (Responsive Dark Sports Analytics Theme), Chart.js 4.4.1 (No heavy JS frameworks)
+* **Data Processing:** pandas, NumPy, PyArrow (Parquet & CSV formats)
+* **Statistical Modeling:** scikit-learn, SciPy (Empirical Bayes Credibility Shrinkage, 1,000 Bootstrap Resampling)
+* **Automated Testing:** pytest (45 unit, governance, and dashboard tests, 100% pass rate)
 * **Visualizations & Notebooks:** Matplotlib, Seaborn, Jupyter Notebook
 
 ---
@@ -91,11 +98,17 @@ The system processes and evaluates players through five clear steps:
 
 ```
 Rajhstan royals/
+├── dashboard/            # Interactive Web Dashboard (Module 8)
+│   ├── index.html        # Single-page dashboard application with 7 tabbed views
+│   ├── css/style.css     # Responsive sports analytics dark theme (RR Pink & Royal Blue)
+│   ├── js/               # Modular application scripts (app.js, data.js, charts.js)
+│   └── data/             # Lightweight JSON feeds exported from verified analytical models
+├── index.html            # Root web entrypoint with auto-redirect to dashboard
 ├── Data Pack/            # Original competition CSV files (deliveries, matches, lineups)
 ├── data/processed/       # Verified clean datasets, ratings, and squad models (Parquet & CSV)
 ├── notebooks/            # Seven step-by-step Jupyter notebooks covering Modules 1 to 7
 ├── src/                  # Core Python modules for data processing, scoring, and strategy
-├── tests/                # Automated test suite ensuring 100% data and logic accuracy
+├── tests/                # Automated test suite ensuring 100% data and logic accuracy (45 tests)
 └── reports/              # Methodology reports, documentation summaries, and visual figures
     └── figures/          # High-resolution publication charts and analytical plots
 ```
@@ -127,22 +140,38 @@ Install the project dependencies:
 pip install pandas numpy scikit-learn pyarrow pytest nbformat matplotlib seaborn
 ```
 
-### 3. Run Automated Tests
-Verify that all 38 data integrity, logic, and governance tests pass:
+### 3. Launch the Interactive Dashboard (Module 8)
+Start a lightweight local web server from the project root:
+
+```powershell
+python -m http.server 8000
+```
+
+Open your browser and navigate to:
+* **`http://localhost:8000/dashboard/index.html`** (or `http://localhost:8000/`)
+
+To re-export or update the dashboard JSON feeds from processed analytical tables:
+
+```powershell
+python src/export_dashboard_data.py
+```
+
+### 4. Run Automated Tests
+Verify that all 45 data integrity, logic, governance, and dashboard tests pass:
 
 ```powershell
 python -m pytest tests/ -v
 ```
 
-### 4. Run Analysis Scripts
-Generate all analytical datasets and figures directly from the command line:
+### 5. Run Analytical Generation Scripts
+Regenerate all processed datasets, models, and publication figures directly:
 
 ```powershell
 python src/generate_module6_outputs.py
 python src/generate_module7_outputs.py
 ```
 
-### 5. Explore Research Notebooks
+### 6. Explore Research Notebooks
 Launch Jupyter to inspect any research module interactively:
 
 ```powershell

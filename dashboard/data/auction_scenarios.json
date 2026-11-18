@@ -1,0 +1,205 @@
+[
+  {
+    "scenario_key": "Scenario_1_Balanced_Reinforcement",
+    "scenario_name": "Balanced Squad Reinforcement",
+    "strategic_focus": "Distribute capital across the three critical voids: specialist finisher, secondary death pacer, and middle-overs spin enforcer.",
+    "total_budget_units": 100.0,
+    "overseas_slots_demanded": 3,
+    "main_advantages": "Directly patches all three primary statistical voids without over-concentrating budget into a single high-beta player.",
+    "main_risks": "Spreading resources evenly may lead to losing targeted bidding duels for the very best player in each role.",
+    "squad_balance_impact": "Establishes a robust 18-22 player squad with two distinct crisis-phase specialists (Archer + Sears; Parag + David).",
+    "budget_allocations": [
+      {
+        "allocation_category": "Primary Death-Overs Specialist Bowler",
+        "budget_units": 35.0,
+        "pct_of_budget": 35.0
+      },
+      {
+        "allocation_category": "Proven Lower-Order Finisher Batter",
+        "budget_units": 30.0,
+        "pct_of_budget": 30.0
+      },
+      {
+        "allocation_category": "Attacking Middle-Overs Spinner",
+        "budget_units": 20.0,
+        "pct_of_budget": 20.0
+      },
+      {
+        "allocation_category": "Domestic Depth / Backup Wicketkeeper",
+        "budget_units": 15.0,
+        "pct_of_budget": 15.0
+      }
+    ],
+    "key_candidate_targets": {
+      "Top_Order_Anchor": [
+        "Devdutt Padikkal (Domestic)",
+        "Angkrish Raghuvanshi (Domestic)"
+      ],
+      "Death_Finisher": [
+        "Tim David (Overseas)",
+        "Matthew Wade (Overseas)",
+        "Mahipal Lomror (Domestic)"
+      ],
+      "Middle_Spinner": [
+        "Liam Dawson (Overseas)",
+        "Mujeeb Ur Rahman (Overseas)",
+        "George Dockrell (Overseas)"
+      ],
+      "Death_Bowler": [
+        "Benjamin Sears (Overseas)",
+        "Nathan Ellis (Overseas)",
+        "Mohsin Khan (Domestic)"
+      ]
+    }
+  },
+  {
+    "scenario_key": "Scenario_2_Bowling_Depth_Priority",
+    "scenario_name": "Bowling-Depth Priority",
+    "strategic_focus": "Resolve Rajasthan Royals' acute bowling economy bleed (9.93 PP, 9.70 Mid, 9.74 Death in 2026) by acquiring dual elite strike weapons.",
+    "total_budget_units": 100.0,
+    "overseas_slots_demanded": 3,
+    "main_advantages": "Constructs the most formidable bowling attack in the competition, completely insulating RR from Archer fatigue or off-days.",
+    "main_risks": "Leaves lower-order batting reliant on domestic emerging finishers (Ashutosh Sharma/Shubham Dubey).",
+    "squad_balance_impact": "Creates elite defensive bowling ceiling; matches become lower-scoring and less dependent on top-order run explosions.",
+    "budget_allocations": [
+      {
+        "allocation_category": "Elite Death-Overs Specialist Pacer",
+        "budget_units": 40.0,
+        "pct_of_budget": 40.0
+      },
+      {
+        "allocation_category": "High-Leverage Middle-Overs Spin Enforcer",
+        "budget_units": 25.0,
+        "pct_of_budget": 25.0
+      },
+      {
+        "allocation_category": "Multi-Phase Bowling All-Rounder",
+        "budget_units": 20.0,
+        "pct_of_budget": 20.0
+      },
+      {
+        "allocation_category": "Domestic Power-Hitting Batter",
+        "budget_units": 15.0,
+        "pct_of_budget": 15.0
+      }
+    ],
+    "key_candidate_targets": {
+      "Death_Bowler": [
+        "Benjamin Sears (Overseas)",
+        "Nathan Ellis (Overseas)",
+        "Tushar Deshpande (Domestic)"
+      ],
+      "Middle_Spinner": [
+        "Liam Dawson (Overseas)",
+        "Mujeeb Ur Rahman (Overseas)"
+      ],
+      "Powerplay_Pacer": [
+        "Nathan Ellis (Overseas)",
+        "Mohsin Khan (Domestic)"
+      ],
+      "Death_Finisher": [
+        "Ashutosh Sharma (Domestic)",
+        "Mahipal Lomror (Domestic)"
+      ]
+    }
+  },
+  {
+    "scenario_key": "Scenario_3_Finishing_Power_Priority",
+    "scenario_name": "Middle-Order & Finishing Power Priority",
+    "strategic_focus": "Remedy the decline in late-overs run-rates (Hetmyer SR 105.4 in 2026) by prioritizing proven boundary hitters at overs 16-20.",
+    "total_budget_units": 100.0,
+    "overseas_slots_demanded": 2,
+    "main_advantages": "Guarantees match-winning death-overs hitting (180+ clutch SR) supporting Jaiswal, Sooryavanshi, and Parag.",
+    "main_risks": "Leaves secondary bowling attack thin if Archer sustains an injury or bowls expensive overs.",
+    "squad_balance_impact": "Maximizes chasing potential and target-setting ceilings in high-scoring venues like Jaipur and Mumbai.",
+    "budget_allocations": [
+      {
+        "allocation_category": "Elite Overseas Finisher (Tim David archetype)",
+        "budget_units": 45.0,
+        "pct_of_budget": 45.0
+      },
+      {
+        "allocation_category": "Domestic Middle-Order Enforcer (Lomror / Dhir)",
+        "budget_units": 25.0,
+        "pct_of_budget": 25.0
+      },
+      {
+        "allocation_category": "Defensive Death-Overs Pacer",
+        "budget_units": 20.0,
+        "pct_of_budget": 20.0
+      },
+      {
+        "allocation_category": "Spin / All-Rounder Backup",
+        "budget_units": 10.0,
+        "pct_of_budget": 10.0
+      }
+    ],
+    "key_candidate_targets": {}
+  },
+  {
+    "scenario_key": "Scenario_4_Domestic_Talent_Maximization",
+    "scenario_name": "Domestic Talent Maximization",
+    "strategic_focus": "Invest aggressively in premium Indian domestic assets to preserve scarce overseas slots for global strike weapons.",
+    "total_budget_units": 100.0,
+    "overseas_slots_demanded": 2,
+    "main_advantages": "Maximizes tactical flexibility by fielding 8 high-performing Indian domestic players, allowing RR to rotate overseas specialists based on pitch.",
+    "main_risks": "Premium Indian domestic stars often encounter ferocious bidding inflation in mini-auctions.",
+    "squad_balance_impact": "Builds sustainable multi-year franchise core aligned with RR's historical scouting and development ethos.",
+    "budget_allocations": [
+      {
+        "allocation_category": "Premium Indian Multi-Role Star (Naman Dhir)",
+        "budget_units": 35.0,
+        "pct_of_budget": 35.0
+      },
+      {
+        "allocation_category": "Indian Middle-Order Power Hitter (Lomror / Ashutosh)",
+        "budget_units": 25.0,
+        "pct_of_budget": 25.0
+      },
+      {
+        "allocation_category": "Overseas Elite Strike Bowler (Sears / Ellis)",
+        "budget_units": 25.0,
+        "pct_of_budget": 25.0
+      },
+      {
+        "allocation_category": "Overseas Finisher / Backup Keeper (Wade / David)",
+        "budget_units": 15.0,
+        "pct_of_budget": 15.0
+      }
+    ],
+    "key_candidate_targets": {}
+  },
+  {
+    "scenario_key": "Scenario_5_High_Upside_Controlled_Risk",
+    "scenario_name": "High-Upside, Controlled-Risk Strategy",
+    "strategic_focus": "Pair proven high-stability veterans with calculated high-ceiling prospects from the Module 5/6 Watchlist.",
+    "total_budget_units": 100.0,
+    "overseas_slots_demanded": 3,
+    "main_advantages": "Provides floor security via the veteran anchor while capturing tournament-winning explosive upside from young prospects.",
+    "main_risks": "Higher statistical variance if the emerging prospects fail to adapt to IPL stage pressure.",
+    "squad_balance_impact": "Exciting, high-tempo squad capable of overwhelming opponents when high-ceiling bets pay off.",
+    "budget_allocations": [
+      {
+        "allocation_category": "Proven High-Stability Veteran Anchor",
+        "budget_units": 40.0,
+        "pct_of_budget": 40.0
+      },
+      {
+        "allocation_category": "High-Ceiling Emerging Power Prospect",
+        "budget_units": 25.0,
+        "pct_of_budget": 25.0
+      },
+      {
+        "allocation_category": "High-Ceiling Death Bowler Prospect",
+        "budget_units": 20.0,
+        "pct_of_budget": 20.0
+      },
+      {
+        "allocation_category": "Versatile Domestic Role Players",
+        "budget_units": 15.0,
+        "pct_of_budget": 15.0
+      }
+    ],
+    "key_candidate_targets": {}
+  }
+]

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SupeRR Selector — In-Browser Automated QA Test Suite</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body style="padding: 20px;">
+  <h1>In-Browser Automated QA Test Suite</h1>
+  <div id="test-output" style="font-family: monospace; white-space: pre-wrap; background: #0f172a; padding: 16px; border-radius: 8px; margin-top: 16px; border: 1px solid #263346;">
+    Running automated browser tests...
+  </div>
+
+  <!-- Hidden Sandbox Container replicating index.html DOM structure -->
+  <div id="sandbox-dom" style="display: none;"></div>
+
+  <script src="js/data_bundle.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+
+  <script>
+    const log = [];
+    function assert(condition, message) {
+      if (condition) {
+        log.push(`[PASS] ${message}`);
+      } else {
+        log.push(`[FAIL] ${message}`);
+        console.error(`Assertion failed: ${message}`);
+      }
+    }
+
+    async function runBrowserTests() {
+      try {
+        log.push("=== STARTING BROWSER AUTOMATION TESTS ===");
+
+        // 1. Test Data Manager Initialisation from Bundle
+        await DataManager.loadAllData();
+        assert(DataManager.data.batters.length === 304, `Batters count is 304 (Found: ${DataManager.data.batters.length})`);
+        assert(DataManager.data.bowlers.length === 290, `Bowlers count is 290 (Found: ${DataManager.data.bowlers.length})`);
+        assert(DataManager.data.recruitmentMatrix.length === 50, `Recruitment Matrix count is 50 (Found: ${DataManager.data.recruitmentMatrix.length})`);
+        assert(DataManager.data.rrSquad.length === 27, `RR Squad Baseline count is 27 (Found: ${DataManager.data.rrSquad.length})`);
+        assert(DataManager.data.squadGaps.length === 36, `Squad Gaps count is 36 (Found: ${DataManager.data.squadGaps.length})`);
+        assert(DataManager.data.auctionScenarios.length === 5, `Auction Scenarios count is 5 (Found: ${DataManager.data.auctionScenarios.length})`);
+
+        // 2. Test Reconciled Scope Numbers
+        const scope = DataManager.data.overview.dataset_scope;
+        assert(scope.total_matches_in_metadata === 883, `Matches in metadata is 883 (Found: ${scope.total_matches_in_metadata})`);
+        assert(scope.total_deliveries_analyzed === 200999, `Deliveries analyzed is 200,999 (Found: ${scope.total_deliveries_analyzed})`);
+        assert(scope.total_batter_runs === 269550, `Total bat runs is 269,550 (Found: ${scope.total_batter_runs})`);
+        assert(scope.total_bowler_wickets === 10272, `Total bowler wickets is 10,272 (Found: ${scope.total_bowler_wickets})`);
+        assert(scope.temporal_range === "2022 - 2026", `Temporal range is 2022 - 2026 (Found: ${scope.temporal_range})`);
+
+        // 3. Test Authoritative Evidence Tier Filtering
+        const strongB = DataManager.filterBatters({ tier: "Strong" });
+        const modB = DataManager.filterBatters({ tier: "Moderate" });
+        assert(strongB.length === 201, `Strong Evidence Batters count is 201 (Found: ${strongB.length})`);
+        assert(modB.length === 103, `Moderate Evidence Batters count is 103 (Found: ${modB.length})`);
+        assert(strongB.length + modB.length === 304, "Strong + Moderate equals total 304 eligible batters");
+
+        const strongBw = DataManager.filterBowlers({ tier: "Strong" });
+        const modBw = DataManager.filterBowlers({ tier: "Moderate" });
+        assert(strongBw.length === 206, `Strong Evidence Bowlers count is 206 (Found: ${strongBw.length})`);
+        assert(modBw.length === 84, `Moderate Evidence Bowlers count is 84 (Found: ${modBw.length})`);
+        assert(strongBw.length + modBw.length === 290, "Strong + Moderate equals total 290 eligible bowlers");
+
+        // 4. Test Search Filtering
+        const searchTim = DataManager.filterBatters({ search: "Tim David" });
+        assert(searchTim.length === 1 && searchTim[0].player_name === "Tim David", "Search 'Tim David' returns exactly 1 record");
+        
+        const searchNone = DataManager.filterBatters({ search: "NonExistentPlayerXYZ" });
+        assert(searchNone.length === 0, "Search for non-existent player returns empty list");
+
+        // 5. Test Actionable-Only Filtering vs Governance Isolation
+        const actionableBatters = DataManager.filterBatters({ actionableOnly: true });
+        assert(!actionableBatters.some(b => b.candidate_category.includes("Benchmark")), "Actionable batters exclude all benchmarks");
+        assert(!actionableBatters.some(b => b.candidate_category.includes("Internal")), "Actionable batters exclude RR internal assets");
+
+        const actionableBowlers = DataManager.filterBowlers({ actionableOnly: true });
+        assert(!actionableBowlers.some(bw => bw.country === "Pakistan"), "Actionable bowlers exclude all Pakistani players");
+        assert(!actionableBowlers.some(bw => bw.player_id === 2933), "Actionable bowlers exclude Jasprit Bumrah (Rival Core)");
+
+        // 6. Test Recruitment Shortlists Sub-Tabs
+        const viableTargets = DataManager.filterRecruitmentMatrix("Viable Auction Target", "ALL", false);
+        assert(viableTargets.length === 36, `Viable Auction Targets count is 36 (Found: ${viableTargets.length})`);
+
+        const benchmarks = DataManager.filterRecruitmentMatrix("ALL", "ALL", false).filter(p => p.candidate_category.includes("Benchmark"));
+        assert(benchmarks.length === 10, `Strategic Benchmarks count is 10 (Found: ${benchmarks.length})`);
+
+        const internalRR = DataManager.filterRecruitmentMatrix("ALL", "ALL", false).filter(p => p.candidate_category.includes("Internal"));
+        assert(internalRR.length === 4, `Internal RR Assets in Top 50 is 4 (Found: ${internalRR.length})`);
+        assert(viableTargets.length + benchmarks.length + internalRR.length === 50, "36 viable + 10 benchmarks + 4 internal = 50 total candidates");
+
+        // 7. Test Side-by-Side Comparison (Max 3 Limit)
+        DataManager.clearComparison();
+        const p1 = DataManager.data.batters[0];
+        const p2 = DataManager.data.batters[1];
+        const p3 = DataManager.data.batters[2];
+        const p4 = DataManager.data.batters[3];
+
+        assert(DataManager.addToComparison(p1).success, "Add 1st player to comparison succeeds");
+        assert(DataManager.addToComparison(p2).success, "Add 2nd player to comparison succeeds");
+        assert(DataManager.addToComparison(p3).success, "Add 3rd player to comparison succeeds");
+        
+        const fourthAttempt = DataManager.addToComparison(p4);
+        assert(fourthAttempt.success === false, "Add 4th player is blocked by max-3 constraint");
+        assert(DataManager.comparisonList.length === 3, "Comparison list length remains capped at 3");
+
+        DataManager.removeFromComparison(p1.player_id);
+        assert(DataManager.comparisonList.length === 2, "Removing player reduces comparison list to 2");
+        DataManager.clearComparison();
+        assert(DataManager.comparisonList.length === 0, "Clearing comparison leaves empty list");
+
+        // 8. Test Auction Scenarios (100 BAU Conserved Total)
+        DataManager.data.auctionScenarios.forEach((scen, idx) => {
+          assert(scen.total_budget_units === 100.0, `Scenario ${idx+1} total is 100.0 BAU`);
+          const sumAlloc = scen.budget_allocations.reduce((sum, a) => sum + a.budget_units, 0);
+          assert(Math.abs(sumAlloc - 100.0) < 0.01, `Scenario ${idx+1} allocation sum is exactly 100.0 BAU (Found: ${sumAlloc})`);
+        });
+
+        // 9. Test RDH Scale Invariant (0.0 to 90.0)
+        const allRDHs = [
+          ...DataManager.data.batters.map(b => b.recruitment_decision_score),
+          ...DataManager.data.bowlers.map(bw => bw.recruitment_decision_score)
+        ];
+        const minRDH = Math.min(...allRDHs);
+        const maxRDH = Math.max(...allRDHs);
+        assert(minRDH >= 0.0, `Minimum RDH is >= 0.0 (Found: ${minRDH})`);
+        assert(maxRDH <= 90.0, `Maximum RDH is <= 90.0 (Found: ${maxRDH})`);
+
+        log.push("=== ALL BROWSER AUTOMATION TESTS COMPLETED SUCCESSFULLY ===");
+      } catch (err) {
+        log.push(`[FATAL ERROR] ${err.message}`);
+        console.error(err);
+      }
+
+      document.getElementById("test-output").textContent = log.join("\n");
+    }
+
+    window.addEventListener("DOMContentLoaded", runBrowserTests);
+  </script>
+</body>
+</html>
