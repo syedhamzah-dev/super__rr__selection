@@ -638,6 +638,17 @@ const App = {
   },
 
   /**
+   * Helper to generate clean, consistent initials for avatars
+   */
+  getInitials(name, fallback = "RR") {
+    if (!name || typeof name !== "string") return fallback;
+    const parts = name.trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return fallback;
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  },
+
+  /**
    * Helper to format badges
    */
   getCategoryBadge(category) {
@@ -794,7 +805,7 @@ const App = {
     const inComp = DataManager.comparisonList.some(item => item.player_id === p.player_id && item.discipline === discipline);
     const rankNum = rank || p.rank || 1;
     const rankClass = rankNum === 1 ? "rank-1" : (rankNum === 2 ? "rank-2" : (rankNum === 3 ? "rank-3" : ""));
-    const initials = p.initials || (p.player_name ? p.player_name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase() : "RR");
+    const initials = p.initials || this.getInitials(p.player_name, "RR");
     const avatarBg = isBat ? "batting" : "bowling";
     const clutchStats = p.key_stats || {};
 
@@ -827,9 +838,8 @@ const App = {
     return `
       <div class="scout-card ${rankClass}">
         <div class="scout-card-header">
-          <div class="scout-avatar-wrap">
-            <img class="scout-avatar-img" loading="lazy" src="${p.image_url || ''}" alt="${p.image_alt || ('Photograph of ' + p.player_name)}" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';" style="${p.image_url ? '' : 'display:none;'}" />
-            <div class="scout-avatar ${avatarBg}" style="${p.image_url ? 'display:none;' : 'display:flex;'}">
+          <div class="scout-avatar-wrap" aria-hidden="true">
+            <div class="scout-avatar ${avatarBg}">
               ${initials}
             </div>
             <div class="scout-rank-badge">#${rankNum}</div>
@@ -942,14 +952,13 @@ const App = {
   buildBenchmarkCard(b) {
     const isBat = b.discipline === "Batting";
     const avatarBg = isBat ? "batting" : "bowling";
-    const initials = b.initials || "BM";
+    const initials = b.initials || this.getInitials(b.player_name, "BM");
 
     return `
       <div class="scout-card" style="border-left: 3px solid ${b.candidate_category.includes('Ineligible') ? '#f43f5e' : '#f59e0b'};">
         <div class="scout-card-header">
-          <div class="scout-avatar-wrap">
-            <img class="scout-avatar-img" loading="lazy" src="${b.image_url || ''}" alt="${b.image_alt || ('Photograph of ' + b.player_name)}" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';" style="${b.image_url ? '' : 'display:none;'}" />
-            <div class="scout-avatar ${avatarBg}" style="${b.image_url ? 'display:none;' : 'display:flex;'}">
+          <div class="scout-avatar-wrap" aria-hidden="true">
+            <div class="scout-avatar ${avatarBg}">
               ${initials}
             </div>
           </div>
@@ -1391,18 +1400,17 @@ const App = {
     if (!bodyEl) return;
 
     const isBat = discipline === "Batting";
-    const initials = p.initials || (p.player_name ? p.player_name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase() : "RR");
+    const initials = p.initials || this.getInitials(p.player_name, "RR");
     const avatarBg = isBat ? "batting" : "bowling";
 
     bodyEl.innerHTML = `
       <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding: 12px 16px; background: rgba(30, 41, 59, 0.4); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-        <div class="scout-avatar-wrap" style="width: 64px; height: 64px;">
-          <img class="scout-avatar-img" loading="lazy" src="${p.image_url || ''}" alt="${p.image_alt || ('Photograph of ' + p.player_name)}" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='flex';" style="${p.image_url ? '' : 'display:none;'}" />
-          <div class="scout-avatar ${avatarBg}" style="${p.image_url ? 'display:none;' : 'display:flex;'} font-size: 22px;">
+        <div class="scout-avatar-wrap" style="width: 58px; height: 58px; min-width: 58px;" aria-hidden="true">
+          <div class="scout-avatar ${avatarBg}" style="width: 58px; height: 58px; font-size: 20px;">
             ${initials}
           </div>
         </div>
-        <div style="flex: 1;">
+        <div style="flex: 1; min-width: 0;">
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             <h3 style="font-size: 22px; font-weight: 800; color: #fff; margin: 0;">${p.player_name}</h3>
             ${this.getCategoryBadge(p.candidate_category)}
