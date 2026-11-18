@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SupeRR Selector — Rajasthan Royals Player Intelligence System</title>
+  <title>SupeRR Intelligence — Cricket Performance & Scouting Platform</title>
   <link rel="stylesheet" href="css/style.css">
   <!-- Chart.js 4.4.1 for interactive visual analytics -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -14,18 +14,23 @@
   <header class="app-header">
     <div class="header-inner">
       <div class="brand-section">
-        <div class="brand-logo">RR</div>
+        <div class="brand-logo" aria-hidden="true">RR</div>
         <div class="brand-titles">
-          <h1>SupeRR <span class="highlight">Selector</span> <span class="brand-badge">IPL 2027</span></h1>
-          <p>Cricket Player Performance Intelligence & Recruitment Decision System</p>
+          <h1>SupeRR <span class="highlight">Intelligence</span> <span class="brand-badge">IPL 2027</span></h1>
+          <p>Cricket Performance & Scouting Platform</p>
         </div>
       </div>
-      <nav class="nav-tabs" aria-label="Dashboard Views">
+      <button class="nav-toggle" id="nav-toggle-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav-tabs">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+      <nav class="nav-tabs" id="main-nav-tabs" aria-label="Dashboard Views">
         <button class="nav-tab active" data-tab="overview">Home</button>
         <button class="nav-tab" data-tab="top-batters">Top 10 Batters</button>
         <button class="nav-tab" data-tab="top-bowlers">Top 10 Bowlers</button>
-        <button class="nav-tab" data-tab="batters">All Batters</button>
-        <button class="nav-tab" data-tab="bowlers">All Bowlers</button>
+        <button class="nav-tab" data-tab="batters">Batter Explorer</button>
+        <button class="nav-tab" data-tab="bowlers">Bowler Explorer</button>
         <button class="nav-tab" data-tab="squad">RR Squad</button>
         <button class="nav-tab" data-tab="recruitment">Recruitment</button>
         <button class="nav-tab" data-tab="auction">Auction Strategy</button>
@@ -55,60 +60,42 @@
           <span>•</span>
           <span>Lead Analyst: Syed Mohammad Hamzah (B.Tech CSE Data Analytics)</span>
         </div>
-        <h2 class="hero-title">SupeRR <span class="pink">Selector</span></h2>
-        <div class="hero-tagline">Cricket Intelligence. Pressure Performance. Smarter Player Selection.</div>
+        <h2 class="hero-title">SupeRR <span class="pink">Intelligence</span></h2>
+        <div class="hero-subtitle">Cricket Performance & Scouting Platform</div>
+        <div class="hero-tagline">Discover Talent. Decode Performance. Make Smarter Decisions.</div>
         <p class="hero-description">
-          An advanced recruitment and scouting intelligence platform engineered ahead of the IPL 2027 auction.
-          By isolating delivery-level performance under extreme match pressure (Leverage Index &ge; 1.0), applying Empirical Bayes credibility shrinkage, and calibrating against Rajasthan Royals' specific squad vacancies, SupeRR Selector pinpoints genuine match-winners and separates elite skill from fleeting form.
+          An elite recruitment intelligence platform engineered ahead of the IPL 2027 mega-auction.
+          By isolating delivery-level performance under extreme match pressure (Leverage Index &ge; 1.0), applying Empirical Bayes statistical shrinkage, and calibrating against Rajasthan Royals' specific squad vacancies, SupeRR Intelligence identifies genuine match-winners and separates elite skill from fleeting form.
         </p>
 
-        <!-- Core Value Proposition Pillars -->
-        <div class="hero-pills">
-          <div class="hero-pill">
-            <span class="icon">⚡</span>
-            <div>
-              <strong>Pressure Performance First</strong>
-              <span>Leverage Index &ge; 1.0 clutch evaluation across 883 matches</span>
-            </div>
-          </div>
-          <div class="hero-pill">
-            <span class="icon">🎯</span>
-            <div>
-              <strong>Statistical Reliability & Stability</strong>
-              <span>Empirical Bayes shrinkage & 1,000 bootstrap resamples</span>
-            </div>
-          </div>
-          <div class="hero-pill">
-            <span class="icon">🛡️</span>
-            <div>
-              <strong>Precision RR Tactical Fit</strong>
-              <span>Directly addresses death bowling & finisher voids</span>
-            </div>
-          </div>
+        <!-- Compact Historical Scope Summary Pill -->
+        <div class="hero-scope-pill">
+          <span>📊 Audited Multi-Tournament Scope:</span>
+          <strong>883 Matches</strong> (867 with deliveries) • <strong>200,999 Deliveries</strong> • <strong>2022–2026</strong> (IPL, T20Is, Asia Cups)
         </div>
 
         <!-- Quick Action Jump Links -->
         <div class="hero-actions">
           <button class="hero-btn hero-btn-primary" data-jump="top-batters">
-            <span>🏏 View Top 10 Batters</span>
+            <span>🏏 Explore Top 10 Batters</span>
             <span>&rarr;</span>
           </button>
           <button class="hero-btn hero-btn-blue" data-jump="top-bowlers">
-            <span>⚡ View Top 10 Bowlers</span>
+            <span>⚡ Explore Top 10 Bowlers</span>
             <span>&rarr;</span>
           </button>
           <button class="hero-btn hero-btn-secondary" data-jump="squad">
-            <span>🛡️ RR Squad Voids</span>
+            <span>🛡️ RR Squad Priorities</span>
           </button>
-          <button class="hero-btn hero-btn-secondary" data-jump="auction">
-            <span>💰 Simulated Auction (100 BAU)</span>
+          <button class="hero-btn hero-btn-secondary" data-jump="methodology">
+            <span>📖 Methodology & Glossary</span>
           </button>
         </div>
 
         <div class="hero-notice-banner">
           <span>ℹ️</span>
           <div>
-            <strong>Recruitment & Regulatory Notice:</strong> Recommended players are model-derived priority targets based on audited 2022–2026 match data. Official IPL 2027 player registration is unconfirmed. Under BCCI regulatory policy, Pakistani players cannot register and are retained strictly as global tactical benchmarks.
+            <strong>Recruitment & Regulatory Notice:</strong> Recommended players are model-derived priority targets based on audited 2022–2026 match data. Official IPL 2027 player registration is unconfirmed. Under long-standing BCCI regulatory policy, Pakistani players cannot register and are retained strictly as global tactical benchmarks.
           </div>
         </div>
       </div>
@@ -361,27 +348,51 @@
       <div class="metric-guide-strip">
         <div class="metric-guide-item">
           <span style="color: var(--rr-pink); font-size: 16px;">⚡</span>
-          <div><strong>Pressure Performance (PR, 0–100):</strong> Performance under high match leverage.</div>
+          <div>
+            <strong>Performance Rating (PR)</strong>
+            <button type="button" class="metric-info-btn" data-metric="PR" aria-label="Performance Rating information">ℹ</button>
+            : Historical clutch rating (0–100 scale).
+          </div>
         </div>
         <div class="metric-guide-item">
           <span style="color: #60a5fa; font-size: 16px;">📊</span>
-          <div><strong>Evidence Strength (ERS, 0–100):</strong> Match volume reliability (Strong vs. Moderate).</div>
+          <div>
+            <strong>Evidence Reliability Score (ERS)</strong>
+            <button type="button" class="metric-info-btn" data-metric="ERS" aria-label="Evidence Reliability information">ℹ</button>
+            : Volume coverage (0–100 scale).
+          </div>
         </div>
         <div class="metric-guide-item">
           <span style="color: #fbbf24; font-size: 16px;">🛡️</span>
-          <div><strong>Stability (SSS, 0–100):</strong> Top-Tier Impact Retention Index across 1,000 bootstrap resamples.</div>
+          <div>
+            <strong>Statistical Stability Score (SSS)</strong>
+            <button type="button" class="metric-info-btn" data-metric="SSS" aria-label="Statistical Stability information">ℹ</button>
+            : Top-Tier Retention Index (0–100 scale).
+          </div>
         </div>
         <div class="metric-guide-item">
           <span style="color: #34d399; font-size: 16px;">🎯</span>
-          <div><strong>RR Squad Fit (TFS, 0–100):</strong> Direct alignment with RR's tactical voids.</div>
+          <div>
+            <strong>Tactical Fit Score (TFS)</strong>
+            <button type="button" class="metric-info-btn" data-metric="TFS" aria-label="Tactical Fit information">ℹ</button>
+            : RR squad void alignment (0–100 scale).
+          </div>
         </div>
         <div class="metric-guide-item">
           <span style="color: #f87171; font-size: 16px;">⚠️</span>
-          <div><strong>Acquisition Risk (ARS):</strong> Bidding inflation & OS slot cost (lower is safer).</div>
+          <div>
+            <strong>Acquisition Risk Score (ARS)</strong>
+            <button type="button" class="metric-info-btn" data-metric="ARS" aria-label="Acquisition Risk information">ℹ</button>
+            : Bidding inflation & OS slot cost (lower is safer).
+          </div>
         </div>
         <div class="metric-guide-item">
           <span style="color: var(--rr-pink); font-weight: 800; font-size: 16px;">🏆</span>
-          <div><strong>Decision Score (RDH, 0–90 scale):</strong> Composite recruitment priority score.</div>
+          <div>
+            <strong>Recruitment Decision Heuristic (RDH)</strong>
+            <button type="button" class="metric-info-btn" data-metric="RDH" aria-label="Recruitment Decision Heuristic information">ℹ</button>
+            : Composite recruitment priority (0–90 scale).
+          </div>
         </div>
       </div>
 
@@ -450,27 +461,51 @@
       <div class="metric-guide-strip">
         <div class="metric-guide-item">
           <span style="color: var(--rr-blue); font-size: 16px;">⚡</span>
-          <div><strong>Pressure Performance (PR, 0–100):</strong> Phase-adjusted clutch bowling rating.</div>
+          <div>
+            <strong>Performance Rating (PR)</strong>
+            <button type="button" class="metric-info-btn" data-metric="PR" aria-label="Performance Rating information">ℹ</button>
+            : Phase-adjusted clutch rating (0–100 scale).
+          </div>
         </div>
         <div class="metric-guide-item">
           <span style="color: #60a5fa; font-size: 16px;">📊</span>
-          <div><strong>Evidence Strength (ERS, 0–100):</strong> Delivery volume reliability (Strong vs. Moderate).</div>
+          <div>
+            <strong>Evidence Reliability Score (ERS)</strong>
+            <button type="button" class="metric-info-btn" data-metric="ERS" aria-label="Evidence Reliability information">ℹ</button>
+            : Volume coverage (0–100 scale).
+          </div>
         </div>
         <div class="metric-guide-item">
           <span style="color: #fbbf24; font-size: 16px;">🛡️</span>
-          <div><strong>Stability (SSS, 0–100):</strong> Top-Tier Impact Retention Index across 1,000 bootstrap resamples.</div>
+          <div>
+            <strong>Statistical Stability Score (SSS)</strong>
+            <button type="button" class="metric-info-btn" data-metric="SSS" aria-label="Statistical Stability information">ℹ</button>
+            : Top-Tier Retention Index (0–100 scale).
+          </div>
         </div>
         <div class="metric-guide-item">
           <span style="color: #34d399; font-size: 16px;">🎯</span>
-          <div><strong>RR Squad Fit (TFS, 0–100):</strong> Solves #1 critical void (Death-Overs Specialist).</div>
+          <div>
+            <strong>Tactical Fit Score (TFS)</strong>
+            <button type="button" class="metric-info-btn" data-metric="TFS" aria-label="Tactical Fit information">ℹ</button>
+            : Solves #1 void: Death Specialist (0–100 scale).
+          </div>
         </div>
         <div class="metric-guide-item">
           <span style="color: #f87171; font-size: 16px;">⚠️</span>
-          <div><strong>Acquisition Risk (ARS):</strong> Bidding inflation & OS slot cost (lower is safer).</div>
+          <div>
+            <strong>Acquisition Risk Score (ARS)</strong>
+            <button type="button" class="metric-info-btn" data-metric="ARS" aria-label="Acquisition Risk information">ℹ</button>
+            : Bidding inflation & OS slot cost (lower is safer).
+          </div>
         </div>
         <div class="metric-guide-item">
           <span style="color: var(--rr-blue); font-weight: 800; font-size: 16px;">🏆</span>
-          <div><strong>Decision Score (RDH, 0–90 scale):</strong> Composite recruitment priority score.</div>
+          <div>
+            <strong>Recruitment Decision Heuristic (RDH)</strong>
+            <button type="button" class="metric-info-btn" data-metric="RDH" aria-label="Recruitment Decision Heuristic information">ℹ</button>
+            : Composite recruitment priority (0–90 scale).
+          </div>
         </div>
       </div>
 
@@ -596,15 +631,15 @@
             <tr>
               <th style="width: 45px;">Rank</th>
               <th>Player Name</th>
-              <th>Role</th>
+              <th>Tactical Role</th>
               <th>Governance Category</th>
               <th>Evidence Tier</th>
-              <th>PR (0–100)</th>
-              <th>ERS (0–100)</th>
-              <th title="Top-Tier Impact Retention Index">SSS (0–100)</th>
-              <th>TFS (0–100)</th>
-              <th>ARS (Risk)</th>
-              <th>Decision Score (RDH)</th>
+              <th>Performance Rating (PR) <button type="button" class="metric-info-btn" data-metric="PR" aria-label="Performance Rating information">ℹ</button></th>
+              <th>Evidence Reliability (ERS) <button type="button" class="metric-info-btn" data-metric="ERS" aria-label="Evidence Reliability information">ℹ</button></th>
+              <th>Statistical Stability (SSS) <button type="button" class="metric-info-btn" data-metric="SSS" aria-label="Statistical Stability information">ℹ</button></th>
+              <th>Tactical Fit (TFS) <button type="button" class="metric-info-btn" data-metric="TFS" aria-label="Tactical Fit information">ℹ</button></th>
+              <th>Acquisition Risk (ARS) <button type="button" class="metric-info-btn" data-metric="ARS" aria-label="Acquisition Risk information">ℹ</button></th>
+              <th>Recruitment Decision (RDH) <button type="button" class="metric-info-btn" data-metric="RDH" aria-label="Recruitment Decision Heuristic information">ℹ</button></th>
               <th style="text-align: right;">Action</th>
             </tr>
           </thead>
@@ -690,15 +725,15 @@
             <tr>
               <th style="width: 45px;">Rank</th>
               <th>Player Name</th>
-              <th>Role</th>
+              <th>Tactical Role</th>
               <th>Governance Category</th>
               <th>Evidence Tier</th>
-              <th>PR (0–100)</th>
-              <th>ERS (0–100)</th>
-              <th title="Top-Tier Impact Retention Index">SSS (0–100)</th>
-              <th>TFS (0–100)</th>
-              <th>ARS (Risk)</th>
-              <th>Decision Score (RDH)</th>
+              <th>Performance Rating (PR) <button type="button" class="metric-info-btn" data-metric="PR" aria-label="Performance Rating information">ℹ</button></th>
+              <th>Evidence Reliability (ERS) <button type="button" class="metric-info-btn" data-metric="ERS" aria-label="Evidence Reliability information">ℹ</button></th>
+              <th>Statistical Stability (SSS) <button type="button" class="metric-info-btn" data-metric="SSS" aria-label="Statistical Stability information">ℹ</button></th>
+              <th>Tactical Fit (TFS) <button type="button" class="metric-info-btn" data-metric="TFS" aria-label="Tactical Fit information">ℹ</button></th>
+              <th>Acquisition Risk (ARS) <button type="button" class="metric-info-btn" data-metric="ARS" aria-label="Acquisition Risk information">ℹ</button></th>
+              <th>Recruitment Decision (RDH) <button type="button" class="metric-info-btn" data-metric="RDH" aria-label="Recruitment Decision Heuristic information">ℹ</button></th>
               <th style="text-align: right;">Action</th>
             </tr>
           </thead>
@@ -897,12 +932,12 @@
               <th>Tactical Role</th>
               <th>Governance Category</th>
               <th>Priority</th>
-              <th>PR (0–100)</th>
-              <th>ERS (0–100)</th>
-              <th title="Top-Tier Impact Retention Index">SSS (0–100)</th>
-              <th>TFS (0–100)</th>
-              <th>ARS (Risk)</th>
-              <th>Decision Score (RDH)</th>
+              <th>Performance Rating (PR) <button type="button" class="metric-info-btn" data-metric="PR" aria-label="Performance Rating information">ℹ</button></th>
+              <th>Evidence Reliability (ERS) <button type="button" class="metric-info-btn" data-metric="ERS" aria-label="Evidence Reliability information">ℹ</button></th>
+              <th>Statistical Stability (SSS) <button type="button" class="metric-info-btn" data-metric="SSS" aria-label="Statistical Stability information">ℹ</button></th>
+              <th>Tactical Fit (TFS) <button type="button" class="metric-info-btn" data-metric="TFS" aria-label="Tactical Fit information">ℹ</button></th>
+              <th>Acquisition Risk (ARS) <button type="button" class="metric-info-btn" data-metric="ARS" aria-label="Acquisition Risk information">ℹ</button></th>
+              <th>Recruitment Decision (RDH) <button type="button" class="metric-info-btn" data-metric="RDH" aria-label="Recruitment Decision Heuristic information">ℹ</button></th>
               <th>Squad Void Addressed</th>
             </tr>
           </thead>
@@ -1045,13 +1080,53 @@
         </div>
 
         <div class="dashboard-card">
-          <div class="card-header"><span class="card-title">Recruitment Decision Score (RDH, 0–90 Scale)</span></div>
+          <div class="card-header"><span class="card-title">Tactical Fit Score (TFS, 0–100)</span></div>
+          <div class="card-body" style="font-size: 13px;">
+            <p>Directly measures alignment between a candidate's tactical profile and Rajasthan Royals' specific squad vacancies (death bowling, lower-order finisher, middle-overs spin).</p>
+            <div style="background: var(--bg-surface); padding: 10px; border-radius: 6px; font-family: monospace; margin: 10px 0; color: #34d399;">
+              TFS = 100 * Role_Gap_Criticality_Weight
+            </div>
+            <p style="color: var(--text-secondary); font-size: 12px;">Calibrated against audited RR gap severities: Death Specialist (90.0), Finisher (87.5), Middle Spinner (80.0).</p>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-header"><span class="card-title">Acquisition Risk Score (ARS, 0–100)</span></div>
+          <div class="card-body" style="font-size: 13px;">
+            <p>Composite recruitment risk combining auction bidding inflation probability (star-power demand) and overseas roster friction penalty (+6.0 overseas surcharge).</p>
+            <div style="background: var(--bg-surface); padding: 10px; border-radius: 6px; font-family: monospace; margin: 10px 0; color: #f87171;">
+              ARS = Base_Bidding_Risk + (6.0 if Overseas else 0.0)
+            </div>
+            <p style="color: var(--text-secondary); font-size: 12px;">* Lower is better. ARS enters negatively into the RDH calculation to reward disciplined, cost-effective recruitment.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-header"><span class="card-title">Recruitment Decision Heuristic (RDH, 0–90 Scale)</span></div>
           <div class="card-body" style="font-size: 13px;">
             <p>Synthesizes performance, reliability, stability, and tactical fit while penalizing acquisition risk. Operates on a strict 0.00 to 90.00 theoretical scale.</p>
             <div style="background: var(--bg-surface); padding: 10px; border-radius: 6px; font-family: monospace; margin: 10px 0; color: #34d399;">
               RDH = clip(0.30*PR + 0.20*ERS + 0.20*SSS + 0.20*TFS - 0.10*ARS, 0.0, 90.0)
             </div>
             <p style="color: var(--text-secondary); font-size: 12px;">* Theoretical maximum is 90.00 because positive weights sum to 0.90. Never displayed as a percentage or win probability.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Searchable Metric & Terminology Glossary -->
+      <div class="dashboard-card" style="margin-top: 24px;">
+        <div class="card-header">
+          <div>
+            <span class="card-title">📚 Comprehensive Metric & Terminology Glossary</span>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">Searchable index of all project metrics, statistical frameworks, governance categories, and abbreviations.</p>
+          </div>
+          <div style="position: relative; min-width: 260px;">
+            <input type="search" id="glossary-search-input" class="search-input" placeholder="🔍 Search metrics (PR, SSS, RDH, etc.)..." style="width: 100%; font-size: 12.5px; padding: 6px 12px;" />
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="glossary-grid" class="grid-2" style="gap: 14px;">
+            <!-- Dynamically Rendered by App.renderGlossary() -->
           </div>
         </div>
       </div>
@@ -1130,6 +1205,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Floating Metric Information Tooltip Popover -->
+  <div id="metric-tooltip-popover" class="metric-tooltip-popover" role="tooltip" aria-hidden="true"></div>
 
   <!-- Application Scripts (Offline Bundle Fallback + Engine) -->
   <script src="js/data_bundle.js"></script>

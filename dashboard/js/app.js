@@ -3,6 +3,89 @@
  * Orchestrates navigation, filtering, rendering, modals, and user events.
  */
 
+const METRIC_GLOSSARY = {
+  PR: {
+    abbr: "PR",
+    name: "Performance Rating",
+    fullName: "Performance Rating (PR)",
+    scale: "0.00 – 100.00",
+    direction: "Higher is better",
+    what: "Measures a player's historical run scoring or run suppression performance under high match pressure (Leverage Index ≥ 1.0).",
+    interpretation: "Combines baseline scoring with clutch multipliers and Empirical Bayes shrinkage toward tournament mean. Scores > 75 represent elite high-leverage execution.",
+    limitation: "Reflects historical multi-tournament performance (2022–2026); does not guarantee future IPL performance."
+  },
+  ERS: {
+    abbr: "ERS",
+    name: "Evidence Reliability Score",
+    fullName: "Evidence Reliability Score (ERS)",
+    scale: "0.00 – 100.00",
+    direction: "Higher is better (sample depth)",
+    what: "Quantifies the volume and breadth of match evidence supporting a player's evaluation using calibrated linear saturation targets.",
+    interpretation: "Categorized into authoritative tiers: Strong Evidence (ERS ≥ 60.0, ≥40 clutch deliveries, ≥10 matches) and Moderate Evidence (ERS ≥ 35.0, ≥20 clutch deliveries, ≥5 matches).",
+    limitation: "Represents exposure volume coverage, not a statistical confidence percentage or probability of success."
+  },
+  SSS: {
+    abbr: "SSS",
+    name: "Statistical Stability Score",
+    fullName: "Statistical Stability Score (SSS)",
+    scale: "0.00 – 100.00",
+    direction: "Higher is better (impact retention)",
+    what: "Top-Tier Impact Retention Index synthesizing bootstrap 95% uncertainty interval width, ranking stability (Top-20 frequency across 1,000 resamples), volume concentration (1 - HHI), and Leave-One-Match-Out (LOMO) resilience.",
+    interpretation: "Measures whether a player's performance rating is sustained across multiple fixtures rather than driven by an isolated outlier match.",
+    limitation: "Evaluates ranking and rating volatility across resamples; not a traditional p-value or statistical confidence interval."
+  },
+  TFS: {
+    abbr: "TFS",
+    name: "Tactical Fit Score",
+    fullName: "Tactical Fit Score (TFS)",
+    scale: "0.00 – 100.00",
+    direction: "Higher is better (void alignment)",
+    what: "Measures how directly a player's tactical role addresses Rajasthan Royals' specific squad vacancies (death-overs bowling, lower-order finisher, middle-overs spin).",
+    interpretation: "Scores ≥ 75 indicate candidates directly filling critical-severity tactical voids for Rajasthan Royals ahead of IPL 2027.",
+    limitation: "Calibrated specifically to Rajasthan Royals' squad depth; does not measure generic utility for other franchises."
+  },
+  ARS: {
+    abbr: "ARS",
+    name: "Acquisition Risk Score",
+    fullName: "Acquisition Risk Score (ARS)",
+    scale: "0.00 – 100.00",
+    direction: "Lower is better (safer recruitment)",
+    what: "Evaluates auction acquisition risk combining bidding inflation probability (star-power demand) and overseas roster friction penalty (+6.0 overseas surcharge).",
+    interpretation: "Scores below 20 represent high-value, cost-effective targets; scores above 35 indicate significant auction purse inflation risk.",
+    limitation: "Simulates auction dynamics; official franchise bidding strategies may diverge during live auctions."
+  },
+  RDH: {
+    abbr: "RDH",
+    name: "Recruitment Decision Heuristic",
+    fullName: "Recruitment Decision Heuristic (RDH)",
+    scale: "0.00 – 90.00 Scale",
+    direction: "Higher is better (priority ranking)",
+    what: "Composite recruitment decision aid synthesizing PR, ERS, SSS, and TFS while penalizing ARS: RDH = clip(0.30·PR + 0.20·ERS + 0.20·SSS + 0.20·TFS - 0.10·ARS, 0.0, 90.0).",
+    interpretation: "The positive weights sum to 0.90, making the theoretical maximum 90.00. Scores in the 70s represent top-decile recruitment priorities.",
+    limitation: "Advisory recruitment decision heuristic, not a win probability or percentage."
+  },
+  LI: {
+    abbr: "LI",
+    name: "Leverage Index",
+    fullName: "Leverage Index (LI)",
+    scale: "0.00 – 10.00 (Base = 1.0)",
+    direction: "Tension scale",
+    what: "Quantifies the importance and swing potential of each delivery based on required run rate, balls remaining, wickets in hand, and match phase.",
+    interpretation: "LI ≥ 1.0 defines high-pressure clutch situations; LI ≥ 3.0 represents extreme crisis points at the death.",
+    limitation: "Calibrated on historical T20 win expectancy; does not incorporate pitch wear or weather interruptions."
+  },
+  BAU: {
+    abbr: "BAU",
+    name: "Budget Allocation Units",
+    fullName: "Budget Allocation Units (BAU)",
+    scale: "0.00 – 100.00 BAU",
+    direction: "Budget distribution model",
+    what: "A normalized 100-point auction capital allocation framework distributing auction purse across squad roles without inventing speculative rupee prices.",
+    interpretation: "Allows systematic strategic planning across 5 squad-building scenarios (Balanced, Elite Pacer Priority, Overseas Heavy, etc.).",
+    limitation: "Normalized strategic model; actual auction prices vary based on franchise bidding wars."
+  }
+};
+
 const App = {
   activeTab: "overview",
   
@@ -56,7 +139,7 @@ const App = {
    * Bootstraps the dashboard application
    */
   async init() {
-    console.log("Initializing SupeRR Selector Interactive Dashboard...");
+    console.log("Initializing SupeRR Intelligence Interactive Dashboard...");
     ChartManager.applyGlobalTheme();
 
     try {
@@ -65,6 +148,7 @@ const App = {
 
       this.setupNavigation();
       this.setupEventListeners();
+      this.setupMetricTooltips();
       this.populateFilterDropdowns();
 
       // Render Initial Views
@@ -116,14 +200,28 @@ const App = {
   },
 
   /**
-   * Tab Navigation handler
+   * Tab Navigation handler with accessible mobile drawer support
    */
   setupNavigation() {
     const navButtons = document.querySelectorAll(".nav-tab");
+    const navTabsContainer = document.getElementById("main-nav-tabs");
+    const navToggleBtn = document.getElementById("nav-toggle-btn");
+
+    if (navToggleBtn && navTabsContainer) {
+      navToggleBtn.addEventListener("click", () => {
+        const isOpen = navTabsContainer.classList.toggle("mobile-open");
+        navToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+    }
+
     navButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         const tabId = btn.getAttribute("data-tab");
         this.switchTab(tabId);
+        if (navTabsContainer) {
+          navTabsContainer.classList.remove("mobile-open");
+          if (navToggleBtn) navToggleBtn.setAttribute("aria-expanded", "false");
+        }
       });
     });
 
@@ -132,6 +230,93 @@ const App = {
       if (jumpTarget) {
         const targetTab = jumpTarget.getAttribute("data-jump");
         this.switchTab(targetTab);
+        if (navTabsContainer) {
+          navTabsContainer.classList.remove("mobile-open");
+          if (navToggleBtn) navToggleBtn.setAttribute("aria-expanded", "false");
+        }
+      }
+    });
+  },
+
+  /**
+   * Interactive Floating Metric Tooltips System
+   */
+  setupMetricTooltips() {
+    const popover = document.getElementById("metric-tooltip-popover");
+    if (!popover) return;
+
+    const showTooltip = (btn, metricKey) => {
+      const info = METRIC_GLOSSARY[metricKey];
+      if (!info) return;
+
+      popover.innerHTML = `
+        <div class="metric-tooltip-header">
+          <span class="metric-tooltip-title">${info.fullName}</span>
+          <button type="button" class="metric-tooltip-close" aria-label="Close tooltip">&times;</button>
+        </div>
+        <div class="metric-tooltip-row">
+          <strong>What it measures:</strong> ${info.what}
+        </div>
+        <div class="metric-tooltip-row">
+          <strong>Scale & Direction:</strong> ${info.scale} (${info.direction})
+        </div>
+        <div class="metric-tooltip-row">
+          <strong>Interpretation:</strong> ${info.interpretation}
+        </div>
+        ${info.limitation ? `
+          <div class="metric-tooltip-limitation">
+            <strong>Key Caveat:</strong> ${info.limitation}
+          </div>
+        ` : ""}
+      `;
+
+      // Position popover near button
+      const rect = btn.getBoundingClientRect();
+      const popoverWidth = 320;
+      let left = rect.left + window.scrollX;
+      let top = rect.bottom + window.scrollY + 6;
+
+      if (rect.left + popoverWidth > window.innerWidth - 16) {
+        left = Math.max(16, window.innerWidth - popoverWidth - 16 + window.scrollX);
+      }
+
+      popover.style.left = `${left}px`;
+      popover.style.top = `${top}px`;
+      popover.classList.add("active");
+      popover.setAttribute("aria-hidden", "false");
+
+      const closeBtn = popover.querySelector(".metric-tooltip-close");
+      if (closeBtn) {
+        closeBtn.onclick = () => hideTooltip();
+      }
+    };
+
+    const hideTooltip = () => {
+      popover.classList.remove("active");
+      popover.setAttribute("aria-hidden", "true");
+    };
+
+    document.addEventListener("click", e => {
+      const btn = e.target.closest(".metric-info-btn");
+      if (btn) {
+        e.stopPropagation();
+        const metricKey = btn.getAttribute("data-metric");
+        if (popover.classList.contains("active") && popover.dataset.currentMetric === metricKey) {
+          hideTooltip();
+        } else {
+          popover.dataset.currentMetric = metricKey;
+          showTooltip(btn, metricKey);
+        }
+        return;
+      }
+
+      if (e.target.closest("#metric-tooltip-popover")) return;
+      hideTooltip();
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") {
+        hideTooltip();
       }
     });
   },
@@ -617,8 +802,11 @@ const App = {
       ? `
         <div class="scout-score-banner">
           <div>
-            <div class="score-label">Historical Pressure Rating</div>
-            <div class="score-sub">Module 5 Performance Rating (0.00 – 100.00)</div>
+            <div class="score-label">
+              Performance Rating (PR)
+              <button type="button" class="metric-info-btn" data-metric="PR" aria-label="Performance Rating information">ℹ</button>
+            </div>
+            <div class="score-sub">Historical Pressure Rating (Scale: 0.00 – 100.00)</div>
           </div>
           <div class="score-val">${p.performance_rating.toFixed(2)}</div>
         </div>
@@ -626,8 +814,11 @@ const App = {
       : `
         <div class="scout-score-banner">
           <div>
-            <div class="score-label">Recruitment Decision Score</div>
-            <div class="score-sub">RDH (0.00 – 90.00 Scale)</div>
+            <div class="score-label">
+              Recruitment Decision Heuristic (RDH)
+              <button type="button" class="metric-info-btn" data-metric="RDH" aria-label="Recruitment Decision Heuristic information">ℹ</button>
+            </div>
+            <div class="score-sub">Advisory Priority Score (Scale: 0.00 – 90.00)</div>
           </div>
           <div class="score-val">${p.recruitment_decision_score !== undefined && p.recruitment_decision_score !== null ? p.recruitment_decision_score.toFixed(2) : '—'}</div>
         </div>
@@ -664,28 +855,46 @@ const App = {
         ${scoreBanner}
 
         <div class="scout-metrics-grid">
-          <div class="scout-metric-cell" title="Pressure Performance under Leverage Index >= 1.0">
-            <div class="label" style="color: var(--rr-pink);">Pressure (PR)</div>
+          <div class="scout-metric-cell" title="Performance Rating under high match leverage (LI >= 1.0)">
+            <div class="label" style="color: var(--rr-pink);">
+              Performance Rating (PR)
+              <button type="button" class="metric-info-btn" data-metric="PR" aria-label="Performance Rating information">ℹ</button>
+            </div>
             <div class="val text-pink">${p.performance_rating.toFixed(1)}</div>
           </div>
-          <div class="scout-metric-cell" title="Evidence Strength based on exposure volume">
-            <div class="label" style="color: #60a5fa;">Evidence (ERS)</div>
+          <div class="scout-metric-cell" title="Evidence Reliability Score based on exposure volume">
+            <div class="label" style="color: #60a5fa;">
+              Evidence Reliability (ERS)
+              <button type="button" class="metric-info-btn" data-metric="ERS" aria-label="Evidence Reliability information">ℹ</button>
+            </div>
             <div class="val text-blue">${p.evidence_reliability_score.toFixed(1)}</div>
           </div>
-          <div class="scout-metric-cell" title="Performance Stability: Top-Tier Impact Retention Index">
-            <div class="label" style="color: #fbbf24;">Stability (SSS)</div>
+          <div class="scout-metric-cell" title="Statistical Stability Score: Top-Tier Impact Retention Index">
+            <div class="label" style="color: #fbbf24;">
+              Statistical Stability (SSS)
+              <button type="button" class="metric-info-btn" data-metric="SSS" aria-label="Statistical Stability information">ℹ</button>
+            </div>
             <div class="val text-gold">${p.statistical_stability_score ? p.statistical_stability_score.toFixed(1) : '—'}</div>
           </div>
-          <div class="scout-metric-cell" title="Tactical Squad Fit for Rajasthan Royals">
-            <div class="label" style="color: #34d399;">Squad Fit (TFS)</div>
+          <div class="scout-metric-cell" title="Tactical Fit Score: Alignment with RR squad voids">
+            <div class="label" style="color: #34d399;">
+              Tactical Fit (TFS)
+              <button type="button" class="metric-info-btn" data-metric="TFS" aria-label="Tactical Fit information">ℹ</button>
+            </div>
             <div class="val text-emerald">${p.tactical_squad_fit_score ? p.tactical_squad_fit_score.toFixed(1) : '—'}</div>
           </div>
-          <div class="scout-metric-cell" title="Acquisition Risk (Bidding Inflation & Overseas Penalty)">
-            <div class="label" style="color: #f87171;">Risk (ARS)</div>
+          <div class="scout-metric-cell" title="Acquisition Risk Score: Bidding Inflation & Overseas Slot Penalty">
+            <div class="label" style="color: #f87171;">
+              Acquisition Risk (ARS)
+              <button type="button" class="metric-info-btn" data-metric="ARS" aria-label="Acquisition Risk information">ℹ</button>
+            </div>
             <div class="val text-rose">${p.acquisition_risk_score ? p.acquisition_risk_score.toFixed(1) : '—'}</div>
           </div>
           <div class="scout-metric-cell" title="Evidence Tier Category">
-            <div class="label">Reliability Tier</div>
+            <div class="label">
+              Evidence Tier
+              <button type="button" class="metric-info-btn" data-metric="ERS" aria-label="Evidence Tier information">ℹ</button>
+            </div>
             <div class="val" style="font-size: 11px; margin-top: 3px;">
               <span class="badge ${p.evidence_tier === 'Strong' ? 'badge-tier-1' : 'badge-tier-2'}">
                 ${p.evidence_tier === 'Strong' ? 'Strong' : 'Moderate'}
@@ -757,11 +966,17 @@ const App = {
         </div>
         <div class="scout-metrics-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 10px;">
           <div class="scout-metric-cell">
-            <div class="label" style="color: var(--rr-pink);">Pressure (PR)</div>
+            <div class="label" style="color: var(--rr-pink);">
+              Performance Rating (PR)
+              <button type="button" class="metric-info-btn" data-metric="PR" aria-label="Performance Rating information">ℹ</button>
+            </div>
             <div class="val text-pink">${b.performance_rating.toFixed(1)}</div>
           </div>
           <div class="scout-metric-cell">
-            <div class="label" style="color: #fbbf24;">Stability (SSS)</div>
+            <div class="label" style="color: #fbbf24;">
+              Statistical Stability (SSS)
+              <button type="button" class="metric-info-btn" data-metric="SSS" aria-label="Statistical Stability information">ℹ</button>
+            </div>
             <div class="val text-gold">${b.statistical_stability_score ? b.statistical_stability_score.toFixed(1) : '—'}</div>
           </div>
         </div>
@@ -769,12 +984,6 @@ const App = {
           <strong>Comparative Benchmark Role:</strong>
           ${b.scouting_rationale}
         </div>
-        <div style="font-size: 11px; color: var(--text-muted); margin-top: auto; padding-top: 8px;">
-          * Strict Governance: Non-actionable for recruitment.
-        </div>
-      </div>
-    `;
-  },
         <div style="font-size: 11px; color: var(--text-muted); margin-top: auto; padding-top: 8px;">
           * Strict Governance: Non-actionable for recruitment.
         </div>
@@ -1107,6 +1316,63 @@ const App = {
         </tr>
       `).join("");
     }
+
+    // Render Searchable Glossary
+    this.renderGlossary("");
+    const searchInput = document.getElementById("glossary-search-input");
+    if (searchInput && !searchInput.dataset.initialized) {
+      searchInput.dataset.initialized = "true";
+      searchInput.addEventListener("input", e => {
+        this.renderGlossary(e.target.value);
+      });
+    }
+  },
+
+  renderGlossary(query = "") {
+    const container = document.getElementById("glossary-grid");
+    if (!container) return;
+
+    const q = query.toLowerCase().trim();
+    const entries = Object.values(METRIC_GLOSSARY).filter(item => {
+      if (!q) return true;
+      return (
+        item.abbr.toLowerCase().includes(q) ||
+        item.name.toLowerCase().includes(q) ||
+        item.fullName.toLowerCase().includes(q) ||
+        item.what.toLowerCase().includes(q) ||
+        item.interpretation.toLowerCase().includes(q) ||
+        (item.limitation && item.limitation.toLowerCase().includes(q))
+      );
+    });
+
+    if (entries.length === 0) {
+      container.innerHTML = `<div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: var(--text-muted); background: var(--bg-surface); border-radius: 8px;">No metrics or concepts matched "${query}".</div>`;
+      return;
+    }
+
+    container.innerHTML = entries.map(item => `
+      <div class="glossary-card">
+        <div class="glossary-card-header">
+          <span class="glossary-term">${item.fullName}</span>
+          <span class="glossary-badge">${item.scale}</span>
+        </div>
+        <div class="glossary-desc">
+          <strong>What it measures:</strong> ${item.what}
+        </div>
+        <div class="glossary-desc" style="color: #cbd5e1;">
+          <strong>Interpretation:</strong> ${item.interpretation}
+        </div>
+        ${item.limitation ? `
+          <div class="metric-tooltip-limitation" style="margin-top: 6px; margin-bottom: 8px;">
+            <strong>Limitation:</strong> ${item.limitation}
+          </div>
+        ` : ''}
+        <div class="glossary-meta">
+          <span><strong>Optimization:</strong> ${item.direction}</span>
+          <span><strong>Scale:</strong> ${item.scale}</span>
+        </div>
+      </div>
+    `).join("");
   },
 
   // ---------------------------------------------------------------------------
@@ -1159,34 +1425,52 @@ const App = {
 
       <div class="metrics-summary-banner">
         <div class="metric-box">
-          <div class="label">Performance Rating</div>
+          <div class="label">
+            Performance Rating (PR)
+            <button type="button" class="metric-info-btn" data-metric="PR" aria-label="Performance Rating information">ℹ</button>
+          </div>
           <div class="val text-pink">${p.performance_rating.toFixed(2)}</div>
-          <div class="sub">Rank #${p.rank} (0-100)</div>
+          <div class="sub">Rank #${p.rank} (0–100 Scale)</div>
         </div>
         <div class="metric-box">
-          <div class="label">Evidence Reliability</div>
+          <div class="label">
+            Evidence Reliability Score (ERS)
+            <button type="button" class="metric-info-btn" data-metric="ERS" aria-label="Evidence Reliability information">ℹ</button>
+          </div>
           <div class="val text-blue">${p.evidence_reliability_score.toFixed(1)}</div>
-          <div class="sub">${p.evidence_tier_label}</div>
+          <div class="sub">${p.evidence_tier_label} (0–100 Scale)</div>
         </div>
         <div class="metric-box">
-          <div class="label">Statistical Stability (SSS)</div>
-          <div class="val text-gold">${p.statistical_stability_score.toFixed(1)}</div>
-          <div class="sub">Top-Tier Retention Index</div>
+          <div class="label">
+            Statistical Stability Score (SSS)
+            <button type="button" class="metric-info-btn" data-metric="SSS" aria-label="Statistical Stability information">ℹ</button>
+          </div>
+          <div class="val text-gold">${p.statistical_stability_score ? p.statistical_stability_score.toFixed(1) : '—'}</div>
+          <div class="sub">Top-Tier Retention Index (0–100)</div>
         </div>
         <div class="metric-box">
-          <div class="label">Tactical Squad Fit</div>
-          <div class="val text-emerald">${p.tactical_squad_fit_score.toFixed(1)}</div>
-          <div class="sub">${p.tactical_role}</div>
+          <div class="label">
+            Tactical Fit Score (TFS)
+            <button type="button" class="metric-info-btn" data-metric="TFS" aria-label="Tactical Fit information">ℹ</button>
+          </div>
+          <div class="val text-emerald">${p.tactical_squad_fit_score ? p.tactical_squad_fit_score.toFixed(1) : '—'}</div>
+          <div class="sub">${p.tactical_role} (0–100 Scale)</div>
         </div>
         <div class="metric-box">
-          <div class="label">Acquisition Risk</div>
-          <div class="val text-rose">${p.acquisition_risk_score.toFixed(1)}</div>
-          <div class="sub">${p.is_overseas ? '+6.0 OS Penalty' : 'Domestic Base'}</div>
+          <div class="label">
+            Acquisition Risk Score (ARS)
+            <button type="button" class="metric-info-btn" data-metric="ARS" aria-label="Acquisition Risk information">ℹ</button>
+          </div>
+          <div class="val text-rose">${p.acquisition_risk_score ? p.acquisition_risk_score.toFixed(1) : '—'}</div>
+          <div class="sub">${p.is_overseas ? '+6.0 OS Penalty' : 'Domestic Base'} (0–100 Scale)</div>
         </div>
         <div class="metric-box" style="border-color: var(--rr-pink);">
-          <div class="label" style="color: var(--rr-pink);">Decision Score (RDH)</div>
-          <div class="val text-pink">${p.recruitment_decision_score.toFixed(2)}</div>
-          <div class="sub">Scale: 0.00 to 90.00</div>
+          <div class="label" style="color: var(--rr-pink);">
+            Recruitment Decision Heuristic (RDH)
+            <button type="button" class="metric-info-btn" data-metric="RDH" aria-label="Recruitment Decision Heuristic information">ℹ</button>
+          </div>
+          <div class="val text-pink">${p.recruitment_decision_score !== undefined && p.recruitment_decision_score !== null ? p.recruitment_decision_score.toFixed(2) : '—'}</div>
+          <div class="sub">Scale: 0.00 to 90.00 (Advisory)</div>
         </div>
       </div>
 
@@ -1296,12 +1580,12 @@ const App = {
       { label: "Discipline & Role", render: p => `<span class="badge badge-role">${p.discipline}</span> • ${p.tactical_role}` },
       { label: "Country & Origin", render: p => `${p.country} (${p.is_overseas ? 'Overseas' : 'Domestic'})` },
       { label: "Governance Category", render: p => this.getCategoryBadge(p.candidate_category) },
-      { label: "Performance Rating (PR)", render: p => `<span class="metric-pill text-pink">${p.performance_rating.toFixed(2)}</span>` },
-      { label: "Evidence Reliability (ERS)", render: p => `<span class="metric-pill text-blue">${p.evidence_reliability_score.toFixed(1)}</span> (${p.evidence_tier_label})` },
-      { label: "Stability (SSS - Impact Retention)", render: p => `<span class="metric-pill text-gold">${p.statistical_stability_score.toFixed(1)}</span>` },
-      { label: "Tactical Squad Fit (TFS)", render: p => `<span class="metric-pill text-emerald">${p.tactical_squad_fit_score.toFixed(1)}</span>` },
-      { label: "Acquisition Risk (ARS)", render: p => `<span class="metric-pill text-rose">${p.acquisition_risk_score.toFixed(1)}</span>` },
-      { label: "Decision Score (RDH)", render: p => `<span class="metric-pill highlight">${p.recruitment_decision_score.toFixed(2)} / 90.0</span>` },
+      { label: `Performance Rating (PR) <button type="button" class="metric-info-btn" data-metric="PR" aria-label="Performance Rating information">ℹ</button>`, render: p => `<span class="metric-pill text-pink">${p.performance_rating.toFixed(2)}</span>` },
+      { label: `Evidence Reliability Score (ERS) <button type="button" class="metric-info-btn" data-metric="ERS" aria-label="Evidence Reliability information">ℹ</button>`, render: p => `<span class="metric-pill text-blue">${p.evidence_reliability_score.toFixed(1)}</span> (${p.evidence_tier_label})` },
+      { label: `Statistical Stability Score (SSS) <button type="button" class="metric-info-btn" data-metric="SSS" aria-label="Statistical Stability information">ℹ</button>`, render: p => `<span class="metric-pill text-gold">${p.statistical_stability_score ? p.statistical_stability_score.toFixed(1) : '—'}</span>` },
+      { label: `Tactical Fit Score (TFS) <button type="button" class="metric-info-btn" data-metric="TFS" aria-label="Tactical Fit information">ℹ</button>`, render: p => `<span class="metric-pill text-emerald">${p.tactical_squad_fit_score ? p.tactical_squad_fit_score.toFixed(1) : '—'}</span>` },
+      { label: `Acquisition Risk Score (ARS) <button type="button" class="metric-info-btn" data-metric="ARS" aria-label="Acquisition Risk information">ℹ</button>`, render: p => `<span class="metric-pill text-rose">${p.acquisition_risk_score ? p.acquisition_risk_score.toFixed(1) : '—'}</span>` },
+      { label: `Recruitment Decision Heuristic (RDH) <button type="button" class="metric-info-btn" data-metric="RDH" aria-label="Recruitment Decision Heuristic information">ℹ</button>`, render: p => `<span class="metric-pill highlight">${p.recruitment_decision_score !== undefined && p.recruitment_decision_score !== null ? p.recruitment_decision_score.toFixed(2) : '—'} / 90.0</span>` },
       { label: "Bootstrap 95% CI", render: p => `[${p.rating_p025.toFixed(1)}, ${p.rating_p975.toFixed(1)}]` },
       { label: "Clutch Volume HHI", render: p => `${p.clutch_volume_hhi.toFixed(4)}` },
       { label: "Recommendation Priority", render: p => `<span class="badge badge-viable">${p.recommendation_priority}</span>` },

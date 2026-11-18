@@ -2,10 +2,13 @@
 
 ### A Cricket Player Intelligence System for Identifying Reliable Match-Winners Under Pressure
 
+[![Live Deployment](https://img.shields.io/badge/live%20demo-superrrselection.netlify.app-ff2a85.svg?style=for-the-badge&logo=netlify)](https://superrrselection.netlify.app/)
 [![Tests](https://img.shields.io/badge/tests-49%20passed-brightgreen.svg)](tests/)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Dashboard](https://img.shields.io/badge/dashboard-live-ff2a85.svg)](dashboard/index.html)
+[![Dashboard](https://img.shields.io/badge/dashboard-live-ff2a85.svg)](https://superrrselection.netlify.app/)
+
+> 🚀 **Live Interactive Platform:** [**https://superrrselection.netlify.app/**](https://superrrselection.netlify.app/) — Powered by *SupeRR Intelligence: Discover Talent. Decode Performance. Make Smarter Decisions.*
 
 ---
 
@@ -40,14 +43,20 @@ SupeRR Selector provides four core analytical capabilities:
 
 ---
 
-## 4. Explore the Dashboard
+## 4. Explore the Dashboard (SupeRR Intelligence)
 
-An interactive cricket analytics dashboard (**Module 8**) is built directly in the repository using clean HTML5, CSS3, and Vanilla JavaScript with Chart.js:
+The interactive cricket performance and scouting platform is available live online and can also be run locally:
 
-* **Executive Hero & Value Proposition:** Slogan *"SupeRR Selector — Cricket Intelligence. Pressure Performance. Smarter Player Selection."* with plain-English introduction and immediate jump links.
-* **Top 10 Actionable Recommendations:** Dedicated showcase cards for the Top 10 Batters and Top 10 Bowlers featuring rank badges, dynamic initials/avatar fallback, key clutch metrics, tactical void tags, and plain-English *"Why this player?"* scouting rationales.
+* 🌐 **Live Web Application:** [https://superrrselection.netlify.app/](https://superrrselection.netlify.app/)
+* 💻 **Local Offline Mode:** Open `dashboard/index.html` directly or serve via local HTTP server.
+
+Built with clean HTML5, CSS3, and Vanilla JavaScript (ES6+) with Chart.js:
+
+* **Executive Hero & Value Proposition:** Product brand *"SupeRR Intelligence — Cricket Performance & Scouting Platform"* with tagline *"Discover Talent. Decode Performance. Make Smarter Decisions."*, plain-English introduction, scope badges, and immediate jump links.
+* **Metric Full Forms & Interactive Tooltips:** Plain-English names and interactive explanatory tooltips for every key metric across all tables and cards — Performance Rating (PR), Evidence Reliability Score (ERS), Statistical Stability Score (SSS), Tactical Fit Score (TFS), Acquisition Risk Score (ARS), and Recruitment Decision Heuristic (RDH) — plus a live searchable Metric Glossary.
+* **Top 10 Actionable Recommendations & Dual Mode:** Dedicated showcase cards for the Top 10 Actionable Batters and Bowlers (ranked by RDH $\in [0.0, 90.0]$ with tactical void tags and plain-English *"Why this player?"* scouting rationales) alongside a toggle to inspect Historical Pressure Leaders (ranked by Module 5 PR $\in [0.0, 100.0]$ with clear non-actionable benchmark badges).
 * **Batter & Bowler Explorers:** Search, filter, and inspect 304 eligible batters and 290 eligible bowlers by role, origin (Domestic vs. Overseas), and evidence tier, with full overall vs. clutch metric splits.
-* **Side-by-Side Player Comparison:** Compare up to 3 candidates simultaneously across Pressure Performance (PR), Evidence Strength (ERS), Performance Stability (SSS), Tactical Squad Fit (TFS), and Acquisition Risk (ARS).
+* **Side-by-Side Player Comparison:** Compare up to 3 candidates simultaneously across Performance Rating (PR), Evidence Reliability Score (ERS), Statistical Stability Score (SSS), Tactical Fit Score (TFS), and Acquisition Risk Score (ARS).
 * **Rajasthan Royals Squad Analysis:** Review Rajasthan Royals' audited 2026 baseline roster (27 registered players) and evaluate tactical depth gaps across Scenarios A, B, and C.
 * **Recruitment Recommendation Matrix:** Authoritative 50-player candidate decision matrix clearly separating actionable auction targets from non-actionable strategic benchmarks (Pakistani stars, rival franchise core retentions, and retired veterans).
 * **Auction Strategy Simulator:** Interactive 100 Budget Allocation Units (BAU) scenario simulator across 5 squad-building strategies with candidate buy lists and overseas slot demand.
@@ -56,7 +65,7 @@ An interactive cricket analytics dashboard (**Module 8**) is built directly in t
 > ```powershell
 > python -m http.server 8000 --bind 127.0.0.1
 > ```
-> Then navigate your web browser to: **`http://localhost:8000/dashboard/index.html`** (or open `dashboard/index.html` directly in offline mode).
+> Then navigate your web browser to: **`http://localhost:8000/dashboard/index.html`**.
 
 ---
 

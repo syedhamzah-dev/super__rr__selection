@@ -1048,17 +1048,43 @@ body {
 .font-mono { font-family: ui-monospace, SFMono-Regular, monospace; }
 
 /* Responsive Adjustments */
-@media (max-width: 768px) {
+@media (max-width: 860px) {
   .header-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    position: relative;
+    padding: 10px 16px;
+  }
+  .nav-toggle {
+    display: flex;
   }
   .nav-tabs {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #0d1527;
+    flex-direction: column;
+    padding: 10px 16px;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.7);
+    z-index: 200;
+    gap: 4px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .nav-tabs.mobile-open {
+    display: flex;
+  }
+  .nav-tab {
     width: 100%;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    justify-content: flex-start;
   }
   .main-content {
-    padding: 16px;
+    padding: 14px;
   }
   .stat-grid {
     grid-template-columns: 1fr;
@@ -1070,6 +1096,39 @@ body {
   .filter-select {
     width: 100%;
   }
+}
+
+/* Accessible Hamburger Toggle Button */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  transition: all var(--transition-fast);
+}
+
+.nav-toggle:hover .hamburger-bar,
+.nav-toggle:focus-visible .hamburger-bar {
+  background-color: var(--rr-pink);
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--rr-pink);
+  outline-offset: 2px;
 }
 
 /* =============================================================================
@@ -1616,4 +1675,208 @@ input:focus-visible,
 select:focus-visible {
   outline: 2px solid var(--rr-pink);
   outline-offset: 2px;
+}
+
+/* =============================================================================
+   METRIC TOOLTIPS & INFORMATION POPOVER
+   ============================================================================= */
+.metric-info-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  margin-left: 4px;
+  vertical-align: middle;
+  transition: all var(--transition-fast);
+  line-height: 1;
+  padding: 0;
+}
+
+.metric-info-btn:hover,
+.metric-info-btn:focus-visible {
+  background: var(--rr-pink);
+  color: #fff;
+  border-color: var(--rr-pink);
+  transform: scale(1.15);
+  outline: none;
+}
+
+.metric-tooltip-popover {
+  position: absolute;
+  z-index: 1000;
+  background: #0f172a;
+  border: 1px solid rgba(255, 42, 133, 0.4);
+  border-radius: var(--radius-md);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 42, 133, 0.15);
+  padding: 14px 16px;
+  max-width: 330px;
+  width: max-content;
+  color: var(--text-primary);
+  font-size: 12px;
+  line-height: 1.5;
+  display: none;
+  animation: fadeInTooltip 0.15s ease-out;
+}
+
+.metric-tooltip-popover.active {
+  display: block;
+}
+
+.metric-tooltip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.metric-tooltip-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.metric-tooltip-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.metric-tooltip-close:hover {
+  color: #fff;
+}
+
+.metric-tooltip-row {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.metric-tooltip-row strong {
+  color: #60a5fa;
+}
+
+.metric-tooltip-limitation {
+  margin-top: 8px;
+  padding: 6px 8px;
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+  border-left: 2px solid #fbbf24;
+}
+
+@keyframes fadeInTooltip {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero Scope Summary Pill & Subtitle */
+.hero-subtitle {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: -6px;
+  margin-bottom: 8px;
+}
+
+.hero-scope-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.hero-scope-pill strong {
+  color: #fff;
+}
+
+/* Searchable Glossary Cards */
+.glossary-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-fast);
+}
+
+.glossary-card:hover {
+  border-color: rgba(255, 42, 133, 0.4);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.glossary-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.glossary-term {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.glossary-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.glossary-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.glossary-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
