@@ -1,478 +1,167 @@
-# SupeRR Selector: Cricket Player Performance Intelligence System
+# SupeRR Selector
 
-**Project:** SupeRR Selector — Cricket Player Performance Intelligence System  
-**Competition:** Rajasthan Royals Sports Analytics Challenge (Season 2)  
-**Author:** Syed Mohammad Hamzah (B.Tech CSE - Data Analytics)  
-**Evaluator Reference:** Sports Analytics Research & Technical Submission  
+### A Cricket Player Intelligence System for Identifying Reliable Match-Winners Under Pressure
 
----
-
-## 1. Project Title and Description
-
-SupeRR Selector is a cricket analytics intelligence system developed for the Rajasthan Royals Sports Analytics Challenge (Season 2). The system evaluates and ranks professional cricket player performance under high-pressure situations across Indian Premier League (IPL) and Men's T20 International matches from 2022 to 2026.
-
-Traditional cricket statistics treat every run and wicket equally. A boundary scored during a low-leverage powerplay in a dead rubber counts identically on an unweighted scorecard to a boundary hit when needing 12 runs off the final 4 deliveries of a knockout match. SupeRR Selector reconstructs ball-by-ball match states, computes a dynamic delivery-level Pressure Index ($PI \in [0.0, 10.0]$), and measures player performance in clutch situations while statistically separating performance quality from sample-size evidence confidence.
+[![Tests](https://img.shields.io/badge/tests-38%20passed-brightgreen.svg)](tests/)
+[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
 
-## 2. Rajasthan Royals Challenge Context
+## 1. About the Project
 
-The Rajasthan Royals Sports Analytics Challenge tasks participants with identifying reliable, battle-tested players who perform dependably when matches are on the line. The objective is to provide actionable intelligence for franchise recruitment and auction strategy ahead of the IPL 2027 cycle.
+**SupeRR Selector** is a cricket analytics system that evaluates how T20 players perform when matches are on the line. 
 
-Franchise auctions represent high-stakes capital allocation decisions. Overpaying for players whose aggregate career metrics are inflated by low-pressure stat-padding creates substantial downside risk. Conversely, under-valuing specialized death-overs finishers or defensive enforcers due to modest aggregate volume leads to missed opportunities. SupeRR Selector addresses this problem by grounding player evaluations in situational leverage and statistical evidence reliability.
-
----
-
-## 3. Problem Statement
-
-Evaluating cricket players using aggregate career averages introduces three critical failure modes:
-1. **Leverage Blindness:** Career strike rates and economy rates fail to distinguish between low-stakes consolidation and high-stakes crisis execution.
-2. **Phase Confounding in Bowling:** Directly comparing clutch economy rates across bowlers penalizes death-overs specialists who bowl in the most expensive phase of T20 cricket (averaging 10.52 runs per over) compared to powerplay or middle-overs specialists.
-3. **Conflating Performance with Statistical Evidence:** Treating an emerging player with 15 clutch balls and a 200 strike rate identically to a veteran with 400 clutch balls and a 175 strike rate introduces severe sample-size variance and regression risk.
+Developed for the **Rajasthan Royals Sports Analytics Challenge (Season 2)**, the project analyzes ball-by-ball data from major Men's T20 competitions between 2022 and 2026. Its goal is to move beyond standard averages and help cricket teams discover players who consistently deliver in difficult, high-pressure match situations.
 
 ---
 
-## 4. Project Objectives
+## 2. The Problem
 
-1. **Reconstruct Situational Match State:** Vectorize cumulative match context before and after each delivery, tracking runs required, balls remaining, wickets in hand, current run rate (CRR), and required run rate (RRR).
-2. **Model Delivery-Level Pressure ($PI$):** Formulate an empirical, resource-based Pressure Index scaled from 0.0 to 10.0 for first innings target-setting, second innings chases, and bowling defense.
-3. **Quantify Player Clutch Differentials:** Measure individual player performance across discrete pressure tiers against their own baseline and role benchmarks, adjusting for phase confounding and applying credibility-weighted shrinkage.
-4. **Decouple Performance from Evidence Reliability:** Engineer independent evaluation scores for Performance Rating ($0.0$ to $100.0$) and Evidence Reliability ($0.0$ to $100.0$) to insulate main auction boards from small-sample noise while surfacing emerging talent on a watchlist.
-5. **Ensure Reproducibility and Audit Integrity:** Reconcile delivery records, scorecard rules, and run identities to 100% precision across all 200,999 deliveries.
+Traditional cricket statistics often tell an incomplete story:
+
+* **Overall averages can hide clutch failures:** A batter with a 40+ average might score most of their runs in low-pressure situations when victory is already assured, but struggle during tight chases.
+* **Economy rates ignore match phase:** A bowler with an 8.0 economy rate who bowls mostly in the middle overs may actually be more expensive than average, while a bowler with an 8.5 rate in the death overs is performing exceptionally well.
+* **Small samples create misleading spikes:** An emerging player who hits two boundaries in one close game can briefly look like a superstar, but may lack the consistency to repeat it across a full season.
+
+Teams need an objective way to ask: **Who can we trust when the pressure is at its highest?**
 
 ---
 
-## 5. Analytical Workflow
+## 3. What Does It Do?
 
-The project is structured into modular stages:
+SupeRR Selector provides four core analytical capabilities:
+
+* **Measures Match Pressure Ball by Ball:** Tracks wickets in hand, balls remaining, and required run rates for every delivery to score how tense each moment is on a 0 to 10 scale.
+* **Separates Performance from Sample Size:** Evaluates player skill under pressure while separately measuring their total volume of experience. This ensures experienced, proven performers are ranked fairly against promising newcomers.
+* **Checks Ranking Stability:** Tests whether a player's standing is steady across multiple games or heavily driven by a single standout performance.
+* **Guides Squad and Auction Planning:** Compares candidate profiles directly against Rajasthan Royals' specific squad gaps (such as death-overs bowling and lower-order finishing) using a 100-unit budget allocation framework without making up unrealistic player prices.
+
+---
+
+## 4. Explore the Dashboard
+
+An interactive scouting dashboard (Module 8) is being built to make these insights intuitive and easy to explore in a web browser:
+
+* **Player Scouting Cards:** Search and filter over 300 batters and 290 bowlers by role, origin (Domestic vs. Overseas), and performance level.
+* **Performance vs. Reliability Quadrants:** Quickly spot proven core targets, emerging high-potential picks, and volatile performers.
+* **Squad Gap Explorer:** Review Rajasthan Royals' current depth chart across 12 specific on-field roles.
+* **Auction Strategy Simulator:** Explore different squad-building scenarios to see how capital can be allocated across priority positions.
+
+> **Live Dashboard Status:** The interactive web dashboard is currently in active development for Module 8 and will be hosted live on Netlify. In the meantime, all charts and outputs can be viewed in the `reports/figures/` folder or explored interactively using the notebooks in `notebooks/`.
+
+---
+
+## 5. How It Works
+
+The system processes and evaluates players through five clear steps:
+
+1. **Match-State Reconstruction:** Cleans and processes over 200,000 deliveries from 883 matches, calculating live game context (such as required run rate and balls remaining) before and after every ball.
+2. **Pressure Index Calculation:** Measures situational difficulty for both first-innings target setting and second-innings chases, grouping deliveries into Low, Medium, High, and Clutch pressure.
+3. **Clutch Performance Scoring:** Evaluates how batters handle rising run rates and dot balls, and measures how bowlers contain boundaries in high-scoring phases compared to league baselines.
+4. **Reliability and Stability Auditing:** Resamples tournament matches to confirm that top rankings hold up over time and are not simply the result of one lucky day.
+5. **Squad Fit and Role Allocation:** Identifies Rajasthan Royals' primary needs ahead of IPL 2027 and matches players to those voids while respecting squad size and overseas player limits.
+
+---
+
+## 6. Key Strategic Findings at a Glance
+
+* **Top Batting Target (Overseas):** **Tim David** (Finisher). Proven multi-match death-overs boundary hitter with 400 pressure balls of experience and high statistical stability.
+* **Top Batting Target (Domestic):** **Naman Dhir** (Batting All-Rounder). Combines high-pressure scoring power with useful bowling overs, saving a valuable overseas roster spot.
+* **Dual-Role Depth:** **Matthew Wade** (Wicketkeeper-Finisher). Solves Rajasthan Royals' backup wicketkeeping need while adding experienced lower-order finishing power.
+* **Top Bowling Target (Overseas):** **Sufiyan Muqeem** (Middle-Overs Spinner). Elite middle-overs run containment with a 5.71 clutch economy rate across 25 matches.
+* **Defensive Bowling Anchor:** **Imad Wasim** (Bowling All-Rounder). Outstanding economy under pressure combined with reliable lower-order batting.
+* **Primary Death Pacer:** **Benjamin Sears** (Death Specialist). High-pace enforcer with 15 clutch wickets to partner Jofra Archer in closing out innings.
+* **Smart Redundancy Avoidance:** Outstanding openers like **Finn Allen** are deprioritized because Rajasthan Royals already has elite young opening talent in Yashasvi Jaiswal and Vaibhav Sooryavanshi.
+* **Volatility Warnings:** High-rated players whose numbers depend heavily on a single match (such as **Chris Woakes**) are clearly flagged for caution.
+
+---
+
+## 7. Technology Used
+
+* **Language:** Python 3.10+
+* **Data Processing:** pandas, NumPy, PyArrow (Parquet format)
+* **Statistical Modeling:** scikit-learn, SciPy
+* **Automated Testing:** pytest (38 unit and governance tests, 100% pass rate)
+* **Visualizations & Notebooks:** Matplotlib, Seaborn, Jupyter Notebook
+
+---
+
+## 8. Project Structure
 
 ```
-[Raw Competition Data: 6 CSVs]
-         |
-         v
-[Module 1: Data Understanding & Exploratory Data Analysis]
-         |  - Relational key validation, schema audit, and cricket rule verification
-         v
-[Module 2: Cleaning, Integration & Match-State Reconstruction]
-         |  - Deduplication, scorecard compliance, cumulative state engine (ball_by_ball_state.parquet)
-         v
-[Module 3: Pressure Index Mathematical Modelling]
-         |  - GroupKFold empirical resource surfaces, pressure calibration (ball_by_ball_pressure.parquet)
-         v
-[Module 4: Player Performance Under Pressure]
-         |  - Scorecard balls faced, dot bifurcation, phase-adjusted bowling, credibility shrinkage
-         v
-[Module 5: Reliability Scoring & Evidence-Based Rankings]
-         |  - Decoupled ratings & ERS, eligibility filtering, role boards, sensitivity testing
-         v
-[Module 6: Statistical Validation & Robustness]
-         |  - 1,000-replicate stratified match-cluster bootstrap, uncertainty intervals, LOMO influence
-         v
-[Future Work: Modules 7 to 9]
-            - RR squad fit & auction strategy, interactive HTML/CSS/JS dashboard, final defense
-```
-
----
-
-## 6. Dataset Overview
-
-The project is built on the official proprietary dataset provided for the challenge, covering Men's T20 cricket from 2022 to 2026:
-
-| Dataset File | File Size | Record Count | Description |
-| :--- | :---: | :---: | :--- |
-| `Data Pack/ball_by_ball.csv` | 39.17 MB | 200,999 | Granular delivery-level records including ball, batsman, bowler, runs, extras, and wickets. |
-| `Data Pack/matches.csv` | 0.12 MB | 883 | Match outcome records, dates, venues, toss decisions, and winning margins. |
-| `Data Pack/competitions.csv` | 0.01 MB | 141 | Tournament metadata covering IPL editions and Men's T20 Internationals. |
-| `Data Pack/playing_eleven.csv` | 0.92 MB | 28,381 | Player match participation and lineup records. |
-| `Data Pack/teams.csv` | 0.01 MB | 353 | Team names and franchise identifiers. |
-| `Data Pack/competition_team_player_mapping.csv` | 0.44 MB | 6,413 | Player-team-tournament roster mappings. |
-
----
-
-## 7. Repository Structure
-
-```text
 Rajhstan royals/
-│
-├── Data Pack/                               # Original competition CSV datasets
-│   ├── ball_by_ball.csv                     # 200,999 deliveries
-│   ├── matches.csv                          # 883 matches
-│   ├── competitions.csv                     # 141 tournaments
-│   ├── playing_eleven.csv                   # 28,381 participation entries
-│   ├── teams.csv                            # 353 team records
-│   └── competition_team_player_mapping.csv   # 6,413 roster records
-│
-├── notebooks/                               # Research and analytical notebooks
-│   ├── 01_data_understanding.ipynb          # Module 1: EDA, schema checks, and relational integrity
-│   ├── 02_data_cleaning_and_integration.ipynb # Module 2: Match-state reconstruction & cleaning
-│   ├── 03_pressure_index_framework.ipynb    # Module 3: Pressure Index modeling and calibration
-│   ├── 04_player_performance_under_pressure.ipynb # Module 4: Batter & bowler clutch evaluation
-│   ├── 05_player_reliability_and_rankings.ipynb   # Module 5: Decoupled ratings, evidence tiers & rankings
-│   └── 06_statistical_validation_robustness.ipynb # Module 6: Cluster bootstrap, stability & influence
-│
-├── data/
-│   └── processed/                           # Verified Parquet and CSV processed datasets
-│       ├── playing_eleven_clean.parquet     # Deduplicated lineups (28,341 rows)
-│       ├── ball_by_ball_state.parquet       # Cumulative match-state deliveries (200,999 rows, 58 cols)
-│       ├── ball_by_ball_pressure.parquet    # Pressure-labeled deliveries (200,999 rows, 68 cols)
-│       ├── batter_pressure_metrics.parquet  # Batter pressure tier metrics (888 players, 77 cols)
-│       ├── bowler_pressure_metrics.parquet  # Bowler pressure tier metrics (647 players, 102 cols)
-│       ├── batter_player_ratings.parquet    # Multi-dimensional batter ratings & ERS (888 players)
-│       ├── bowler_player_ratings.parquet    # Multi-dimensional bowler ratings & ERS (647 players)
-│       ├── batter_player_rankings.csv       # Official eligible batter leaderboard (304 players)
-│       ├── bowler_player_rankings.csv       # Official eligible bowler leaderboard (290 players)
-│       ├── player_ranking_sensitivity.csv   # Robustness, rank shift & sensitivity outputs
-│       ├── batter_rating_uncertainty.parquet # Module 6: 95% bootstrap intervals for batters (888 rows)
-│       ├── bowler_rating_uncertainty.parquet # Module 6: 95% bootstrap intervals for bowlers (647 rows)
-│       ├── batter_ranking_stability.parquet # Module 6: Rank volatility & Top 5/10/20 frequencies (888 rows)
-│       ├── bowler_ranking_stability.parquet # Module 6: Rank volatility & Top 5/10/20 frequencies (647 rows)
-│       ├── batter_eligibility_stability.parquet # Module 6: Bootstrap qualification stability (888 rows)
-│       ├── bowler_eligibility_stability.parquet # Module 6: Bootstrap qualification stability (647 rows)
-│       ├── evidence_threshold_sensitivity.parquet # Module 6: 6-scenario threshold sensitivity (12 rows)
-│       ├── match_influence_analysis.parquet # Module 6: HHI, top-match share & LOMO tests (50 rows)
-│       └── role_phase_robustness.parquet    # Module 6: Tactical role & phase evaluation (8 rows)
-│
-├── src/                                     # Production Python analytical modules
-│   ├── __init__.py
-│   ├── data_loader.py                       # Ingestion, validation, and path resolution
-│   ├── data_cleaner.py                      # Deduplication and anomaly cleaning
-│   ├── match_state.py                       # Vectorized live match-state reconstruction engine
-│   ├── pressure_calibration.py              # Out-of-fold baseline resource surface calibration
-│   ├── pressure_model.py                    # Multi-component Pressure Index calculation engine
-│   ├── batter_pressure_analysis.py          # Scorecard-compliant batter metrics across pressure tiers
-│   ├── bowler_pressure_analysis.py          # Bowler metrics across pressure tiers with dot bifurcation
-│   ├── clutch_analysis.py                   # Clutch differentials, phase adjustments & credibility weighting
-│   ├── reliability_scoring.py               # Multi-factor Evidence Reliability Score (ERS) engine
-│   ├── player_rating.py                     # Multi-dimensional batting and bowling performance ratings
-│   ├── player_ranking.py                    # Stratified rankings, role boards & specialized cohorts
-│   ├── ranking_validation.py                # Sensitivity auditing, rank shift & Spearman stability engine
-│   ├── bootstrap_validation.py              # Module 6: Stratified match-cluster bootstrap engine
-│   ├── robustness_analysis.py               # Module 6: Threshold sensitivity & tactical cohort analysis
-│   ├── influence_analysis.py                # Module 6: HHI, top share & LOMO sensitivity testing
-│   ├── generate_module6_outputs.py          # Module 6: Master execution & figure generation pipeline
-│   └── data_validator.py                    # Automated data integrity and invariant test suite
-│
-├── tests/                                   # Automated unit and regression test suite (pytest)
-│   ├── test_audit_reconciliation.py         # Forensic run, extras, dots, wickets, and ranking tests
-│   ├── test_module4_corrections.py          # Scorecard balls-faced, dot-ball & run preservation tests
-│   ├── test_module5_ratings.py              # ERS bounds, rating monotonicity & sensitivity tests
-│   └── test_module6_robustness.py           # Module 6: Cluster preservation, seed reproducibility & HHI bounds
-│
-├── reports/                                 # Handover documentation & technical reports
-│   ├── figures/                             # Publication-grade analytical visualizations
-│   │   ├── batter_rating_uncertainty_intervals.png
-│   │   ├── bowler_rating_uncertainty_intervals.png
-│   │   ├── ranking_stability_distribution.png
-│   │   ├── top_retention_comparison.png
-│   │   ├── sample_size_sensitivity.png
-│   │   └── match_influence_concentration.png
-│   ├── module_01_completion_summary.md
-│   ├── module_02_completion_summary.md
-│   ├── module_02_data_quality_report.md
-│   ├── module_03_completion_summary.md
-│   ├── module_03_pressure_methodology_report.md
-│   ├── module_04_completion_summary.md
-│   ├── module_04_methodology_report.md
-│   ├── module_05_completion_summary.md
-│   ├── module_05_methodology_report.md
-│   ├── module_06_completion_summary.md
-│   ├── module_06_methodology_report.md
-│   ├── project_correction_audit.md          # Forensic defect catalog and verification evidence
-│   └── final_project_readiness_report.md    # Multi-gate competition readiness audit
-│
-└── .gitignore                               # Clean git tracking policy
+├── Data Pack/            # Original competition CSV files (deliveries, matches, lineups)
+├── data/processed/       # Verified clean datasets, ratings, and squad models (Parquet & CSV)
+├── notebooks/            # Seven step-by-step Jupyter notebooks covering Modules 1 to 7
+├── src/                  # Core Python modules for data processing, scoring, and strategy
+├── tests/                # Automated test suite ensuring 100% data and logic accuracy
+└── reports/              # Methodology reports, documentation summaries, and visual figures
+    └── figures/          # High-resolution publication charts and analytical plots
 ```
 
 ---
 
-## 8. Technology Stack
+## 9. How to Run Locally
 
-* **Core Analytical Environment:** Python 3.10+ (tested on Python 3.10 to 3.14)
-* **Data Processing & Analytics:** pandas, NumPy, PyArrow (Parquet engine)
-* **Statistical Modeling & ML:** scikit-learn (GroupKFold cross-validation, non-linear regression baselines), SciPy (Spearman rho, Kendall tau rank statistics)
-* **Visualization (Research):** Matplotlib, Seaborn
-* **Interactive Dashboard Architecture (Planned):** Pure HTML5, CSS3, modern JavaScript (ES6+), Chart.js / Plotly.js, hosted on Netlify (planned for Module 8; Streamlit is not used for final production deployment)
-* **Testing & Quality Assurance:** pytest, unittest
+### 1. Prerequisites
+Ensure you have Python 3.10 or higher installed on your machine.
 
----
-
-## 9. Module 1 — Data Understanding and EDA
-
-* **Scope:** Forensic schema inspection, missing-value audit, primary key validation, and relational key consistency across all six raw CSV tables.
-* **Key Findings:**
-  * Confirmed 200,999 delivery rows across 883 matches and 141 tournaments.
-  * Identified 40 duplicate participation records in `playing_eleven.csv` (specifically within match ID 13613), which were resolved in Module 2.
-  * Verified that player identifiers (`striker_id`, `bowler_id`) link cleanly to `competition_team_player_mapping.csv`.
-
----
-
-## 10. Module 2 — Cleaning, Integration and Match-State Reconstruction
-
-* **Scope:** Deduplication, dismissal alignment, and vectorized live match-state reconstruction.
-* **Engine Deliverables (`src/match_state.py`):**
-  * Computed pre-delivery and post-delivery match state for all 200,999 balls.
-  * Invariant tracking: cumulative innings runs, balls elapsed, legal balls remaining, wickets in hand (10 down to 0), Current Run Rate (CRR), and Required Run Rate (RRR).
-  * Legal ball flagging (`is_legal_ball`): exactly 192,445 legal balls (excluding 7,714 wides and 840 no-balls).
-  * Exports: `playing_eleven_clean.parquet` (28,341 rows) and `ball_by_ball_state.parquet` (200,999 rows, 58 columns).
-
----
-
-## 11. Module 3 — Pressure Index Modelling
-
-* **Scope:** Mathematical formulation and empirical calibration of delivery-level pressure ($PI \in [0.0, 10.0]$).
-* **Framework Design (`src/pressure_model.py`, `src/pressure_calibration.py`):**
-  * **Chasing Innings ($PI_{\text{chase}}$):** Compares required run rate against an empirical resource baseline surface calibrated via GroupKFold out-of-fold cross-validation on match IDs to prevent data leakage ($R^2 > 0.83$).
-  * **First Innings ($PI_{\text{1st}}$):** Measures deviation from par projected score based on balls remaining and wickets fallen.
-  * **Pressure Tiers:** Low ($PI < 3.5$), Medium ($3.5 \le PI < 6.0$), High ($6.0 \le PI < 8.0$), Extreme ($PI \ge 8.0$), and Clutch ($PI \ge 6.0$).
-  * Export: `ball_by_ball_pressure.parquet` (200,999 rows, 68 columns).
-
----
-
-## 12. Module 4 — Player Performance Under Pressure
-
-* **Scope:** Aggregating batter and bowler metrics across pressure tiers and computing clutch differentials.
-* **Cricket Scorecard Compliance:**
-  * Excluded wides (7,714) from batter balls faced while including no-balls (840), byes (529), leg-byes (2,748), and standard deliveries, establishing exactly **193,285 balls faced**.
-  * Preserved all **269,550 runs off the bat**, including 1,264 runs scored on no-balls.
-  * Bifurcated dot balls into True Team Dots (`total_runs == 0`, 68,027 balls) and Bowler Scoreless Balls (`bowler_conceded_runs == 0`, 71,304 balls).
-  * Phase-adjusted bowling clutch comparison against Powerplay (9.18 RPO), Middle (9.01 RPO), and Death (10.52 RPO) baselines.
-  * Applied credibility-weighted shrinkage heuristic ($w = n / (n + 30.0)$).
-  * Exports: `batter_pressure_metrics.parquet` (888 rows, 77 cols) and `bowler_pressure_metrics.parquet` (647 rows, 102 cols).
-
----
-
-## 13. Module 5 — Reliability Scoring and Evidence-Based Rankings
-
-* **Scope:** Decoupled multi-dimensional performance ratings and evidence reliability scores.
-* **Core Outputs:**
-  * Evaluated 888 batters and 647 bowlers across independent disciplines.
-  * Computed Evidence Reliability Score ($ERS$) across 4 exposure dimensions.
-  * Enforced eligibility criteria ($\ge 20$ clutch balls AND $ERS \ge 35.0$ / Moderate+ Evidence), qualifying **304 eligible batters** and **290 eligible bowlers**.
-  * Generated stratified role boards, Standout Performers, High-Upside Watchlist, and Regression Risks.
-  * Exports: `batter_player_ratings.parquet` (888 rows), `bowler_player_ratings.parquet` (647 rows), `batter_player_rankings.csv` (304 rows), `bowler_player_rankings.csv` (290 rows), `player_ranking_sensitivity.csv` (6 scenarios).
-
----
-
-## 14. Module 6 — Statistical Validation and Robustness
-
-* **Scope:** Independent statistical evaluation of player performance ratings and ranking stability using match-cluster resampling and outlier influence diagnostics.
-* **Stratified Match-Cluster Bootstrap (`src/bootstrap_validation.py`):**
-  * Resamples entire match clusters (867 total matches) with replacement within 11 format-season strata (5 IPL editions, 5 T20I years, 1 other T20) across 1,000 full-tournament replicates, executed in 3.62 seconds via vectorized NumPy matrix transformations.
-  * Preserves within-match delivery correlation, phase progression, and contextual game state without leakage.
-* **Uncertainty Quantification & Ranking Stability:**
-  * Computes 95% descriptive percentile intervals for Performance Ratings ($PR$), clutch strike rates, and phase-adjusted clutch economy rates across 888 batters and 647 bowlers.
-  * Measures leaderboard ranking volatility, rank standard deviation, and Top 5, Top 10, and Top 20 retention frequencies under missing-rank penalty assignments ($N_{\text{total}} + 1$).
-  * Tracks bootstrap eligibility rates under strict conjunctional criteria ($n_{\text{clutch}} \ge 20$ AND $ERS \ge 35.0$).
-* **Outlier Concentration & Influence Testing (`src/influence_analysis.py`):**
-  * Calculates delivery volume Herfindahl-Hirschman Index ($HHI$) and top-match run/wicket shares.
-  * Conducts Leave-One-Most-Influential-Match-Out (LOMO) tests, quantifying rating drops ($\Delta BPR_{\text{LOMO}}$) and leaderboard rank displacements.
-  * Identifies match-dependent spike performers (e.g., Yashasvi Jaiswal, Finn Allen, Chris Woakes) versus sustained, multi-match resilient performers (e.g., Naman Dhir, Matthew Wade, Tim David, Sufiyan Muqeem, Imad Wasim, Jasprit Bumrah).
-* **Sample-Size Threshold Sensitivity (`src/robustness_analysis.py`):**
-  * Evaluates 6 alternative qualification scenarios (`Baseline`, `Relaxed_Clutch_15`, `Strict_Clutch_30`, `Strong_Evidence_Only`, `High_Match_Breadth`, `Low_Exposure_Probe`).
-  * Confirms 90% Top 20 retention when tightening to strict clutch volume ($c \ge 30$, $\rho \ge 0.9972$).
-* **Tactical Cohort & Phase Validation:**
-  * Validates phase-adjusted bowling economy against Powerplay (9.18 RPO), Middle (9.01 RPO), and Death (10.52 RPO) baselines.
-  * Highlights top-order batting leverage vulnerability (-28.36 SR drop under pressure) relative to middle-order (-7.86 SR) and finisher resilience (-10.73 SR).
-* **Deliverables:** 9 processed datasets in `data/processed/`, 6 publication figures in `reports/figures/`, research notebook `notebooks/06_statistical_validation_robustness.ipynb`, and 8 unit/robustness tests in `tests/test_module6_robustness.py`.
-
----
-
-## 15. Methodology and Mathematical Framework
-
-### 15.1 Evidence Reliability Score ($ERS$)
-
-The Evidence Reliability Score ($ERS \in [0.0, 100.0]$) quantifies statistical exposure and sample adequacy:
-
-$$ERS = 0.40 \cdot S_{\text{clutch}} + 0.25 \cdot S_{\text{overall}} + 0.20 \cdot S_{\text{matches}} + 0.15 \cdot S_{\text{comps}}$$
-
-Where each sub-score uses linear saturation benchmarks calibrated to professional T20 exposure distributions:
-
-$$S_{\text{clutch}} = \text{clip}\left(\frac{n_{\text{clutch}}}{120.0} \times 100.0, 0.0, 100.0\right) \quad [\text{Target: 120 clutch balls, top-quartile exposure}]$$
-$$S_{\text{overall}} = \text{clip}\left(\frac{n_{\text{overall}}}{300.0} \times 100.0, 0.0, 100.0\right) \quad [\text{Target: 300 total balls, ~15-20 T20 innings}]$$
-$$S_{\text{matches}} = \text{clip}\left(\frac{m}{25.0} \times 100.0, 0.0, 100.0\right) \quad [\text{Target: 25 matches, multi-season presence}]$$
-$$S_{\text{comps}} = \text{clip}\left(\frac{c}{3.0} \times 100.0, 0.0, 100.0\right) \quad [\text{Target: 3 competitions, cross-league versatility}]$$
-
-**Critical Conceptual Boundary:** ERS is an exposure coverage index. It is **not** a probability that a player is good, **not** a confidence interval, **not** a Bayesian posterior, and **not** a future performance guarantee.
-
----
-
-## 16. Final Batter and Bowler Ranking Methodology
-
-### 16.1 Batting Performance Rating ($BPR \in [0.0, 100.0]$)
-
-Every batter is evaluated across six traceable dimensions:
-
-$$BPR = 0.30 \cdot S_{\text{scoring}} + 0.20 \cdot S_{\text{boundary}} + 0.15 \cdot S_{\text{rotation}} + 0.15 \cdot S_{\text{preservation}} + 0.10 \cdot S_{\text{clutch}} + 0.10 \cdot S_{\text{overall}}$$
-
-* $S_{\text{scoring}}$: Clutch SR normalized $[70.0, 200.0]$ (Domain reasoning / design choice).
-* $S_{\text{boundary}}$: Clutch Boundary % normalized $[0.0\%, 35.0\%]$ (Domain reasoning / design choice).
-* $S_{\text{rotation}}$: Clutch Non-Dot % normalized $[20.0\%, 70.0\%]$ (Domain reasoning / design choice).
-* $S_{\text{preservation}}$: Clutch Runs per Dismissal normalized $[0.0, 50.0]$ (Domain reasoning / design choice).
-* $S_{\text{clutch}}$: Batting Clutch Index normalized $[0.0, 10.0]$ scaled to $[0.0, 100.0]$ (Model scale design).
-* $S_{\text{overall}}$: Career SR Baseline normalized $[80.0, 180.0]$ (Domain reasoning / design choice).
-
-### 16.2 Bowling Performance Rating ($BPR_{\text{bowl}} \in [0.0, 100.0]$)
-
-Every bowler is evaluated across six traceable dimensions:
-
-$$BPR_{\text{bowl}} = 0.25 \cdot S_{\text{run\_control}} + 0.20 \cdot S_{\text{dot\_creation}} + 0.20 \cdot S_{\text{wicket\_taking}} + 0.15 \cdot S_{\text{bnd\_supp}} + 0.10 \cdot S_{\text{overall}} + 0.10 \cdot S_{\text{clutch}}$$
-
-* $S_{\text{run\_control}}$: Phase-adjusted delta economy normalized $[-3.0, +3.0]$ RPO (Domain reasoning / design choice).
-* $S_{\text{dot\_creation}}$: True team dot % in clutch normalized $[15.0\%, 50.0\%]$ (Domain reasoning / design choice).
-* $S_{\text{wicket\_taking}}$: Clutch wicket % normalized $[0.0\%, 12.0\%]$ (Domain reasoning / design choice).
-* $S_{\text{bnd\_supp}}$: Inverted clutch boundary % normalized $[10.0\%, 30.0\%]$ (Domain reasoning / design choice).
-* $S_{\text{overall}}$: Inverted overall career economy normalized $[6.0, 11.0]$ RPO (Domain reasoning / design choice).
-* $S_{\text{clutch}}$: Bowling Clutch Index normalized $[0.0, 10.0]$ scaled to $[0.0, 100.0]$ (Model scale design).
-
----
-
-## 17. Reliability and Eligibility Framework
-
-Players are segmented into discrete evidence tiers based on their $ERS$ and conjunctional sample floors:
-
-| Evidence Tier | Criteria | Batters Count | Bowlers Count | Treatment in Recruitment Strategy |
-| :--- | :--- | :---: | :---: | :--- |
-| **Strong Evidence** | $ERS \ge 60.0$ AND $n_{\text{clutch}} \ge 40$ AND $\text{matches} \ge 10$ | **201** | **206** | Core auction targets with extensive multi-tournament proof. |
-| **Moderate Evidence** | $ERS \ge 35.0$ AND $n_{\text{clutch}} \ge 20$ AND $\text{matches} \ge 5$ | **103** | **84** | Viable targets with role-specific contextualization. |
-| **Insufficient Evidence** | $n_{\text{overall}} \ge 30$ AND $n_{\text{clutch}} \ge 10$ (not Strong/Mod) | **163** | **156** | Emerging talents; isolated on Watchlist if performance is high. |
-| **Not Eligible** | $n_{\text{overall}} < 30$ OR $n_{\text{clutch}} < 10$ | **421** | **201** | Excluded from player rankings due to negligible exposure. |
-
-**Sub-20 Clutch Deliveries Classification:** Exactly 44 batters and 29 bowlers have between 5 and 19 clutch deliveries and $ERS \ge 20.0$. Because Moderate Evidence strictly enforces $n_{\text{clutch}} \ge 20$, 100% of these players have `is_eligible_for_ranking == False`. High-upside talents among them are monitored on the Watchlist.
-
-**Official Leaderboard Cutoff:** Players must have `is_eligible_for_ranking == True` (`Strong Evidence` or `Moderate Evidence`), satisfying $n_{\text{clutch}} \ge 20$. This establishes **304 eligible batters** and **290 eligible bowlers**.
-
----
-
-## 18. Module 5 Sensitivity and Parameter Robustness Testing
-
-To ensure rankings are not artifacts of specific weight choices, the models were stress-tested against 6 alternative weighting scenarios ($\pm 15\%$ variations) in `data/processed/player_ranking_sensitivity.csv`:
-
-| Discipline | Scenario | Weight Shift Description | Spearman $\rho$ | Kendall $\tau$ | Mean Shift | Max Shift | Top 20 Retention |
-| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Batting** | `Clutch_Heavy` | Clutch Scoring 40%, Clutch Index 25% | **0.9936** | 0.9352 | 7.05 | 37 | **18 / 20 (90%)** |
-| **Batting** | `Baseline_Heavy` | Wicket Preservation 25%, Non-Dot 25% | **0.9925** | 0.9320 | 7.47 | 53 | **18 / 20 (90%)** |
-| **Batting** | `Power_Hitting_Bias` | Boundary % 35%, Clutch Scoring 35% | **0.9755** | 0.8719 | 13.97 | 70 | **15 / 20 (75%)** |
-| **Bowling** | `Clutch_Heavy` | Delta Economy 40%, Absolute Econ 25% | **0.9932** | 0.9324 | 7.08 | 34 | **18 / 20 (90%)** |
-| **Bowling** | `Baseline_Heavy` | Absolute Econ 35%, True Dot % 30% | **0.9805** | 0.8828 | 12.37 | 67 | **17 / 20 (85%)** |
-| **Bowling** | `Wicket_Attacking_Bias` | Wicket % 35%, Boundary Supp 25% | **0.9635** | 0.8394 | 16.38 | 85 | **14 / 20 (70%)** |
-
-**Robustness Findings:**
-* High relative rank stability: all Spearman correlations exceed **0.9635**.
-* Top 20 retention ranges from **70% to 90%**, with lower retention in aggressive stress scenarios reflecting expected tactical divergence (strike bowlers advancing over run-containment spinners) rather than mathematical instability.
-* **Scope Boundary:** These scenarios test parameter specification robustness; full statistical uncertainty quantification and cluster resampling are conducted in Module 6.
-
----
-
-## 19. Validation and Testing
-
-The repository includes an automated test suite executed via `pytest`:
+### 2. Set Up Environment
+Clone or navigate to the project directory:
 
 ```powershell
-python -m pytest tests/ -v
+cd "c:\Users\mohdh\Desktop\Projects\Rajhstan royals"
 ```
 
-### Test Suite Coverage:
-* `tests/test_audit_reconciliation.py` (10 tests): Run reconciliation identities, balls-faced counts, dot-ball bifurcations, anomalous deliveries, individual dismissal breakdown, eligibility counts, 6-dimension bowling model verification, sub-20 clutch exclusions, linear ERS targets, and sensitivity ranges.
-* `tests/test_module4_corrections.py` (6 tests): Scorecard balls faced, bat runs on no-balls, dot definitions, phase adjustment, and credibility weighting bounds.
-* `tests/test_module5_ratings.py` (5 tests): ERS calculation bounds, performance rating monotonicity, role filtering, and rank sensitivity.
-* `tests/test_module6_robustness.py` (8 tests): Match-cluster preservation, duplicate match weighting, seed reproducibility, uncertainty interval ordering, missing-rank penalties, conjunctional eligibility rules, threshold monotonicity, and delivery volume HHI bounds.
-* **Test Outcome:** **29 passed in 17.83s** (100% pass rate).
+Create and activate a virtual environment:
 
----
-
-## 20. Key Analytical Findings
-
-### 20.1 Top 10 Eligible Batters
-1. **Yashasvi Jaiswal** (Rank 1, Rating: 96.90, ERS: 63.00, Clutch SR: 225.64, 39 clutch balls)
-2. **Finn Allen** (Rank 2, Rating: 93.48, ERS: 63.67, Clutch SR: 212.20, 41 clutch balls)
-3. **Vipraj Nigam** (Rank 3, Rating: 92.52, ERS: 44.42, Clutch SR: 187.50, 72 clutch balls)
-4. **Mahipal Lomror** (Rank 4, Rating: 85.26, ERS: 60.50, Clutch SR: 205.88, 51 clutch balls)
-5. **Naman Dhir** (Rank 5, Rating: 84.48, ERS: 90.00, Clutch SR: 182.87, 216 clutch balls)
-6. **Phil Salt** (Rank 6, Rating: 84.42, ERS: 78.33, Clutch SR: 190.59, 85 clutch balls)
-7. **Matthew Wade** (Rank 7, Rating: 81.39, ERS: 90.00, Clutch SR: 171.97, 157 clutch balls)
-8. **Asif Khan** (Rank 8, Rating: 81.20, ERS: 52.40, Clutch SR: 190.16, 61 clutch balls)
-9. **Tim David** (Rank 9, Rating: 80.98, ERS: 90.00, Clutch SR: 179.25, 400 clutch balls)
-10. **Shamar Springer** (Rank 10, Rating: 80.79, ERS: 37.02, Clutch SR: 172.58, 62 clutch balls)
-
-### 20.2 Top 10 Eligible Bowlers
-1. **Chris Woakes** (Rank 1, Rating: 90.22, ERS: 38.13, Clutch Econ: 6.56, Delta Econ: +2.91, 32 clutch balls)
-2. **Sufiyan Muqeem** (Rank 2, Rating: 88.28, ERS: 90.00, Clutch Econ: 5.71, Delta Econ: +3.54, 126 clutch balls)
-3. **George Dockrell** (Rank 3, Rating: 83.05, ERS: 52.17, Clutch Econ: 5.29, Delta Econ: +3.90, 59 clutch balls)
-4. **Imad Wasim** (Rank 4, Rating: 81.42, ERS: 74.70, Clutch Econ: 6.00, Delta Econ: +3.19, 114 clutch balls)
-5. **Matthew Humphreys** (Rank 5, Rating: 77.56, ERS: 64.87, Clutch Econ: 6.68, Delta Econ: +2.60, 71 clutch balls)
-6. **Ehsan Khan** (Rank 6, Rating: 77.15, ERS: 60.20, Clutch Econ: 7.37, Delta Econ: +3.01, 57 clutch balls)
-7. **Dushan Hemantha** (Rank 7, Rating: 76.76, ERS: 49.73, Clutch Econ: 7.50, Delta Econ: +1.84, 68 clutch balls)
-8. **Benjamin Sears** (Rank 8, Rating: 75.30, ERS: 87.60, Clutch Econ: 7.91, Delta Econ: +1.62, 129 clutch balls, 15 wkts)
-9. **George Linde** (Rank 9, Rating: 74.18, ERS: 71.52, Clutch Econ: 7.57, Delta Econ: +1.74, 88 clutch balls)
-10. **Liam Dawson** (Rank 10, Rating: 72.68, ERS: 87.60, Clutch Econ: 7.05, Delta Econ: +2.13, 131 clutch balls, 12 wkts)
-
-### 20.3 Specialized Analytical Cohorts
-* **Standout Clutch Performers (High Rating + Strong Evidence):** Tim David, Matthew Wade, Phil Salt, Sufiyan Muqeem, Imad Wasim, Benjamin Sears, Taskin Ahmed, Jasprit Bumrah (541 clutch balls, +1.73 delta econ).
-* **High-Upside Watchlist (High Rating + Low Evidence):** Jake Fraser-McGurk (Rating: 95.15, Clutch SR: 316.67, 12 balls), Vaibhav Sooryavanshi (Rating: 95.63, Clutch SR: 261.11, 18 balls), Kushal Bhurtel (Rating: 95.46, Clutch Econ: 4.74, 19 balls).
-* **High-Volume Regression Risks (High Evidence + Poor Clutch Performance):** Romario Shepherd (Rating: 54.05, Clutch SR drops to 140.43 across 423 balls), Arshad Khan (Rating: 16.79, Concedes 14.05 RPO across 111 clutch balls), Mayank Markande (Rating: 15.79, Concedes 12.48 RPO across 150 clutch balls).
-
-### 20.4 Module 6 Robustness & Outlier Classifications
-* **Match-Dependent Spikes (Fragile Top Ranks):**
-  * *Yashasvi Jaiswal (Bat Rank 1):* 95% bootstrap interval [9.15, 98.13] (width 88.98). 87.5% of clutch runs occurred in a single fixture (HHI: 0.692). LOMO rating drop: -38.19 (plummets to Rank 99).
-  * *Finn Allen (Bat Rank 2):* 95% interval [12.53, 97.34] (width 84.81). 92.0% of clutch runs in one match (HHI: 0.862). LOMO drop: -13.64 (drops to Rank 13).
-  * *Chris Woakes (Bowl Rank 1):* 95% interval [20.40, 98.20] (width 77.80), bootstrap eligibility only 53.3%. 75.0% of clutch wickets in one match (HHI: 0.377). LOMO drop: -35.99 (falls to Rank 55).
-* **Sustained / Resilient Performers (Core Targets):**
-  * *Batters:* Naman Dhir (100% eligibility, CI width 29.36, LOMO -4.87), Matthew Wade (100% eligibility, CI width 28.46, LOMO -3.00), Tim David (100% eligibility, CI width 25.87, LOMO -0.42).
-  * *Bowlers:* Sufiyan Muqeem (100% eligibility, CI width 34.32, LOMO -0.54, Top 20 in 88.6% of resamples), Imad Wasim (98.2% eligibility, CI width 29.66, LOMO -4.94, Top 20 in 92.4%), Jasprit Bumrah (100% eligibility, CI width 20.60, LOMO -0.31, 541 clutch balls across 49 matches).
-
----
-
-## 21. Limitations
-
-1. **Phase Adjustment Residuals:** While phase baselines mitigate over-phase bias, residual confounding remains regarding opposition batter quality and venue pitch conditions.
-2. **Cross-Tournament Standardisation:** Regional franchise leagues (CPL, BPL, SA20) possess differing competitive baselines from the IPL.
-3. **No Direct Auction Recommendations in Modules 5 & 6:** Modules 5 and 6 deliver objective performance evidence and statistical uncertainty bounds. Auction price estimation, budget allocation, and team squad balance are strictly reserved for Module 7.
-4. **Match-Cluster Resampling Context:** Cluster bootstrapping preserves delivery dependence within fixtures, but does not adjust for opposition bowling quality or venue boundary asymmetry.
-
----
-
-## 22. Instructions to Reproduce the Analysis
-
-### Step 1: Environment Setup
 ```powershell
 python -m venv venv
 .\venv\Scripts\activate
+```
+
+Install the project dependencies:
+
+```powershell
 pip install pandas numpy scikit-learn pyarrow pytest nbformat matplotlib seaborn
 ```
 
-### Step 2: Run Automated Test Suite
+### 3. Run Automated Tests
+Verify that all 38 data integrity, logic, and governance tests pass:
+
 ```powershell
 python -m pytest tests/ -v
 ```
 
-### Step 3: Execute Research Notebooks in Sequence
+### 4. Run Analysis Scripts
+Generate all analytical datasets and figures directly from the command line:
+
 ```powershell
-jupyter notebook notebooks/01_data_understanding.ipynb
-jupyter notebook notebooks/02_data_cleaning_and_integration.ipynb
-jupyter notebook notebooks/03_pressure_index_framework.ipynb
-jupyter notebook notebooks/04_player_performance_under_pressure.ipynb
-jupyter notebook notebooks/05_player_reliability_and_rankings.ipynb
-jupyter notebook notebooks/06_statistical_validation_robustness.ipynb
+python src/generate_module6_outputs.py
+python src/generate_module7_outputs.py
+```
+
+### 5. Explore Research Notebooks
+Launch Jupyter to inspect any research module interactively:
+
+```powershell
+jupyter notebook notebooks/
 ```
 
 ---
 
-## 23. Current Project Status
+## 10. Limitations
 
-* [x] **Module 1 — Data Understanding & Exploratory Data Analysis:** Completed and verified.
-* [x] **Module 2 — Data Cleaning, Integration & Match-State Reconstruction:** Completed and verified.
-* [x] **Module 3 — Pressure Index ($PI$) Mathematical Modelling:** Completed and verified.
-* [x] **Module 4 — Player Performance Under Pressure:** Completed and verified (scorecard compliant, bifurcated dots, phase adjusted).
-* [x] **Module 5 — Reliability Scoring & Evidence-Based Rankings:** Completed and verified (decoupled ratings, 304 eligible batters, 290 eligible bowlers, sensitivity verified).
-* [x] **Module 6 — Statistical Validation & Robustness:** Completed and verified (1,000-replicate stratified match-cluster bootstrap, 95% uncertainty intervals, ranking stability, LOMO influence analysis).
-* [ ] **Module 7 — Rajasthan Royals Squad Fit & Auction Strategy:** Pending development.
-* [ ] **Module 8 — Interactive Dashboard:** Pending development (planned HTML/CSS/JS architecture on Netlify).
-* [ ] **Module 9 — Final Competition Report & Presentation:** Pending development.
+* **Past Performance vs. Future Results:** Strong past performance under pressure is a helpful guide, but it does not guarantee future success under new match conditions, pitches, or team dynamics.
+* **Sample Size Realities:** Players with very few high-pressure deliveries are placed on a watchlist rather than ranked on primary auction leaderboards.
+* **Tournament Context:** Playing conditions and competition standards differ across international matches and regional T20 leagues.
+* **Auction Dynamics:** The 100-unit budget allocation model represents strategic squad priority. It does not attempt to predict exact rupee bids or erratic bidding wars during live auctions.
 
 ---
 
-## 24. Future Work: Dashboard Development and Presentation
+## 11. Acknowledgements
 
-* **Interactive Scouting Dashboard:** Development of a high-performance web dashboard built in HTML5, CSS3, and modern JavaScript, featuring interactive player cards, scatter plots, role filters, and radar charts. The dashboard will be hosted on Netlify.
-* **Squad Optimization Engine:** Implementation of an auction purse simulation model tailored to the Rajasthan Royals' retention sheet and role vacancies for IPL 2027.
-* **Executive Presentation:** Preparation of an analytical slide deck and technical defense document summarizing methodology, findings, and strategic recruitment targets.
+This project was built for the **Rajasthan Royals Sports Analytics Challenge (Season 2)**, using the official competition data pack covering T20 cricket from 2022 to 2026.
+
+Special thanks to the sports analytics community for open research into win probability, run-rate pressure modeling, and cricket performance metrics.
