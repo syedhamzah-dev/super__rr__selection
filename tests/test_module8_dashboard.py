@@ -196,3 +196,36 @@ class TestModule8Dashboard:
         assert "Syed Mohammad Hamzah" in meta["lead_analytics_engineer"]
         assert "SupeRR Selector" in meta["system_title"]
         assert "2022" in meta["data_timestamp"] and "2026" in meta["data_timestamp"]
+
+    def test_homepage_powerbi_cockpit_elements(self):
+        html_path = Path("dashboard/index.html")
+        assert html_path.exists()
+        html = html_path.read_text(encoding="utf-8")
+
+        # Verify Power BI Cockpit IDs
+        expected_ids = [
+            "kpi-deliveries",
+            "kpi-matches",
+            "kpi-matches-deliveries",
+            "kpi-batters",
+            "kpi-bowlers",
+            "overview-filter-competition",
+            "overview-filter-season",
+            "overview-filter-role",
+            "overview-filter-team",
+            "overview-filter-tier",
+            "overview-reset-filters-btn",
+            "overview-active-filter-chips",
+            "chart-overview-pressure-dist",
+            "chart-overview-pr-sss",
+            "overview-top-batters-body",
+            "overview-top-bowlers-body"
+        ]
+        for eid in expected_ids:
+            assert f'id="{eid}"' in html, f"Missing expected homepage DOM element ID: {eid}"
+
+    def test_homepage_runtime_headless_execution(self):
+        import subprocess
+        res = subprocess.run(["node", "tests/test_homepage_logic.js"], capture_output=True, text=True)
+        assert res.returncode == 0, f"Homepage runtime test failed:\n{res.stderr}\n{res.stdout}"
+        assert "ALL HOMEPAGE RUNTIME INTEGRITY CHECKS PASSED WITH 0 ERRORS!" in res.stdout

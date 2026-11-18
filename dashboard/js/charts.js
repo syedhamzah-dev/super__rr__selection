@@ -593,5 +593,114 @@ const ChartManager = {
         }
       }
     });
+  },
+
+  /**
+   * 9. Delivery Pressure Index Distribution (Doughnut Chart)
+   */
+  renderPressureDistribution(canvasId) {
+    if (typeof Chart === "undefined") return;
+    this.destroyChart(canvasId);
+
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+
+    this.charts[canvasId] = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: [
+          "Low Pressure (< 3.0 PI)",
+          "Moderate Pressure (3.0–5.9 PI)",
+          "High Pressure Clutch (6.0–7.9 PI)",
+          "Extreme Clutch (≥ 8.0 PI)"
+        ],
+        datasets: [{
+          data: [87412, 62874, 34918, 15795], // 200,999 total; 50,713 clutch events (≥6.0 PI)
+          backgroundColor: ["#3b82f6", "#f59e0b", "#ff2a85", "#e11d48"],
+          borderColor: "#0f172a",
+          borderWidth: 2,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: { boxWidth: 12, padding: 10, color: "#cbd5e1", font: { size: 11 } }
+          },
+          tooltip: {
+            callbacks: {
+              label: item => {
+                const total = 200999;
+                const val = item.raw;
+                const pct = ((val / total) * 100).toFixed(1);
+                return ` ${item.label}: ${val.toLocaleString()} deliveries (${pct}%)`;
+              }
+            }
+          }
+        },
+        cutout: "60%"
+      }
+    });
+  },
+
+  /**
+   * 10. Evidence Tier Distribution (Batters vs Bowlers Bar Chart)
+   */
+  renderEvidenceTierDistribution(canvasId) {
+    if (typeof Chart === "undefined") return;
+    this.destroyChart(canvasId);
+
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+
+    this.charts[canvasId] = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Batters (304)", "Bowlers (290)"],
+        datasets: [
+          {
+            label: "Strong Evidence (ERS ≥ 60)",
+            data: [201, 206],
+            backgroundColor: "#10b981",
+            borderRadius: 4
+          },
+          {
+            label: "Moderate Evidence (ERS 35–59)",
+            data: [103, 84],
+            backgroundColor: "#3b82f6",
+            borderRadius: 4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "top",
+            labels: { boxWidth: 12, padding: 10, color: "#cbd5e1", font: { size: 11 } }
+          },
+          tooltip: {
+            callbacks: {
+              label: item => ` ${item.dataset.label}: ${item.raw} players`
+            }
+          }
+        },
+        scales: {
+          x: {
+            stacked: true,
+            grid: { display: false }
+          },
+          y: {
+            stacked: true,
+            grid: { color: "rgba(255, 255, 255, 0.05)" },
+            title: { display: true, text: "Qualified Players", color: "#94a3b8" }
+          }
+        }
+      }
+    });
   }
 };

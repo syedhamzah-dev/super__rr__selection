@@ -20,18 +20,23 @@
           <p>Cricket Performance & Scouting Platform</p>
         </div>
       </div>
+      <!-- Compact Dataset Coverage Indicator (Phase 2.A) -->
+      <div class="header-coverage-indicator" style="display: flex; align-items: center; gap: 8px; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); padding: 5px 12px; border-radius: 20px; font-size: 11px; color: var(--text-secondary);">
+        <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span>
+        <span><strong>883</strong> Matches • <strong>200,999</strong> Deliveries • <strong>2022–2026</strong></span>
+      </div>
       <button class="nav-toggle" id="nav-toggle-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav-tabs">
         <span class="hamburger-bar"></span>
         <span class="hamburger-bar"></span>
         <span class="hamburger-bar"></span>
       </button>
       <nav class="nav-tabs" id="main-nav-tabs" aria-label="Dashboard Views">
-        <button class="nav-tab active" data-tab="overview">Home</button>
+        <button class="nav-tab active" data-tab="overview">Overview</button>
         <button class="nav-tab" data-tab="top-batters">Top 10 Batters</button>
         <button class="nav-tab" data-tab="top-bowlers">Top 10 Bowlers</button>
-        <button class="nav-tab" data-tab="batters">Batter Explorer</button>
-        <button class="nav-tab" data-tab="bowlers">Bowler Explorer</button>
-        <button class="nav-tab" data-tab="squad">RR Squad</button>
+        <button class="nav-tab" data-tab="batters">Batters</button>
+        <button class="nav-tab" data-tab="bowlers">Bowlers</button>
+        <button class="nav-tab" data-tab="squad">RR Squad Analysis</button>
         <button class="nav-tab" data-tab="recruitment">Recruitment</button>
         <button class="nav-tab" data-tab="auction">Auction Strategy</button>
         <button class="nav-tab" data-tab="methodology">Methodology</button>
@@ -49,288 +54,461 @@
   <main class="main-content">
 
     <!-- =====================================================================
-         PAGE 1: HOME / OVERVIEW
+         PAGE 1: HOME / OVERVIEW (Power BI-Inspired Cockpit)
          ===================================================================== -->
     <section id="pane-overview" class="tab-pane active">
 
-      <!-- Executive Hero Experience -->
-      <div class="hero-card">
+      <!-- Executive Intro / Hero Banner (Phase 2.B) -->
+      <div class="hero-card" style="margin-bottom: 20px;">
         <div class="hero-meta-badge">
           <span>🏏 Rajasthan Royals Sports Analytics Challenge — Season 2</span>
           <span>•</span>
           <span>Lead Analyst: Syed Mohammad Hamzah (B.Tech CSE Data Analytics)</span>
         </div>
-        <h2 class="hero-title">SupeRR <span class="pink">Intelligence</span></h2>
-        <div class="hero-subtitle">Cricket Performance & Scouting Platform</div>
-        <div class="hero-tagline">Discover Talent. Decode Performance. Make Smarter Decisions.</div>
+        <h2 class="hero-title">Cricket Performance Intelligence Dashboard</h2>
+        <div class="hero-subtitle">SupeRR Intelligence • Cricket Performance & Scouting Platform</div>
         <p class="hero-description">
-          An elite recruitment intelligence platform engineered ahead of the IPL 2027 mega-auction.
-          By isolating delivery-level performance under extreme match pressure (Leverage Index &ge; 1.0), applying Empirical Bayes statistical shrinkage, and calibrating against Rajasthan Royals' specific squad vacancies, SupeRR Intelligence identifies genuine match-winners and separates elite skill from fleeting form.
+          Explore historical player performance, pressure situations, statistical reliability and Rajasthan Royals recruitment insights through an integrated analytical framework.
         </p>
 
-        <!-- Compact Historical Scope Summary Pill -->
-        <div class="hero-scope-pill">
+        <!-- Compact Dataset Scope Pill -->
+        <div class="hero-scope-pill" id="overview-scope-pill">
           <span>📊 Audited Multi-Tournament Scope:</span>
-          <strong>883 Matches</strong> (867 with deliveries) • <strong>200,999 Deliveries</strong> • <strong>2022–2026</strong> (IPL, T20Is, Asia Cups)
+          <strong>883 Matches</strong> (867 Enriched with Deliveries) • <strong>200,999 Deliveries</strong> • <strong>2022–2026</strong> (IPL, T20Is, Asia Cups)
         </div>
 
-        <!-- Quick Action Jump Links -->
+        <!-- Functional Actions -->
         <div class="hero-actions">
-          <button class="hero-btn hero-btn-primary" data-jump="top-batters">
-            <span>🏏 Explore Top 10 Batters</span>
+          <button class="hero-btn hero-btn-primary" data-jump="batters" id="hero-btn-explore-rankings">
+            <span>🏏 Explore Player Rankings</span>
             <span>&rarr;</span>
           </button>
-          <button class="hero-btn hero-btn-blue" data-jump="top-bowlers">
-            <span>⚡ Explore Top 10 Bowlers</span>
+          <button class="hero-btn hero-btn-blue" data-jump="recruitment" id="hero-btn-explore-recruitment">
+            <span>🛡️ Explore RR Recruitment Insights</span>
             <span>&rarr;</span>
           </button>
           <button class="hero-btn hero-btn-secondary" data-jump="squad">
-            <span>🛡️ RR Squad Priorities</span>
+            <span>⚡ RR Squad Baseline</span>
           </button>
           <button class="hero-btn hero-btn-secondary" data-jump="methodology">
-            <span>📖 Methodology & Glossary</span>
+            <span>📖 Methodology & Limits</span>
           </button>
         </div>
 
         <div class="hero-notice-banner">
           <span>ℹ️</span>
           <div>
-            <strong>Recruitment & Regulatory Notice:</strong> Recommended players are model-derived priority targets based on audited 2022–2026 match data. Official IPL 2027 player registration is unconfirmed. Under long-standing BCCI regulatory policy, Pakistani players cannot register and are retained strictly as global tactical benchmarks.
+            <strong>Candidate Governance & Integrity:</strong> Player availability for IPL 2027 is conditional upon official auction registration. <strong>Marcus Stoinis</strong> is retained by Punjab Kings (PBKS) and classified strictly as a <em>Conditional Trade Watch</em>. Pakistani stars and rival cornerstones are retained as strategic international benchmarks.
           </div>
         </div>
       </div>
 
-      <!-- First-Time Visitor Quick Guide -->
-      <div class="dashboard-card" style="margin-bottom: 24px; border-left: 4px solid var(--rr-pink);">
-        <div class="card-header">
-          <span class="card-title">📖 New to SupeRR Selector? Quick User Guide</span>
-          <span class="badge badge-viable">Scouting Platform Overview</span>
-        </div>
-        <div class="card-body">
-          <div class="grid-3" style="gap: 16px;">
-            <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-              <strong style="color: var(--rr-pink); display: block; font-size: 13.5px; margin-bottom: 6px;">1. What This Platform Does</strong>
-              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
-                SupeRR Selector analyzes 200,999 ball-by-ball deliveries (2022–2026) to measure how players perform under extreme match pressure (Leverage Index &ge; 1.0), separating genuine clutch skill from short-term form.
-              </p>
-            </div>
-            <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-              <strong style="color: #60a5fa; display: block; font-size: 13.5px; margin-bottom: 6px;">2. What Top 10 Picks Represent</strong>
-              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
-                The <strong>Top 10 Batters</strong> and <strong>Top 10 Bowlers</strong> are prioritized candidates calibrated to solve Rajasthan Royals' specific squad voids (finishers, middle-order hitting, and death bowling). Historical rankings and actionable shortlists are clearly distinguished.
-              </p>
-            </div>
-            <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-              <strong style="color: #34d399; display: block; font-size: 13.5px; margin-bottom: 6px;">3. Inspecting & Comparing Players</strong>
-              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
-                Click <strong>"View Profile &rarr;"</strong> on any player to examine overall vs. clutch splits, bootstrap confidence intervals, and sensitivity ranks. Click <strong>"+ Compare"</strong> to pin up to 3 players side-by-side in the comparison tray.
-              </p>
-            </div>
+      <!-- KPI Row (Phase 2.C) - Authoritative Values -->
+      <div class="kpi-grid" id="overview-kpi-row">
+        <!-- 1. Deliveries Analysed -->
+        <div class="stat-card blue">
+          <div class="stat-header">
+            <span class="stat-title">Deliveries Analysed</span>
+            <button type="button" class="metric-info-btn" data-metric="DELIVERIES" aria-label="Deliveries Analysed info">ℹ</button>
           </div>
-          <div style="margin-top: 14px; padding: 10px 14px; background: rgba(15, 23, 42, 0.7); border-radius: 6px; font-size: 12px; color: var(--text-muted);">
-            ⚠️ <strong>Crucial Recruitment Principle:</strong> Historical pressure performance is evaluated on audited multi-tournament data (2022–2026) and is not a guarantee of future IPL performance. All actionable picks are potential candidates subject to official IPL 2027 auction registration.
-          </div>
-        </div>
-      </div>
-
-      <!-- Top 3 Spotlight Showcase (Home Quick Preview) -->
-      <div class="grid-2" style="margin-bottom: 24px;">
-        <div class="dashboard-card" style="margin-bottom: 0;">
-          <div class="card-header">
-            <span class="card-title">🏏 Top Batting Picks (Preview)</span>
-            <button class="btn btn-sm btn-primary" data-jump="top-batters">View All 10 Batters &rarr;</button>
-          </div>
-          <div class="card-body" id="home-top-batters-preview">
-            <!-- Dynamically populated with top 3 batting cards -->
-          </div>
+          <div id="kpi-deliveries" class="stat-value font-mono">200,999</div>
+          <div class="stat-subtext">193,285 balls faced • 10,272 wkts</div>
         </div>
 
-        <div class="dashboard-card" style="margin-bottom: 0;">
-          <div class="card-header">
-            <span class="card-title">⚡ Top Bowling Picks (Preview)</span>
-            <button class="btn btn-sm hero-btn-blue" style="font-size: 12px; padding: 5px 12px;" data-jump="top-bowlers">View All 10 Bowlers &rarr;</button>
-          </div>
-          <div class="card-body" id="home-top-bowlers-preview">
-            <!-- Dynamically populated with top 3 bowling cards -->
-          </div>
-        </div>
-      </div>
-
-      <div class="page-header">
-        <div class="page-title-group">
-          <h2>High-Pressure Performance Intelligence Overview</h2>
-          <p>Multi-tournament evaluation across 883 matches (IPL, T20Is, Asia Cups) from 2022 to 2026.</p>
-        </div>
-      </div>
-
-      <!-- KPI Stat Cards (Reconciled to Production Datasets) -->
-      <div class="stat-grid">
+        <!-- 2. Matches in Scope -->
         <div class="stat-card">
           <div class="stat-header">
             <span class="stat-title">Matches in Scope</span>
-            <span class="stat-icon">🏏</span>
+            <button type="button" class="metric-info-btn" data-metric="MATCHES_SCOPE" aria-label="Matches in Scope info">ℹ</button>
           </div>
-          <div id="kpi-matches" class="stat-value">883</div>
-          <div class="stat-subtext">867 enriched with deliveries (16 abandonments)</div>
+          <div id="kpi-matches" class="stat-value font-mono">883</div>
+          <div class="stat-subtext">371 IPL • 486 T20I • 26 Asia Cups</div>
         </div>
-        <div class="stat-card blue">
-          <div class="stat-header">
-            <span class="stat-title">Deliveries Evaluated</span>
-            <span class="stat-icon">⚡</span>
-          </div>
-          <div id="kpi-deliveries" class="stat-value">200,999</div>
-          <div class="stat-subtext">193,285 balls faced • 10,272 wkts</div>
-        </div>
+
+        <!-- 3. Matches with Delivery Data -->
         <div class="stat-card emerald">
           <div class="stat-header">
-            <span class="stat-title">Eligible Batters</span>
-            <span class="stat-icon">🎯</span>
+            <span class="stat-title">Matches with Delivery Data</span>
+            <button type="button" class="metric-info-btn" data-metric="MATCHES_DATA" aria-label="Matches with Delivery Data info">ℹ</button>
           </div>
-          <div id="kpi-batters" class="stat-value">304</div>
-          <div class="stat-subtext">From 1,091 evaluated (201 Strong, 103 Moderate)</div>
+          <div id="kpi-matches-deliveries" class="stat-value font-mono">867</div>
+          <div class="stat-subtext">16 abandoned fixtures excluded</div>
         </div>
+
+        <!-- 4. Eligible Batters -->
         <div class="stat-card gold">
           <div class="stat-header">
-            <span class="stat-title">Eligible Bowlers</span>
-            <span class="stat-icon">🎯</span>
+            <span class="stat-title">Eligible Batters</span>
+            <button type="button" class="metric-info-btn" data-metric="ELIGIBLE_BATTERS" aria-label="Eligible Batters info">ℹ</button>
           </div>
-          <div id="kpi-bowlers" class="stat-value">290</div>
-          <div class="stat-subtext">From 734 evaluated (206 Strong, 84 Moderate)</div>
+          <div id="kpi-batters" class="stat-value font-mono">304</div>
+          <div class="stat-subtext">201 Strong • 103 Moderate Tier</div>
         </div>
+
+        <!-- 5. Eligible Bowlers -->
         <div class="stat-card purple">
           <div class="stat-header">
-            <span class="stat-title">RR Squad Baseline</span>
-            <span class="stat-icon">🛡️</span>
+            <span class="stat-title">Eligible Bowlers</span>
+            <button type="button" class="metric-info-btn" data-metric="ELIGIBLE_BOWLERS" aria-label="Eligible Bowlers info">ℹ</button>
           </div>
-          <div id="kpi-rr-roster" class="stat-value">27</div>
-          <div class="stat-subtext">20 active • 6 bench • 1 admin registration</div>
+          <div id="kpi-bowlers" class="stat-value font-mono">290</div>
+          <div class="stat-subtext">206 Strong • 84 Moderate Tier</div>
         </div>
       </div>
 
-      <!-- Governance Notice -->
-      <div class="governance-alert">
-        <div class="alert-icon">ℹ️</div>
-        <div class="alert-content">
-          <p><strong>Candidate Governance & Regulatory Notice:</strong> Under long-standing BCCI regulatory policy, Pakistani players cannot register for the IPL auction. They are retained strictly as global tactical benchmarks. Rival franchise core assets and retired veterans are likewise benchmark-only. All actionable targets are classified as <strong>Potential Auction Candidates</strong> pending official IPL 2027 auction registration.</p>
+      <!-- Power BI-Inspired Slicer Bar / Analytical Filters (Phase 2.D) -->
+      <div class="powerbi-slicer-bar">
+        <div class="slicer-header">
+          <div class="slicer-title-group">
+            <span style="font-size: 16px;">🎛️</span>
+            <span class="slicer-title">Analytical Filters & Dimension Slicers</span>
+            <span class="slicer-badge">Live Interactive Cross-Filter</span>
+          </div>
+          <button class="btn btn-sm btn-reset" id="overview-reset-filters-btn">
+            ↺ Reset Filters
+          </button>
+        </div>
+
+        <div class="slicer-controls-grid">
+          <!-- 1. Competition -->
+          <div class="slicer-field">
+            <label class="slicer-label" for="overview-filter-competition">Competition Scope</label>
+            <select id="overview-filter-competition" class="slicer-select">
+              <option value="all">All Competitions (883 Matches)</option>
+              <option value="IPL">Indian Premier League (371 Matches)</option>
+              <option value="T20I">International T20s (486 Matches)</option>
+              <option value="Asia Cups">Asia Cups (26 Matches)</option>
+            </select>
+          </div>
+
+          <!-- 2. Season -->
+          <div class="slicer-field">
+            <label class="slicer-label" for="overview-filter-season">Season Temporal Range</label>
+            <select id="overview-filter-season" class="slicer-select">
+              <option value="all">All Seasons (2022–2026)</option>
+              <option value="2026">2026 Season</option>
+              <option value="2025">2025 Season</option>
+              <option value="2024">2024 Season</option>
+              <option value="2023">2023 Season</option>
+              <option value="2022">2022 Season</option>
+            </select>
+          </div>
+
+          <!-- 3. Player Role -->
+          <div class="slicer-field">
+            <label class="slicer-label" for="overview-filter-role">Tactical Player Role</label>
+            <select id="overview-filter-role" class="slicer-select">
+              <option value="all">All Tactical Roles</option>
+              <option value="Finisher">Finisher (Critical RR Void)</option>
+              <option value="Death-Overs Specialist">Death-Overs Specialist (Critical RR Void)</option>
+              <option value="Middle-Order Batter">Middle-Order Batter</option>
+              <option value="Top-Order Batter">Top-Order Batter</option>
+              <option value="New-Ball / Powerplay Fast Bowler">New-Ball Fast Bowler</option>
+              <option value="Middle-Overs Spinner">Middle-Overs Spinner</option>
+            </select>
+          </div>
+
+          <!-- 4. Team / Affiliation -->
+          <div class="slicer-field">
+            <label class="slicer-label" for="overview-filter-team">Team / Governance</label>
+            <select id="overview-filter-team" class="slicer-select">
+              <option value="all">All Candidate Affiliations</option>
+              <option value="viable">Viable Auction Targets (Actionable)</option>
+              <option value="internal">Rajasthan Royals (Internal Assets)</option>
+              <option value="trade">Conditional Trade Watch (Punjab Kings)</option>
+              <option value="rival">Strategic Benchmarks (Rival Core)</option>
+              <option value="ineligible">Strategic Benchmarks (BCCI Ineligible)</option>
+            </select>
+          </div>
+
+          <!-- 5. Evidence Tier -->
+          <div class="slicer-field">
+            <label class="slicer-label" for="overview-filter-tier">Evidence Reliability Tier</label>
+            <select id="overview-filter-tier" class="slicer-select">
+              <option value="all">All Evidence Tiers</option>
+              <option value="Strong">Strong Evidence (ERS ≥ 60)</option>
+              <option value="Moderate">Moderate Evidence (ERS 35–59)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="slicer-footer">
+          <div class="slicer-chips" id="overview-active-filter-chips">
+            <span style="font-size: 11.5px; color: var(--text-muted);">Active Filters:</span>
+            <span class="filter-chip">All Scope (883 Matches)</span>
+            <span class="filter-chip">All Roles</span>
+            <span class="filter-chip">All Tiers</span>
+          </div>
+          <div id="overview-filter-summary-count" style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">
+            Showing 10 Batters • 10 Bowlers in Leaderboards
+          </div>
         </div>
       </div>
 
-      <!-- Overview Visuals & Tactical Highlights -->
-      <div class="grid-2">
-        <div class="dashboard-card">
+      <!-- Empty State Card for Zero-Results Filter -->
+      <div id="overview-empty-filter-state" class="dashboard-card" style="display: none; text-align: center; padding: 30px;">
+        <div style="font-size: 32px; margin-bottom: 10px;">🔍</div>
+        <h3 style="color: #fff; margin-bottom: 6px;">No Matching Candidates Found</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); max-width: 500px; margin: 0 auto 16px auto;">
+          No candidates match the combined filter criteria. Try adjusting the tactical role or evidence tier, or click reset to restore default views.
+        </p>
+        <button class="btn btn-primary" onclick="App.resetOverviewFilters()">↺ Clear Slicer Filters</button>
+      </div>
+
+      <!-- Analytical Visualizations Area (Phase 2.E: 2-Column Responsive Tiles) -->
+      <div class="analytics-grid" id="overview-visualizations-area">
+        <!-- Left Panel: Pressure Index Distribution & Clutch Definition -->
+        <div class="dashboard-card" style="margin-bottom: 0;">
           <div class="card-header">
-            <span class="card-title">Performance (PR) vs. Statistical Stability (SSS)</span>
-            <span class="badge badge-role">Top Shortlisted Targets</span>
+            <span class="card-title">⚡ Delivery Pressure Index (PI) Distribution</span>
+            <span class="badge badge-role">Leverage-Calibrated (0–10 Scale)</span>
           </div>
           <div class="card-body">
-            <div class="chart-container">
+            <div class="chart-container" style="height: 280px;">
+              <canvas id="chart-overview-pressure-dist"></canvas>
+            </div>
+            <!-- Clutch Situation Explanation Callout -->
+            <div style="margin-top: 14px; padding: 12px 14px; background: rgba(15, 23, 42, 0.7); border-radius: var(--radius-sm); border: 1px solid var(--border-color); border-left: 3px solid var(--rr-pink);">
+              <div style="font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                <span>🎯</span> What Constitutes a Clutch Situation?
+              </div>
+              <p style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.45; margin: 0;">
+                A delivery is classified as <strong>Clutch (&ge; 6.0 PI)</strong> when win leverage is heightened (Leverage Index &ge; 1.0, required run rate pressure &ge; 9.0, or late overs with low wicket resource margins). In our audited dataset, <strong>50,713 deliveries (25.23%)</strong> qualify as clutch situations where match outcomes are decided.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Panel: PR vs SSS Performance & Evidence Distribution -->
+        <div class="dashboard-card" style="margin-bottom: 0;">
+          <div class="card-header">
+            <span class="card-title">🎯 Performance Rating (PR) vs. Stability (SSS)</span>
+            <span class="badge badge-viable">Retention & Reliability</span>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 280px;">
               <canvas id="chart-overview-pr-sss"></canvas>
             </div>
-            <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 10px;">
-              * <strong>Statistical Stability Score (SSS):</strong> Top-Tier Impact Retention Index evaluating bootstrap uncertainty, ranking volatility (top-20 frequency), volume concentration (HHI), and leave-one-match-out resilience.
-            </p>
+            <!-- Evidence Tier Breakdown Sub-tile -->
+            <div style="margin-top: 14px; padding: 12px 14px; background: rgba(15, 23, 42, 0.7); border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong style="color: #60a5fa; font-size: 12px;">Evidence Reliability Calibration:</strong>
+                <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+                  Batters: <strong>201 Strong</strong> / 103 Moderate • Bowlers: <strong>206 Strong</strong> / 84 Moderate
+                </div>
+              </div>
+              <span class="badge badge-tier-1">Bayesian Calibrated</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top 10 Leaderboards Area (Phase 2.F) -->
+      <div class="leaderboard-grid" style="margin-top: 24px;">
+        <!-- Top 10 Batters Panel -->
+        <div class="dashboard-card" style="margin-bottom: 0;">
+          <div class="card-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 18px;">🏏</span>
+              <span class="card-title">Top 10 Historical Batters</span>
+            </div>
+            <button class="btn btn-sm btn-primary" data-jump="batters">View Full Rankings &rarr;</button>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width: 44px;">Rank</th>
+                    <th>Player Name</th>
+                    <th>PR <button type="button" class="metric-info-btn" data-metric="PR" aria-label="PR info">ℹ</button></th>
+                    <th>ERS <button type="button" class="metric-info-btn" data-metric="ERS" aria-label="ERS info">ℹ</button></th>
+                    <th>Evidence Tier</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="overview-top-batters-body">
+                  <!-- Dynamically populated with authoritative Module 5 rankings -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        <div class="dashboard-card">
+        <!-- Top 10 Bowlers Panel -->
+        <div class="dashboard-card" style="margin-bottom: 0;">
           <div class="card-header">
-            <span class="card-title">Priority Tactical Voids for Rajasthan Royals</span>
-            <span class="badge badge-viable">IPL 2027 Recruitment</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 18px;">⚡</span>
+              <span class="card-title">Top 10 Historical Bowlers</span>
+            </div>
+            <button class="btn btn-sm hero-btn-blue" style="font-size: 12px; padding: 5px 12px;" data-jump="bowlers">View Full Rankings &rarr;</button>
           </div>
-          <div class="card-body">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Tactical Role</th>
-                  <th>Discipline</th>
-                  <th>Severity</th>
-                  <th>Depth Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Death-Overs Specialist</strong></td>
-                  <td><span class="badge badge-tier-2">Bowling</span></td>
-                  <td><span class="gap-tag gap-critical">Critical (90.0)</span></td>
-                  <td><span class="gap-tag gap-critical">Critical Void</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Finisher</strong></td>
-                  <td><span class="badge badge-internal">Batting</span></td>
-                  <td><span class="gap-tag gap-critical">Critical (87.5)</span></td>
-                  <td><span class="gap-tag gap-critical">Critical Void</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Middle-Overs Spinner</strong></td>
-                  <td><span class="badge badge-tier-2">Bowling</span></td>
-                  <td><span class="gap-tag gap-high">High (80.0)</span></td>
-                  <td><span class="gap-tag gap-high">Limited Depth</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Middle-Order Batter</strong></td>
-                  <td><span class="badge badge-internal">Batting</span></td>
-                  <td><span class="gap-tag gap-critical">Critical (70.0)</span></td>
-                  <td><span class="gap-tag gap-critical">Critical Void</span></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="card-body" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width: 44px;">Rank</th>
+                    <th>Player Name</th>
+                    <th>PR <button type="button" class="metric-info-btn" data-metric="PR" aria-label="PR info">ℹ</button></th>
+                    <th>ERS <button type="button" class="metric-info-btn" data-metric="ERS" aria-label="ERS info">ℹ</button></th>
+                    <th>Evidence Tier</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="overview-top-bowlers-body">
+                  <!-- Dynamically populated with authoritative Module 5 rankings -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            <div style="margin-top: 18px; padding: 12px; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-              <strong style="color: #60a5fa;">Recruitment Objective:</strong>
-              <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
-                Address critical death bowling voids and lower-order power-hitting while conserving overseas roster flexibility and managing bidding inflation risk.
+      <!-- Rajasthan Royals Squad Intelligence (Phase 2.G) -->
+      <div class="dashboard-card" style="margin-top: 24px;">
+        <div class="card-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 18px;">🛡️</span>
+            <span class="card-title">Rajasthan Royals Squad Intelligence & Recruitment Strategy</span>
+          </div>
+          <button class="btn btn-sm btn-secondary" data-jump="squad">Detailed Squad Analysis &rarr;</button>
+        </div>
+        <div class="card-body">
+          <div class="grid-3" style="gap: 16px; margin-bottom: 18px;">
+            <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">Audited Baseline Roster</span>
+              <div style="font-size: 20px; font-weight: 800; color: #fff; margin: 4px 0;">27 Players Registered</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">20 Active Playing XI / Rotation • 6 Bench Reserves • 1 Admin Registration (Yuzvendra Chahal)</div>
+            </div>
+            <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #f87171; letter-spacing: 0.5px;">Critical Squad Voids</span>
+              <div style="font-size: 20px; font-weight: 800; color: #f87171; margin: 4px 0;">Finisher & Death Bowling</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">Death-Overs Specialist (Criticality 90.0) • Finisher (Criticality 87.5) • Middle-Order Batter (70.0)</div>
+            </div>
+            <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #34d399; letter-spacing: 0.5px;">Candidate Pool Governance</span>
+              <div style="font-size: 20px; font-weight: 800; color: #34d399; margin: 4px 0;">50-Player Decision Matrix</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">35 Viable Auction Targets • 1 Conditional Trade Watch (Marcus Stoinis) • 14 Benchmarks & RR Assets</div>
+            </div>
+          </div>
+
+          <!-- Governance Isolation Invariant Strip -->
+          <div style="padding: 12px 16px; background: rgba(15, 23, 42, 0.8); border-radius: var(--radius-sm); border: 1px solid var(--border-color); border-left: 3px solid #f59e0b; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+            <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; max-width: 800px;">
+              🔒 <strong>Candidate Governance Invariant:</strong>
+              Under official tournament rules, <strong>Marcus Stoinis is retained by Punjab Kings for IPL 2027</strong> and is strictly a <em>Conditional Trade Watch</em> (non-auction asset). Pakistani stars (Sufiyan Muqeem, Imad Wasim) and rival core cornerstones (Jasprit Bumrah, Suryakumar Yadav) are retained as international benchmarks. <strong>35 Viable Targets</strong> represent actionable auction options.
+            </div>
+            <button class="btn btn-sm btn-primary" data-jump="recruitment">Explore Matrix &rarr;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Analytical Findings (Phase 2.H) -->
+      <div class="dashboard-card" style="margin-top: 24px;">
+        <div class="card-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 18px;">💡</span>
+            <span class="card-title">Key Analytical Findings & Project Insights</span>
+          </div>
+          <span class="badge badge-viable">Traceable Outputs</span>
+        </div>
+        <div class="card-body">
+          <div class="grid-2" style="gap: 16px;">
+            <!-- Finding 1 -->
+            <div style="background: var(--bg-surface); padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); border-left: 3px solid var(--rr-pink);">
+              <div style="font-weight: 700; color: #fff; font-size: 13.5px; margin-bottom: 4px;">1. Non-Linear Value of Clutch Deliveries</div>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45; margin: 0;">
+                Analysis of 200,999 deliveries reveals a universal <strong>14.8% decline in batting strike rate</strong> under extreme pressure (PI &ge; 6.0). Elite outliers like Tim David (179.3 clutch SR) and Naman Dhir (168.2 clutch SR) provide disproportionate win probability impact in death-overs chases.
+              </p>
+            </div>
+
+            <!-- Finding 2 -->
+            <div style="background: var(--bg-surface); padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); border-left: 3px solid #60a5fa;">
+              <div style="font-weight: 700; color: #fff; font-size: 13.5px; margin-bottom: 4px;">2. Empirical Bayes Reliability Decoupling</div>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45; margin: 0;">
+                By decoupling Performance Rating (PR) from Evidence Reliability (ERS), we eliminate small-sample bias. Batters requiring &ge;40 clutch balls and bowlers requiring &ge;40 clutch deliveries achieved Strong Evidence tier status (201 batters, 206 bowlers).
+              </p>
+            </div>
+
+            <!-- Finding 3 -->
+            <div style="background: var(--bg-surface); padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); border-left: 3px solid #fbbf24;">
+              <div style="font-weight: 700; color: #fff; font-size: 13.5px; margin-bottom: 4px;">3. Bootstrap Ranking Stability (SSS)</div>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45; margin: 0;">
+                1,000 cluster-preserving match bootstrap iterations show that elite death bowlers (e.g., Benjamin Sears, Liam Dawson) exhibit top-tier retention indices &gt; 70.0, proving their historical effectiveness is not an artifact of single outlier performances.
+              </p>
+            </div>
+
+            <!-- Finding 4 -->
+            <div style="background: var(--bg-surface); padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); border-left: 3px solid #34d399;">
+              <div style="font-weight: 700; color: #fff; font-size: 13.5px; margin-bottom: 4px;">4. 100 BAU Auction Capital Conservation</div>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45; margin: 0;">
+                Across 5 strategic allocation scenarios, allocating <strong>35–45 BAU to death bowling</strong> and <strong>30–45 BAU to lower-order finishing</strong> maximizes squad expected surplus value while preserving budget flexibility against speculative bidding inflation.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Quick Actionable Targets Summary -->
-      <div class="dashboard-card">
+      <!-- Methodology & Data Coverage Summary (Phase 2.I & Phase 3 Glossary) -->
+      <div class="dashboard-card" style="margin-top: 24px;">
         <div class="card-header">
-          <span class="card-title">Top Actionable Recruitment Targets (Preview)</span>
-          <button class="btn btn-sm btn-primary" data-jump="recruitment">View Full Recruitment Matrix →</button>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 18px;">📖</span>
+            <span class="card-title">Methodology, Metric Glossary & Analytical Limitations</span>
+          </div>
+          <button class="btn btn-sm btn-secondary" data-jump="methodology">View Complete Methodology &rarr;</button>
         </div>
-        <div class="card-body" style="padding: 0;">
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Player Name</th>
-                  <th>Discipline</th>
-                  <th>Tactical Role</th>
-                  <th>PR (0–100)</th>
-                  <th>TFS (0–100)</th>
-                  <th>ARS (Risk)</th>
-                  <th>Decision Score (RDH, 0–90)</th>
-                </tr>
-              </thead>
-              <tbody id="overview-top-recruits-body">
-                <!-- Dynamically Populated -->
-              </tbody>
-            </table>
+        <div class="card-body">
+          <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 16px;">
+            The SupeRR Intelligence platform synthesizes 883 audited matches (2022–2026) across six mathematically defined evaluation dimensions:
+          </p>
+          <div class="grid-3" style="gap: 12px; margin-bottom: 18px;">
+            <div style="background: var(--bg-surface); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <strong style="color: var(--rr-pink); font-size: 12.5px;">PR — Performance Rating (0–100)</strong>
+              <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">
+                Evaluates clutch execution using Bayesian shrinkage across strike rate, boundary %, dot %, and phase-adjusted economy. Higher is better.
+              </p>
+            </div>
+            <div style="background: var(--bg-surface); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <strong style="color: #60a5fa; font-size: 12.5px;">ERS — Evidence Reliability Score (0–90)</strong>
+              <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">
+                Quantifies sample volume: clutch balls, total deliveries, matches, and multi-tournament exposure. Higher represents greater statistical confidence.
+              </p>
+            </div>
+            <div style="background: var(--bg-surface); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <strong style="color: #fbbf24; font-size: 12.5px;">SSS — Statistical Stability Score (0–100)</strong>
+              <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">
+                Top-Tier Impact Retention Index from 1,000 bootstrap iterations measuring ranking volatility and match-removal resilience.
+              </p>
+            </div>
+            <div style="background: var(--bg-surface); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <strong style="color: #34d399; font-size: 12.5px;">TFS — Tactical Fit Score (0–100)</strong>
+              <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">
+                Measures candidate capability alignment with Rajasthan Royals' primary tactical voids: death-overs bowling and lower-order finishing.
+              </p>
+            </div>
+            <div style="background: var(--bg-surface); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <strong style="color: #f87171; font-size: 12.5px;">ARS — Acquisition Risk Score (0–100)</strong>
+              <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">
+                Quantifies bidding war inflation, overseas slot competition, and player unavailability. Lower is preferable.
+              </p>
+            </div>
+            <div style="background: var(--bg-surface); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <strong style="color: #38bdf8; font-size: 12.5px;">RDH — Recruitment Decision Heuristic (0–90)</strong>
+              <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">
+                Composite decision formula: <code>0.30*PR + 0.20*ERS + 0.20*SSS + 0.20*TFS - 0.10*ARS</code>. Theoretical range strictly [0.0, 90.0].
+              </p>
+            </div>
+          </div>
+
+          <div style="padding: 10px 14px; background: rgba(15, 23, 42, 0.7); border-radius: 6px; font-size: 11.5px; color: var(--text-muted); line-height: 1.45;">
+            ⚠️ <strong>Important Analytical Limitations:</strong> Historical multi-tournament pressure performance provides empirical evaluation of past execution under stress. It is not an unconditional guarantee of future IPL performance. All actionable candidates are potential targets whose auction availability depends on official player registration.
           </div>
         </div>
       </div>
 
-      <!-- Navigation Quick-Jump Grid -->
-      <div class="grid-3" style="margin-top: 10px;">
-        <div class="stat-card" style="cursor: pointer;" data-jump="batters">
-          <div class="stat-title">Explore Batters →</div>
-          <div style="font-size: 16px; font-weight: 700; color: #fff; margin-top: 6px;">304 Filterable Batters</div>
-          <div class="stat-subtext">Overall vs. clutch splits, dot %, boundary %, and PR metrics.</div>
-        </div>
-        <div class="stat-card blue" style="cursor: pointer;" data-jump="bowlers">
-          <div class="stat-title">Explore Bowlers →</div>
-          <div style="font-size: 16px; font-weight: 700; color: #fff; margin-top: 6px;">290 Filterable Bowlers</div>
-          <div class="stat-subtext">Phase adjustments, clutch economy, wickets, and true dot %.</div>
-        </div>
-        <div class="stat-card emerald" style="cursor: pointer;" data-jump="auction">
-          <div class="stat-title">Auction Strategy →</div>
-          <div style="font-size: 16px; font-weight: 700; color: #fff; margin-top: 6px;">5 Budget Scenarios</div>
-          <div class="stat-subtext">100 BAU model, overseas slot demand, and candidate targets.</div>
-        </div>
-      </div>
     </section>
 
     <!-- =====================================================================

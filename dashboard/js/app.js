@@ -83,6 +83,56 @@ const METRIC_GLOSSARY = {
     what: "A normalized 100-point auction capital allocation framework distributing auction purse across squad roles without inventing speculative rupee prices.",
     interpretation: "Allows systematic strategic planning across 5 squad-building scenarios (Balanced, Elite Pacer Priority, Overseas Heavy, etc.).",
     limitation: "Normalized strategic model; actual auction prices vary based on franchise bidding wars."
+  },
+  DELIVERIES: {
+    abbr: "DELIVERIES",
+    name: "Deliveries Analysed",
+    fullName: "Deliveries Analysed",
+    scale: "200,999 Deliveries",
+    direction: "Volume benchmark",
+    what: "Total delivery-level ball-by-ball records analyzed from audited competition archives across 883 matches (2022–2026).",
+    interpretation: "Encompasses 193,285 legal balls faced, 7,714 wides, 840 no-balls, and 10,272 wickets. Includes 50,713 clutch deliveries (PI ≥ 6.0).",
+    limitation: "Audited multi-tournament dataset scope; excludes unrecorded local practice fixtures."
+  },
+  MATCHES_SCOPE: {
+    abbr: "MATCHES_SCOPE",
+    name: "Matches in Scope",
+    fullName: "Matches in Scope",
+    scale: "883 Matches",
+    direction: "Coverage scope",
+    what: "Total competitive fixtures in competition metadata, comprising 371 IPL matches (2022–2026), 486 T20Is, and 26 Asia Cup fixtures.",
+    interpretation: "Provides a balanced multi-tournament lens evaluating elite players across franchise pressure and international stakes.",
+    limitation: "16 matches were abandoned without a ball bowled and are excluded from delivery-level metric calculations."
+  },
+  MATCHES_DATA: {
+    abbr: "MATCHES_DATA",
+    name: "Matches with Delivery Data",
+    fullName: "Matches with Delivery Data",
+    scale: "867 Matches",
+    direction: "Verified data coverage",
+    what: "Fixtures with complete ball-by-ball records; exactly 883 metadata matches minus 16 weather abandonments.",
+    interpretation: "All pressure index calibrations and player ratings are derived strictly from these 867 fixtures.",
+    limitation: "Only fixtures with completed ball-by-ball logging are included in statistical models."
+  },
+  ELIGIBLE_BATTERS: {
+    abbr: "ELIGIBLE_BATTERS",
+    name: "Eligible Batters",
+    fullName: "Eligible Batters (304 of 1,091)",
+    scale: "304 Qualified Batters",
+    direction: "Evidence qualification",
+    what: "Batters satisfying strict statistical eligibility criteria: ≥20 clutch deliveries, ≥5 matches, and ERS ≥ 35.0.",
+    interpretation: "201 batters achieved Strong Evidence status (≥40 clutch balls, ≥10 matches, ERS ≥ 60.0), and 103 achieved Moderate Evidence.",
+    limitation: "Players with <20 clutch balls are filtered out to prevent small-sample rating distortions."
+  },
+  ELIGIBLE_BOWLERS: {
+    abbr: "ELIGIBLE_BOWLERS",
+    name: "Eligible Bowlers",
+    fullName: "Eligible Bowlers (290 of 734)",
+    scale: "290 Qualified Bowlers",
+    direction: "Evidence qualification",
+    what: "Bowlers satisfying strict statistical eligibility criteria: ≥20 clutch deliveries, ≥5 matches, and ERS ≥ 35.0.",
+    interpretation: "206 bowlers achieved Strong Evidence status (≥40 clutch balls, ≥10 matches, ERS ≥ 60.0), and 84 achieved Moderate Evidence.",
+    limitation: "Part-time or low-volume bowlers with <20 clutch deliveries are excluded from primary rankings."
   }
 };
 
@@ -134,6 +184,15 @@ const App = {
   topBattersFilter: "all",
   topBowlersView: "actionable",
   topBowlersFilter: "all",
+
+  // State for Overview Slicers
+  overviewFilters: {
+    competition: "all",
+    season: "all",
+    role: "all",
+    team: "all",
+    tier: "all"
+  },
 
   /**
    * Bootstraps the dashboard application
@@ -339,9 +398,7 @@ const App = {
   refreshActiveCharts(tabId) {
     setTimeout(() => {
       if (tabId === "overview") {
-        if (DataManager.data.recruitmentMatrix.length > 0) {
-          ChartManager.renderPRvsSSS("chart-overview-pr-sss", DataManager.data.recruitmentMatrix);
-        }
+        this.renderOverviewCharts();
       } else if (tabId === "batters") {
         ChartManager.renderBatterPRvsERS("chart-batters-scatter", DataManager.data.batters);
       } else if (tabId === "bowlers") {
@@ -676,63 +733,276 @@ const App = {
   },
 
   // ---------------------------------------------------------------------------
-  // PAGE 1: Overview
+  // PAGE 1: Overview (Power BI-Inspired Cockpit)
   // ---------------------------------------------------------------------------
   renderOverview() {
     const stats = DataManager.data.overview;
     if (!stats) return;
 
-    // Set Reconciled KPI cards
-    const elMatches = document.getElementById("kpi-matches");
-    if (elMatches) elMatches.textContent = `${stats.dataset_scope.total_matches_in_metadata} (${stats.dataset_scope.total_matches_with_deliveries} Enriched)`;
-
+    // 1. Authoritative KPI Values (Phase 2.C)
     const elBalls = document.getElementById("kpi-deliveries");
-    if (elBalls) elBalls.textContent = stats.dataset_scope.total_deliveries_analyzed.toLocaleString();
+    if (elBalls) elBalls.textContent = (200999).toLocaleString();
+
+    const elMatches = document.getElementById("kpi-matches");
+    if (elMatches) elMatches.textContent = "883";
+
+    const elDeliveriesMatches = document.getElementById("kpi-matches-deliveries");
+    if (elDeliveriesMatches) elDeliveriesMatches.textContent = "867";
 
     const elBatters = document.getElementById("kpi-batters");
-    if (elBatters) elBatters.textContent = `${stats.candidate_pool.eligible_batters_count} / ${stats.candidate_pool.total_batters_evaluated}`;
+    if (elBatters) elBatters.textContent = "304";
 
     const elBowlers = document.getElementById("kpi-bowlers");
-    if (elBowlers) elBowlers.textContent = `${stats.candidate_pool.eligible_bowlers_count} / ${stats.candidate_pool.total_bowlers_evaluated}`;
+    if (elBowlers) elBowlers.textContent = "290";
 
-    const elRoster = document.getElementById("kpi-rr-roster");
-    if (elRoster) elRoster.textContent = `${stats.rr_squad_baseline.total_registered_players} (${stats.rr_squad_baseline.active_playing_xi_rotation} Active)`;
+    // 2. Setup Slicer Listeners
+    this.setupOverviewSlicers();
 
-    // Render Home Top 3 Spotlight Previews
-    const homeBattersPreview = document.getElementById("home-top-batters-preview");
-    if (homeBattersPreview) {
-      const top3B = DataManager.getTop10Batters("all").slice(0, 3);
-      homeBattersPreview.innerHTML = top3B.map((p, idx) => this.buildScoutCard(p, "Batting", idx + 1)).join("");
+    // 3. Render Filtered Views & Leaderboards
+    this.updateOverviewFilteredViews();
+
+    // 4. Render Overview Charts
+    this.renderOverviewCharts();
+  },
+
+  setupOverviewSlicers() {
+    if (this._overviewSlicersSetup) return;
+    this._overviewSlicersSetup = true;
+
+    const compSelect = document.getElementById("overview-filter-competition");
+    const seasonSelect = document.getElementById("overview-filter-season");
+    const roleSelect = document.getElementById("overview-filter-role");
+    const teamSelect = document.getElementById("overview-filter-team");
+    const tierSelect = document.getElementById("overview-filter-tier");
+    const resetBtn = document.getElementById("overview-reset-filters-btn");
+
+    const onFilterChange = () => {
+      this.overviewFilters.competition = compSelect ? compSelect.value : "all";
+      this.overviewFilters.season = seasonSelect ? seasonSelect.value : "all";
+      this.overviewFilters.role = roleSelect ? roleSelect.value : "all";
+      this.overviewFilters.team = teamSelect ? teamSelect.value : "all";
+      this.overviewFilters.tier = tierSelect ? tierSelect.value : "all";
+
+      this.updateOverviewFilteredViews();
+      this.renderOverviewCharts();
+    };
+
+    if (compSelect) compSelect.addEventListener("change", onFilterChange);
+    if (seasonSelect) seasonSelect.addEventListener("change", onFilterChange);
+    if (roleSelect) roleSelect.addEventListener("change", onFilterChange);
+    if (teamSelect) teamSelect.addEventListener("change", onFilterChange);
+    if (tierSelect) tierSelect.addEventListener("change", onFilterChange);
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => this.resetOverviewFilters());
+    }
+  },
+
+  resetOverviewFilters() {
+    this.overviewFilters = {
+      competition: "all",
+      season: "all",
+      role: "all",
+      team: "all",
+      tier: "all"
+    };
+
+    const compSelect = document.getElementById("overview-filter-competition");
+    const seasonSelect = document.getElementById("overview-filter-season");
+    const roleSelect = document.getElementById("overview-filter-role");
+    const teamSelect = document.getElementById("overview-filter-team");
+    const tierSelect = document.getElementById("overview-filter-tier");
+
+    if (compSelect) compSelect.value = "all";
+    if (seasonSelect) seasonSelect.value = "all";
+    if (roleSelect) roleSelect.value = "all";
+    if (teamSelect) teamSelect.value = "all";
+    if (tierSelect) tierSelect.value = "all";
+
+    this.updateOverviewFilteredViews();
+    this.renderOverviewCharts();
+  },
+
+  updateOverviewFilteredViews() {
+    const f = this.overviewFilters;
+
+    // Update Scope pill based on competition/season
+    const scopePill = document.getElementById("overview-scope-pill");
+    if (scopePill) {
+      if (f.competition === "IPL") {
+        scopePill.innerHTML = `<span>📊 Audited IPL Scope:</span> <strong>371 Matches</strong> • <strong>86,520 Deliveries</strong> • <strong>2022–2026</strong> (Indian Premier League)`;
+      } else if (f.competition === "T20I") {
+        scopePill.innerHTML = `<span>📊 Audited International Scope:</span> <strong>486 Matches</strong> • <strong>108,124 Deliveries</strong> • <strong>2022–2026</strong> (International T20s)`;
+      } else if (f.competition === "Asia Cups") {
+        scopePill.innerHTML = `<span>📊 Audited Asia Cups Scope:</span> <strong>26 Matches</strong> • <strong>6,355 Deliveries</strong> • <strong>2024–2025</strong> (Emerging & Rising Stars)`;
+      } else {
+        scopePill.innerHTML = `<span>📊 Audited Multi-Tournament Scope:</span> <strong>883 Matches</strong> (867 Enriched with Deliveries) • <strong>200,999 Deliveries</strong> • <strong>2022–2026</strong> (IPL, T20Is, Asia Cups)`;
+      }
     }
 
-    const homeBowlersPreview = document.getElementById("home-top-bowlers-preview");
-    if (homeBowlersPreview) {
-      const top3Bw = DataManager.getTop10Bowlers("all").slice(0, 3);
-      homeBowlersPreview.innerHTML = top3Bw.map((p, idx) => this.buildScoutCard(p, "Bowling", idx + 1)).join("");
+    // Update active filter chips
+    const chipsContainer = document.getElementById("overview-active-filter-chips");
+    if (chipsContainer) {
+      const activeChips = [];
+      if (f.competition !== "all") activeChips.push(`Scope: ${f.competition}`);
+      if (f.season !== "all") activeChips.push(`Season: ${f.season}`);
+      if (f.role !== "all") activeChips.push(`Role: ${f.role}`);
+      if (f.team !== "all") {
+        const teamLabels = {
+          viable: "Viable Auction Targets",
+          internal: "RR Internal Assets",
+          trade: "Trade Watch (PBKS)",
+          rival: "Rival Core",
+          ineligible: "BCCI Ineligible"
+        };
+        activeChips.push(`Affiliation: ${teamLabels[f.team] || f.team}`);
+      }
+      if (f.tier !== "all") activeChips.push(`Tier: ${f.tier} Evidence`);
+
+      if (activeChips.length === 0) {
+        chipsContainer.innerHTML = `<span style="font-size: 11.5px; color: var(--text-muted);">Active Filters:</span> <span class="filter-chip">All Scope (883 Matches)</span> <span class="filter-chip">All Roles</span> <span class="filter-chip">All Tiers</span>`;
+      } else {
+        chipsContainer.innerHTML = `<span style="font-size: 11.5px; color: var(--text-muted);">Active Filters:</span> ` +
+          activeChips.map(chip => `<span class="filter-chip">${chip}</span>`).join(" ");
+      }
     }
 
-    // Top Actionable Targets preview table
-    const topRecruitsBody = document.getElementById("overview-top-recruits-body");
-    if (topRecruitsBody) {
-      const topB = stats.top_actionable_targets.batting.slice(0, 3);
-      const topBw = stats.top_actionable_targets.bowling.slice(0, 3);
-      const combined = [
-        ...topB.map(b => ({ ...b, discipline: "Batting" })),
-        ...topBw.map(bw => ({ ...bw, discipline: "Bowling" }))
-      ];
+    // Filter Batters and Bowlers
+    const isDefault = (f.role === "all" && f.team === "all" && f.tier === "all");
 
-      topRecruitsBody.innerHTML = combined.map(p => `
-        <tr>
-          <td><strong style="color: #fff;">${p.name}</strong> <span class="badge badge-role">${p.country}</span></td>
-          <td><span class="badge ${p.discipline === 'Batting' ? 'badge-internal' : 'badge-tier-2'}">${p.discipline}</span></td>
-          <td>${p.role}</td>
-          <td class="metric-pill font-mono">${p.pr.toFixed(2)}</td>
-          <td class="metric-pill font-mono">${p.tfs.toFixed(2)}</td>
-          <td class="metric-pill font-mono" style="color: #f87171;">${p.ars.toFixed(2)}</td>
-          <td class="metric-pill highlight font-mono">${p.rdh.toFixed(2)}</td>
-        </tr>
-      `).join("");
+    let battersList = [];
+    let bowlersList = [];
+
+    if (isDefault) {
+      const stats = DataManager.data.overview;
+      battersList = stats && stats.top_10_historical_batters ? [...stats.top_10_historical_batters] : [];
+      bowlersList = stats && stats.top_10_historical_bowlers ? [...stats.top_10_historical_bowlers] : [];
+    } else {
+      const filterPlayer = p => {
+        if (f.role !== "all" && p.tactical_role !== f.role) return false;
+        if (f.tier !== "all" && p.evidence_tier !== f.tier) return false;
+        if (f.team !== "all") {
+          const cat = p.candidate_category || "";
+          if (f.team === "viable" && cat !== "Viable Auction Target") return false;
+          if (f.team === "internal" && !cat.includes("Internal") && !cat.includes("RR")) return false;
+          if (f.team === "trade" && !cat.includes("Trade") && !cat.includes("Punjab Kings")) return false;
+          if (f.team === "rival" && !cat.includes("Rival")) return false;
+          if (f.team === "ineligible" && !cat.includes("Ineligible")) return false;
+        }
+        return true;
+      };
+
+      battersList = DataManager.data.batters.filter(filterPlayer)
+        .sort((a, b) => b.performance_rating - a.performance_rating)
+        .slice(0, 10);
+
+      bowlersList = DataManager.data.bowlers.filter(filterPlayer)
+        .sort((a, b) => b.performance_rating - a.performance_rating)
+        .slice(0, 10);
     }
+
+    // Check empty state
+    const emptyState = document.getElementById("overview-empty-filter-state");
+    const summaryCount = document.getElementById("overview-filter-summary-count");
+
+    if (summaryCount) {
+      summaryCount.textContent = `Showing ${battersList.length} Batters • ${bowlersList.length} Bowlers in Leaderboards`;
+    }
+
+    if (battersList.length === 0 && bowlersList.length === 0) {
+      if (emptyState) emptyState.style.display = "block";
+    } else {
+      if (emptyState) emptyState.style.display = "none";
+    }
+
+    // Render Batters Table
+    const battersBody = document.getElementById("overview-top-batters-body");
+    if (battersBody) {
+      if (battersList.length === 0) {
+        battersBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">No batters match the selected slicer filters.</td></tr>`;
+      } else {
+        battersBody.innerHTML = battersList.map((p, idx) => `
+          <tr>
+            <td class="font-mono text-center" style="font-weight: 800; color: var(--rr-pink);">${p.rank || (idx + 1)}</td>
+            <td>
+              <div class="player-cell">
+                <div>
+                  <span class="player-cell-name" onclick="App.openPlayerModal(${p.player_id}, 'Batting')">${p.player_name}</span>
+                  <div class="player-cell-sub">${p.country || 'International'} • ${p.tactical_role || 'Batter'}</div>
+                </div>
+              </div>
+            </td>
+            <td class="metric-pill font-mono" style="color: var(--rr-pink); font-weight: 800;">${p.performance_rating.toFixed(2)}</td>
+            <td class="metric-pill font-mono blue">${p.evidence_reliability_score.toFixed(1)}</td>
+            <td>${this.getTierBadge(p.evidence_tier || (p.evidence_tier_label && p.evidence_tier_label.includes("Strong") ? "Strong" : "Moderate"), p.evidence_tier_label)}</td>
+            <td>
+              <button class="btn btn-sm btn-secondary" onclick="App.openPlayerModal(${p.player_id}, 'Batting')" style="padding: 4px 10px; font-size: 11px;">
+                View Profile &rarr;
+              </button>
+            </td>
+          </tr>
+        `).join("");
+      }
+    }
+
+    // Render Bowlers Table
+    const bowlersBody = document.getElementById("overview-top-bowlers-body");
+    if (bowlersBody) {
+      if (bowlersList.length === 0) {
+        bowlersBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">No bowlers match the selected slicer filters.</td></tr>`;
+      } else {
+        bowlersBody.innerHTML = bowlersList.map((p, idx) => `
+          <tr>
+            <td class="font-mono text-center" style="font-weight: 800; color: #60a5fa;">${p.rank || (idx + 1)}</td>
+            <td>
+              <div class="player-cell">
+                <div>
+                  <span class="player-cell-name" onclick="App.openPlayerModal(${p.player_id}, 'Bowling')">${p.player_name}</span>
+                  <div class="player-cell-sub">${p.country || 'International'} • ${p.tactical_role || 'Bowler'}</div>
+                </div>
+              </div>
+            </td>
+            <td class="metric-pill font-mono" style="color: #60a5fa; font-weight: 800;">${p.performance_rating.toFixed(2)}</td>
+            <td class="metric-pill font-mono blue">${p.evidence_reliability_score.toFixed(1)}</td>
+            <td>${this.getTierBadge(p.evidence_tier || (p.evidence_tier_label && p.evidence_tier_label.includes("Strong") ? "Strong" : "Moderate"), p.evidence_tier_label)}</td>
+            <td>
+              <button class="btn btn-sm hero-btn-blue" onclick="App.openPlayerModal(${p.player_id}, 'Bowling')" style="padding: 4px 10px; font-size: 11px;">
+                View Profile &rarr;
+              </button>
+            </td>
+          </tr>
+        `).join("");
+      }
+    }
+  },
+
+  renderOverviewCharts() {
+    // 1. Delivery Pressure Distribution Doughnut
+    ChartManager.renderPressureDistribution("chart-overview-pressure-dist");
+
+    // 2. PR vs SSS Scatter Chart
+    const f = this.overviewFilters;
+    let candidates = DataManager.data.recruitmentMatrix || [];
+
+    if (f.role !== "all") {
+      candidates = candidates.filter(c => c.tactical_role === f.role);
+    }
+    if (f.tier !== "all") {
+      candidates = candidates.filter(c => c.evidence_tier === f.tier);
+    }
+    if (f.team !== "all") {
+      candidates = candidates.filter(c => {
+        const cat = c.candidate_category || "";
+        if (f.team === "viable") return cat === "Viable Auction Target";
+        if (f.team === "internal") return cat.includes("Internal") || cat.includes("RR");
+        if (f.team === "trade") return cat.includes("Trade") || cat.includes("Punjab Kings");
+        if (f.team === "rival") return cat.includes("Rival");
+        if (f.team === "ineligible") return cat.includes("Ineligible");
+        return true;
+      });
+    }
+
+    ChartManager.renderPRvsSSS("chart-overview-pr-sss", candidates);
   },
 
   // ---------------------------------------------------------------------------
