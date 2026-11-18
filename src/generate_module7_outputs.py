@@ -166,6 +166,8 @@ def main():
             return "Strategic Benchmark (Retired)", "Retired from IPL Competition (Historical Reference Benchmark)"
         if pid in [2933, 1699, 781, 4708]:
             return "Strategic Benchmark (Rival Core)", "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)"
+        if pid == 2639:
+            return "Conditional Trade Watch — Currently Retained by Punjab Kings", "Non-Auction Asset (Retained by Punjab Kings; Conditional Trade Watch Only — Subject to Franchise Agreement & IPL Trading Rules; No Trade Confirmed)"
         return "Viable Auction Target", "Eligible for Auction (Conditional on IPL 2027 Registration)"
 
     gov_tuples = rec_matrix.apply(classify_candidate_governance, axis=1)

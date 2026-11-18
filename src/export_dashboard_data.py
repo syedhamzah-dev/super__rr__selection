@@ -74,7 +74,7 @@ def get_scouting_rationale(pid: int, name: str, role: str, gap: str, disc: str, 
         4821: "Proven domestic left-handed middle-order striker (85.26 PR, 84.50 TFS). Demolishes spin through middle overs and provides formidable power hitting at the death.",
         6281: "Explosive domestic top-order engine with 190+ powerplay strike rate. Provides lightning-fast starts against pace and spin while offering tactical bowling versatility.",
         6460: "Composed domestic middle-overs stabilizer with 61.40 stability. Excels at crisis recovery, strike rotation, and tempo shifts in high-pressure chases.",
-        2639: "Experienced international powerhouse (71.32 PR) offering proven multi-phase boundary striking and handy middle-overs seam bowling under pressure.",
+        2639: "Retained by Punjab Kings for IPL 2027 (Official IPL Announcement, 18 Nov 2026). Non-auction asset; Rajasthan Royals could consider him only through a potential player trade, subject to bilateral franchise agreement and applicable IPL trading rules. No trade has been confirmed. Tracked as a high-impact multi-phase benchmark (71.32 PR, 167.4 clutch SR) and conditional trade scenario.",
         4369: "Technically adept wicketkeeper-anchor (79.99 PR) with strong tempo control, elite boundary placement, and anchor versatility in challenging batting conditions.",
         2258: "High-impact wicketkeeper-batter (71.01 PR) capable of accelerating against both pace and spin across all batting phases with deep franchise familiarity.",
         6819: "Rajasthan Royals cornerstone retention. #1 ranked historical T20 batter with 96.90 PR and transcendent powerplay boundary hitting against both pace and spin.",
@@ -161,6 +161,8 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             return "Strategic Benchmark (Retired)", "Retired from IPL Competition (Historical Reference Benchmark)"
         if pid in [2933, 1699, 781, 4708]:
             return "Strategic Benchmark (Rival Core)", "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)"
+        if pid == 2639:
+            return "Conditional Trade Watch — Currently Retained by Punjab Kings", "Non-Auction Asset (Retained by Punjab Kings; Conditional Trade Watch Only — Subject to Franchise Agreement & IPL Trading Rules; No Trade Confirmed)"
         return "Viable Auction Target", "Potential Auction Candidate (Availability unconfirmed; conditional on official IPL 2027 player registration)"
 
     # 2. Export Batters Data (304 eligible batters)
@@ -391,10 +393,10 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             "acquisition_risk_score": round(float(row["acquisition_risk_score"]), 2),
             "recruitment_decision_score": round(rdh, 2),
             "player_archetype": str(row["player_archetype"]),
-            "recommendation_priority": str(row["recommendation_priority"]),
+            "recommendation_priority": "Conditional Trade Watch (Retained by PBKS)" if pid == 2639 else str(row["recommendation_priority"]),
             "squad_gap_addressed": gap,
-            "candidate_category": str(row["candidate_category"]),
-            "availability_status": str(row["availability_status"]),
+            "candidate_category": "Conditional Trade Watch — Currently Retained by Punjab Kings" if pid == 2639 else str(row["candidate_category"]),
+            "availability_status": "Non-Auction Asset (Retained by Punjab Kings; Conditional Trade Watch Only — Subject to Franchise Agreement & IPL Trading Rules; No Trade Confirmed)" if pid == 2639 else str(row["availability_status"]),
             "scouting_rationale": get_scouting_rationale(pid, pname, role, gap, disc, pr, rdh, sss, tfs),
             "clutch_stats": clutch_stats
         })
@@ -749,6 +751,20 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             "evidence_reliability_score": 90.00,
             "statistical_stability_score": 64.20,
             "scouting_rationale": "Historical Reference (Retired): Veteran finisher and wicketkeeper benchmark illustrating late-career pressure execution and situational mastery."
+        },
+        {
+            "player_id": 2639,
+            "player_name": "Marcus Stoinis",
+            "country": "Australia",
+            "initials": "MS",
+            "tactical_role": "Batting All-Rounder",
+            "discipline": "Batting",
+            "candidate_category": "Conditional Trade Watch — Currently Retained by Punjab Kings",
+            "availability_status": "Non-Auction Asset (Retained by Punjab Kings; Conditional Trade Watch Only — Subject to Franchise Agreement & IPL Trading Rules; No Trade Confirmed)",
+            "performance_rating": 71.32,
+            "evidence_reliability_score": 90.00,
+            "statistical_stability_score": 61.75,
+            "scouting_rationale": "Retained by Punjab Kings for IPL 2027 (Official IPL Announcement, 18 Nov 2026). Non-auction asset; Rajasthan Royals could consider him only through a potential player trade, subject to bilateral franchise agreement and applicable IPL trading rules. No trade has been confirmed. Tracked as a high-impact multi-phase benchmark (71.32 PR, 167.4 clutch SR) and conditional trade scenario."
         }
     ]
 
@@ -910,6 +926,11 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
                 "category": "Existing RR Player (Internal Asset)",
                 "badge_class": "badge-internal",
                 "description": "Current Rajasthan Royals roster players (e.g., Dhruv Jurel, Ravindra Jadeja, Riyan Parag, Ravi Bishnoi, Yashasvi Jaiswal) evaluated as internal retention assets."
+            },
+            {
+                "category": "Conditional Trade Watch — Currently Retained by Punjab Kings",
+                "badge_class": "badge-trade",
+                "description": "Retained by Punjab Kings for IPL 2027 per official 18 Nov 2026 announcement (Marcus Stoinis). Excluded from the auction pool; accessible to Rajasthan Royals only via potential bilateral franchise trade subject to IPL trading rules. No trade confirmed."
             }
         ],
         "assumptions_register": reg_list

@@ -362,40 +362,6 @@
     },
     {
       "rank": 8,
-      "player_id": 2639,
-      "player_name": "Marcus Stoinis",
-      "initials": "MS",
-      "image_url": null,
-      "image_alt": "Photograph of Marcus Stoinis",
-      "country": "Australia",
-      "is_overseas": true,
-      "tactical_role": "Batting All-Rounder",
-      "player_archetype": "Multi-Role Tactical Option",
-      "performance_rating": 71.32,
-      "evidence_reliability_score": 90.0,
-      "evidence_tier": "Strong",
-      "evidence_tier_label": "Strong Evidence",
-      "statistical_stability_score": 61.75,
-      "tactical_squad_fit_score": 69.65,
-      "acquisition_risk_score": 17.48,
-      "recruitment_decision_score": 63.93,
-      "squad_gap_addressed": "Reinforce Batting Depth",
-      "scouting_rationale": "Experienced international powerhouse (71.32 PR) offering proven multi-phase boundary striking and handy middle-overs seam bowling under pressure.",
-      "candidate_category": "Viable Auction Target",
-      "availability_status": "Potential Auction Candidate (Availability unconfirmed; conditional on official IPL 2027 player registration)",
-      "key_stats": {
-        "bf_clutch": 390,
-        "runs_clutch": 653,
-        "sr_clutch": 167.44,
-        "bnd_pct_clutch": 22.56,
-        "dot_pct_clutch": 31.54,
-        "bf_overall": 1247,
-        "runs_overall": 1915,
-        "sr_overall": 153.57
-      }
-    },
-    {
-      "rank": 9,
       "player_id": 4369,
       "player_name": "Shai Hope",
       "initials": "SH",
@@ -429,7 +395,7 @@
       }
     },
     {
-      "rank": 10,
+      "rank": 9,
       "player_id": 2258,
       "player_name": "Sanju Samson",
       "initials": "SS",
@@ -460,6 +426,40 @@
         "bf_overall": 2232,
         "runs_overall": 3451,
         "sr_overall": 154.61
+      }
+    },
+    {
+      "rank": 10,
+      "player_id": 6725,
+      "player_name": "Sherfane Rutherford",
+      "initials": "SR",
+      "image_url": null,
+      "image_alt": "Photograph of Sherfane Rutherford",
+      "country": "West Indies",
+      "is_overseas": true,
+      "tactical_role": "Middle-Order Batter",
+      "player_archetype": "High-Ceiling, High-Volatility Performer",
+      "performance_rating": 75.66,
+      "evidence_reliability_score": 90.0,
+      "evidence_tier": "Strong",
+      "evidence_tier_label": "Strong Evidence",
+      "statistical_stability_score": 58.95,
+      "tactical_squad_fit_score": 74.35,
+      "acquisition_risk_score": 38.32,
+      "recruitment_decision_score": 63.53,
+      "squad_gap_addressed": "Reinforce Batting Depth",
+      "scouting_rationale": "Explosive West Indian middle-order power hitter with exceptional bat speed; clears the ropes under extreme death-overs pressure.",
+      "candidate_category": "Viable Auction Target",
+      "availability_status": "Potential Auction Candidate (Availability unconfirmed; conditional on official IPL 2027 player registration)",
+      "key_stats": {
+        "bf_clutch": 226,
+        "runs_clutch": 408,
+        "sr_clutch": 180.53,
+        "bnd_pct_clutch": 27.88,
+        "dot_pct_clutch": 37.17,
+        "bf_overall": 818,
+        "runs_overall": 1223,
+        "sr_overall": 149.51
       }
     }
   ],
@@ -1539,6 +1539,20 @@
       "evidence_reliability_score": 90.0,
       "statistical_stability_score": 64.2,
       "scouting_rationale": "Historical Reference (Retired): Veteran finisher and wicketkeeper benchmark illustrating late-career pressure execution and situational mastery."
+    },
+    {
+      "player_id": 2639,
+      "player_name": "Marcus Stoinis",
+      "country": "Australia",
+      "initials": "MS",
+      "tactical_role": "Batting All-Rounder",
+      "discipline": "Batting",
+      "candidate_category": "Conditional Trade Watch \u2014 Currently Retained by Punjab Kings",
+      "availability_status": "Non-Auction Asset (Retained by Punjab Kings; Conditional Trade Watch Only \u2014 Subject to Franchise Agreement & IPL Trading Rules; No Trade Confirmed)",
+      "performance_rating": 71.32,
+      "evidence_reliability_score": 90.0,
+      "statistical_stability_score": 61.75,
+      "scouting_rationale": "Retained by Punjab Kings for IPL 2027 (Official IPL Announcement, 18 Nov 2026). Non-auction asset; Rajasthan Royals could consider him only through a potential player trade, subject to bilateral franchise agreement and applicable IPL trading rules. No trade has been confirmed. Tracked as a high-impact multi-phase benchmark (71.32 PR, 167.4 clutch SR) and conditional trade scenario."
     }
   ],
   "top_actionable_targets": {

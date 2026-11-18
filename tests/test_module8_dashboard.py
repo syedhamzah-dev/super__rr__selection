@@ -90,12 +90,19 @@ class TestModule8Dashboard:
             c = p["candidate_category"]
             cat_counts[c] = cat_counts.get(c, 0) + 1
 
-        assert cat_counts["Viable Auction Target"] == 36
+        assert cat_counts["Viable Auction Target"] == 35
+        assert cat_counts["Conditional Trade Watch — Currently Retained by Punjab Kings"] == 1
         assert cat_counts["Strategic Benchmark (BCCI Ineligible)"] == 5
         assert cat_counts["Existing RR Player (Internal Asset)"] == 4
         assert cat_counts["Strategic Benchmark (Rival Core)"] == 4
         assert cat_counts["Strategic Benchmark (Retired)"] == 1
         assert sum(cat_counts.values()) == 50
+
+        # Verify Marcus Stoinis trade watch governance invariant
+        stoinis = next((p for p in rec_matrix if p["player_id"] == 2639), None)
+        assert stoinis is not None
+        assert stoinis["candidate_category"] == "Conditional Trade Watch — Currently Retained by Punjab Kings"
+        assert "PBKS" in stoinis["recommendation_priority"] or "Punjab Kings" in stoinis["recommendation_priority"]
 
         # Verify the 4 internal assets in top 50 matrix
         internal_ids = {p["player_id"] for p in rec_matrix if p["candidate_category"] == "Existing RR Player (Internal Asset)"}
@@ -158,8 +165,8 @@ class TestModule8Dashboard:
         assert len(top_b) == 10, f"Expected 10 actionable batters, found {len(top_b)}"
         assert len(top_bw) == 10, f"Expected 10 actionable bowlers, found {len(top_bw)}"
 
-        # Strict governance checks: NO ineligible Pakistani players, NO rival retentions, NO retired
-        ineligible_pids = {34485, 3578, 7364, 2490, 7690, 2933, 1699, 781, 4708, 143}
+        # Strict governance checks: NO ineligible Pakistani players, NO rival retentions, NO retired, NO retained trade watch (Stoinis)
+        ineligible_pids = {34485, 3578, 7364, 2490, 7690, 2933, 1699, 781, 4708, 143, 2639}
         for b in top_b:
             assert b["candidate_category"] == "Viable Auction Target"
             assert b["country"] != "Pakistan"

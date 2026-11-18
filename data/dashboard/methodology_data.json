@@ -65,6 +65,11 @@
       "category": "Existing RR Player (Internal Asset)",
       "badge_class": "badge-internal",
       "description": "Current Rajasthan Royals roster players (e.g., Dhruv Jurel, Ravindra Jadeja, Riyan Parag, Ravi Bishnoi, Yashasvi Jaiswal) evaluated as internal retention assets."
+    },
+    {
+      "category": "Conditional Trade Watch \u2014 Currently Retained by Punjab Kings",
+      "badge_class": "badge-trade",
+      "description": "Retained by Punjab Kings for IPL 2027 per official 18 Nov 2026 announcement (Marcus Stoinis). Excluded from the auction pool; accessible to Rajasthan Royals only via potential bilateral franchise trade subject to IPL trading rules. No trade confirmed."
     }
   ],
   "assumptions_register": [

@@ -652,7 +652,9 @@ const App = {
    * Helper to format badges
    */
   getCategoryBadge(category) {
-    if (category.includes("Viable")) {
+    if (category.includes("Trade") || category.includes("Punjab Kings")) {
+      return `<span class="badge badge-rival" style="background: rgba(225, 29, 72, 0.2); color: #fb7185; border: 1px solid rgba(225, 29, 72, 0.4);">🔄 Conditional Trade Watch (Retained by PBKS)</span>`;
+    } else if (category.includes("Viable")) {
       return `<span class="badge badge-viable">✓ Potential Target</span>`;
     } else if (category.includes("Ineligible")) {
       return `<span class="badge badge-ineligible">⚠ Non-Actionable (BCCI Ineligible)</span>`;
@@ -953,9 +955,10 @@ const App = {
     const isBat = b.discipline === "Batting";
     const avatarBg = isBat ? "batting" : "bowling";
     const initials = b.initials || this.getInitials(b.player_name, "BM");
+    const borderCol = b.candidate_category.includes('Ineligible') ? '#f43f5e' : (b.candidate_category.includes('Trade') || b.candidate_category.includes('Punjab Kings') ? '#fb7185' : '#f59e0b');
 
     return `
-      <div class="scout-card" style="border-left: 3px solid ${b.candidate_category.includes('Ineligible') ? '#f43f5e' : '#f59e0b'};">
+      <div class="scout-card" style="border-left: 3px solid ${borderCol};">
         <div class="scout-card-header">
           <div class="scout-avatar-wrap" aria-hidden="true">
             <div class="scout-avatar ${avatarBg}">
@@ -1199,7 +1202,7 @@ const App = {
     } else if (tab === "bowling") {
       filtered = filtered.filter(p => p.discipline === "Bowling");
     } else if (tab === "benchmarks") {
-      filtered = filtered.filter(p => p.candidate_category.includes("Benchmark"));
+      filtered = filtered.filter(p => p.candidate_category.includes("Benchmark") || p.candidate_category.includes("Trade") || p.candidate_category.includes("Punjab Kings"));
     } else if (tab === "internal") {
       filtered = filtered.filter(p => p.candidate_category.includes("Internal") || p.candidate_category.includes("RR"));
     } else if (tab === "viable") {
@@ -1596,7 +1599,7 @@ const App = {
       { label: `Recruitment Decision Heuristic (RDH) <button type="button" class="metric-info-btn" data-metric="RDH" aria-label="Recruitment Decision Heuristic information">ℹ</button>`, render: p => `<span class="metric-pill highlight">${p.recruitment_decision_score !== undefined && p.recruitment_decision_score !== null ? p.recruitment_decision_score.toFixed(2) : '—'} / 90.0</span>` },
       { label: "Bootstrap 95% CI", render: p => `[${p.rating_p025.toFixed(1)}, ${p.rating_p975.toFixed(1)}]` },
       { label: "Clutch Volume HHI", render: p => `${p.clutch_volume_hhi.toFixed(4)}` },
-      { label: "Recommendation Priority", render: p => `<span class="badge badge-viable">${p.recommendation_priority}</span>` },
+      { label: "Recommendation Priority", render: p => `<span class="badge ${p.recommendation_priority.includes('Trade') || p.recommendation_priority.includes('Non-Auction') ? 'badge-rival' : 'badge-viable'}">${p.recommendation_priority}</span>` },
       { label: "Action", render: p => `<button class="btn btn-sm btn-reset" onclick="App.removeAndRefreshCompare(${p.player_id})">Remove</button>` }
     ];
 
