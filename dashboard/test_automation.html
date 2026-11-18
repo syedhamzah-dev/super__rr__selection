@@ -128,6 +128,31 @@
         assert(minRDH >= 0.0, `Minimum RDH is >= 0.0 (Found: ${minRDH})`);
         assert(maxRDH <= 90.0, `Maximum RDH is <= 90.0 (Found: ${maxRDH})`);
 
+        // 10. Test Top 10 Actionable Picks Integrity
+        const top10B = DataManager.getTop10Batters("all");
+        const top10Bw = DataManager.getTop10Bowlers("all");
+        assert(top10B.length === 10, `Top 10 Batters has exactly 10 picks (Found: ${top10B.length})`);
+        assert(top10Bw.length === 10, `Top 10 Bowlers has exactly 10 picks (Found: ${top10Bw.length})`);
+
+        assert(top10B[0].player_name === "Tim David", `Top Batter #1 is Tim David (Found: ${top10B[0].player_name})`);
+        assert(top10Bw[0].player_name === "Benjamin Sears", `Top Bowler #1 is Benjamin Sears (Found: ${top10Bw[0].player_name})`);
+
+        // Governance: No benchmarks in Top 10
+        const forbiddenPids = [34485, 3578, 7364, 2933, 1699, 781, 4708, 143];
+        assert(!top10B.some(b => forbiddenPids.includes(b.player_id)), "Top 10 Batters strictly excludes benchmarks & ineligible");
+        assert(!top10Bw.some(bw => forbiddenPids.includes(bw.player_id)), "Top 10 Bowlers strictly excludes benchmarks & ineligible");
+
+        // Verify initials and scouting rationale presence
+        assert(top10B.every(b => b.initials && b.initials.length >= 2), "All Top 10 Batters have valid dynamic initials");
+        assert(top10Bw.every(bw => bw.initials && bw.initials.length >= 2), "All Top 10 Bowlers have valid dynamic initials");
+        assert(top10B.every(b => b.scouting_rationale && b.scouting_rationale.length > 20), "All Top 10 Batters have comprehensive scouting rationales");
+        assert(top10Bw.every(bw => bw.scouting_rationale && bw.scouting_rationale.length > 20), "All Top 10 Bowlers have comprehensive scouting rationales");
+
+        // 11. Test Developer Attribution & Metadata
+        const meta = DataManager.data.overview.metadata;
+        assert(meta && meta.lead_analytics_engineer.includes("Syed Mohammad Hamzah"), "Lead Analyst persona is Syed Mohammad Hamzah");
+        assert(meta && meta.system_title.includes("Cricket Intelligence"), "System title contains slogan");
+
         log.push("=== ALL BROWSER AUTOMATION TESTS COMPLETED SUCCESSFULLY ===");
       } catch (err) {
         log.push(`[FATAL ERROR] ${err.message}`);

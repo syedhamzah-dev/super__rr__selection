@@ -63,6 +63,8 @@ const App = {
 
       // Render Initial Views
       this.renderOverview();
+      this.renderTop10Batters("all");
+      this.renderTop10Bowlers("all");
       this.renderBatterExplorer();
       this.renderBowlerExplorer();
       this.renderRRSquadAnalysis();
@@ -70,8 +72,13 @@ const App = {
       this.renderAuctionStrategy();
       this.renderMethodology();
 
-      // Activate default tab
-      this.switchTab("overview");
+      // Activate default tab or URL hash tab
+      const hash = window.location.hash.replace("#", "");
+      if (hash && document.getElementById(`pane-${hash}`)) {
+        this.switchTab(hash);
+      } else {
+        this.switchTab("overview");
+      }
 
     } catch (err) {
       console.error("Dashboard initialization error:", err);
@@ -383,6 +390,28 @@ const App = {
         this.renderRecruitmentShortlists();
       });
     });
+
+    // Top 10 Batters Filter Chips
+    const bChips = document.querySelectorAll("#top10-batters-filter-chips .filter-chip");
+    bChips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        bChips.forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        const filter = chip.getAttribute("data-filter");
+        this.renderTop10Batters(filter);
+      });
+    });
+
+    // Top 10 Bowlers Filter Chips
+    const bwChips = document.querySelectorAll("#top10-bowlers-filter-chips .filter-chip");
+    bwChips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        bwChips.forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        const filter = chip.getAttribute("data-filter");
+        this.renderTop10Bowlers(filter);
+      });
+    });
   },
 
   /**
@@ -433,6 +462,19 @@ const App = {
     const elRoster = document.getElementById("kpi-rr-roster");
     if (elRoster) elRoster.textContent = `${stats.rr_squad_baseline.total_registered_players} (${stats.rr_squad_baseline.active_playing_xi_rotation} Active)`;
 
+    // Render Home Top 3 Spotlight Previews
+    const homeBattersPreview = document.getElementById("home-top-batters-preview");
+    if (homeBattersPreview) {
+      const top3B = DataManager.getTop10Batters("all").slice(0, 3);
+      homeBattersPreview.innerHTML = top3B.map((p, idx) => this.buildScoutCard(p, "Batting", idx + 1)).join("");
+    }
+
+    const homeBowlersPreview = document.getElementById("home-top-bowlers-preview");
+    if (homeBowlersPreview) {
+      const top3Bw = DataManager.getTop10Bowlers("all").slice(0, 3);
+      homeBowlersPreview.innerHTML = top3Bw.map((p, idx) => this.buildScoutCard(p, "Bowling", idx + 1)).join("");
+    }
+
     // Top Actionable Targets preview table
     const topRecruitsBody = document.getElementById("overview-top-recruits-body");
     if (topRecruitsBody) {
@@ -455,6 +497,216 @@ const App = {
         </tr>
       `).join("");
     }
+  },
+
+  // ---------------------------------------------------------------------------
+  // PAGE 2: Top 10 Batters
+  // ---------------------------------------------------------------------------
+  renderTop10Batters(filter = "all") {
+    const grid = document.getElementById("top10-batters-grid");
+    if (!grid) return;
+
+    const list = DataManager.getTop10Batters(filter);
+    const counter = document.getElementById("top10-batters-counter");
+    if (counter) {
+      counter.textContent = `Showing ${list.length} of 10 actionable batting picks`;
+    }
+
+    if (list.length === 0) {
+      grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 30px; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-md);">No batting picks matched this filter.</div>`;
+    } else {
+      grid.innerHTML = list.map(p => this.buildScoutCard(p, "Batting", p.rank)).join("");
+    }
+
+    // Render Strategic Benchmarks
+    const benchContainer = document.getElementById("top10-batters-benchmarks");
+    if (benchContainer) {
+      const benchmarks = DataManager.getStrategicBenchmarks("Batting");
+      benchContainer.innerHTML = benchmarks.map(b => this.buildBenchmarkCard(b)).join("");
+    }
+  },
+
+  // ---------------------------------------------------------------------------
+  // PAGE 3: Top 10 Bowlers
+  // ---------------------------------------------------------------------------
+  renderTop10Bowlers(filter = "all") {
+    const grid = document.getElementById("top10-bowlers-grid");
+    if (!grid) return;
+
+    const list = DataManager.getTop10Bowlers(filter);
+    const counter = document.getElementById("top10-bowlers-counter");
+    if (counter) {
+      counter.textContent = `Showing ${list.length} of 10 actionable bowling picks`;
+    }
+
+    if (list.length === 0) {
+      grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 30px; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-md);">No bowling picks matched this filter.</div>`;
+    } else {
+      grid.innerHTML = list.map(p => this.buildScoutCard(p, "Bowling", p.rank)).join("");
+    }
+
+    // Render Strategic Benchmarks
+    const benchContainer = document.getElementById("top10-bowlers-benchmarks");
+    if (benchContainer) {
+      const benchmarks = DataManager.getStrategicBenchmarks("Bowling");
+      benchContainer.innerHTML = benchmarks.map(b => this.buildBenchmarkCard(b)).join("");
+    }
+  },
+
+  /**
+   * Builds rich scout player card HTML with dynamic initials/avatar fallback
+   */
+  buildScoutCard(p, discipline, rank) {
+    const isBat = discipline === "Batting";
+    const inComp = DataManager.comparisonList.some(item => item.player_id === p.player_id && item.discipline === discipline);
+    const rankNum = rank || p.rank || 1;
+    const rankClass = rankNum === 1 ? "rank-1" : (rankNum === 2 ? "rank-2" : (rankNum === 3 ? "rank-3" : ""));
+    const initials = p.initials || (p.player_name ? p.player_name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase() : "RR");
+    const avatarBg = isBat ? "batting" : "bowling";
+    const clutchStats = p.key_stats || {};
+
+    return `
+      <div class="scout-card ${rankClass}">
+        <div class="scout-card-header">
+          <div class="scout-avatar-wrap">
+            <div class="scout-avatar ${avatarBg}">
+              ${initials}
+            </div>
+            <div class="scout-rank-badge">#${rankNum}</div>
+          </div>
+          <div class="scout-header-info">
+            <div class="scout-player-name" title="${p.player_name}">${p.player_name}</div>
+            <div class="scout-meta-row">
+              <span class="scout-country-pill">
+                <span>${p.country}</span>
+                <span>•</span>
+                <span style="color: ${p.is_overseas ? '#38bdf8' : '#34d399'}; font-weight: 700;">
+                  ${p.is_overseas ? 'Overseas' : 'Domestic'}
+                </span>
+              </span>
+              <span class="scout-role-pill">${p.tactical_role}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="scout-score-banner">
+          <div>
+            <div class="score-label">Recruitment Decision Score</div>
+            <div class="score-sub">RDH (0.00 – 90.00 Scale)</div>
+          </div>
+          <div class="score-val">${p.recruitment_decision_score.toFixed(2)}</div>
+        </div>
+
+        <div class="scout-metrics-grid">
+          <div class="scout-metric-cell" title="Pressure Performance under Leverage Index >= 1.0">
+            <div class="label" style="color: var(--rr-pink);">Pressure (PR)</div>
+            <div class="val text-pink">${p.performance_rating.toFixed(1)}</div>
+          </div>
+          <div class="scout-metric-cell" title="Evidence Strength based on exposure volume">
+            <div class="label" style="color: #60a5fa;">Evidence (ERS)</div>
+            <div class="val text-blue">${p.evidence_reliability_score.toFixed(1)}</div>
+          </div>
+          <div class="scout-metric-cell" title="Performance Stability: Top-Tier Impact Retention Index">
+            <div class="label" style="color: #fbbf24;">Stability (SSS)</div>
+            <div class="val text-gold">${p.statistical_stability_score.toFixed(1)}</div>
+          </div>
+          <div class="scout-metric-cell" title="Tactical Squad Fit for Rajasthan Royals">
+            <div class="label" style="color: #34d399;">Squad Fit (TFS)</div>
+            <div class="val text-emerald">${p.tactical_squad_fit_score.toFixed(1)}</div>
+          </div>
+          <div class="scout-metric-cell" title="Acquisition Risk (Bidding Inflation & Overseas Penalty)">
+            <div class="label" style="color: #f87171;">Risk (ARS)</div>
+            <div class="val text-rose">${p.acquisition_risk_score.toFixed(1)}</div>
+          </div>
+          <div class="scout-metric-cell" title="Evidence Tier Category">
+            <div class="label">Reliability Tier</div>
+            <div class="val" style="font-size: 11px; margin-top: 3px;">
+              <span class="badge ${p.evidence_tier === 'Strong' ? 'badge-tier-1' : 'badge-tier-2'}">
+                ${p.evidence_tier === 'Strong' ? 'Strong' : 'Moderate'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="scout-clutch-stats">
+          ${isBat ? `
+            <span>Clutch BF: <strong>${clutchStats.bf_clutch !== undefined ? clutchStats.bf_clutch : (p.bf_clutch || '—')}</strong></span>
+            <span>Clutch SR: <strong>${clutchStats.sr_clutch !== undefined ? clutchStats.sr_clutch.toFixed(1) : (p.sr_clutch ? p.sr_clutch.toFixed(1) : '—')}</strong></span>
+            <span>Boundary %: <strong>${clutchStats.bnd_pct_clutch !== undefined ? clutchStats.bnd_pct_clutch.toFixed(1) + '%' : (p.bnd_pct_clutch ? p.bnd_pct_clutch.toFixed(1) + '%' : '—')}</strong></span>
+            <span>Dot %: <strong>${clutchStats.dot_pct_clutch !== undefined ? clutchStats.dot_pct_clutch.toFixed(1) + '%' : (p.dot_pct_clutch ? p.dot_pct_clutch.toFixed(1) + '%' : '—')}</strong></span>
+          ` : `
+            <span>Clutch Balls: <strong>${clutchStats.legal_balls_clutch !== undefined ? clutchStats.legal_balls_clutch : (p.legal_balls_clutch || '—')}</strong></span>
+            <span>Clutch Econ: <strong>${clutchStats.economy_clutch !== undefined ? clutchStats.economy_clutch.toFixed(2) : (p.economy_clutch ? p.economy_clutch.toFixed(2) : '—')}</strong></span>
+            <span>Clutch Wkts: <strong>${clutchStats.wickets_clutch !== undefined ? clutchStats.wickets_clutch : (p.wickets_clutch !== undefined ? p.wickets_clutch : '—')}</strong></span>
+            <span>True Dot %: <strong>${clutchStats.true_dot_pct_clutch !== undefined ? clutchStats.true_dot_pct_clutch.toFixed(1) + '%' : (p.true_dot_pct_clutch ? p.true_dot_pct_clutch.toFixed(1) + '%' : '—')}</strong></span>
+          `}
+        </div>
+
+        <div class="scout-void-tag">
+          <span>🎯</span>
+          <span>${p.squad_gap_addressed || (isBat ? 'Fill Finisher Void' : 'Fill Death-Overs Specialist Void')}</span>
+        </div>
+
+        <div class="scout-rationale-box">
+          <strong>Why this player?</strong>
+          ${p.scouting_rationale || 'High-pressure specialist evaluated for Rajasthan Royals recruitment ahead of IPL 2027.'}
+        </div>
+
+        <div class="scout-card-footer">
+          <button class="btn btn-sm ${inComp ? 'btn-primary' : ''}" onclick="App.toggleCompare(${p.player_id}, '${discipline}')">
+            ${inComp ? '✓ In Compare' : '+ Compare'}
+          </button>
+          <button class="btn btn-sm btn-primary" onclick="App.openPlayerModal(${p.player_id}, '${discipline}')">
+            View Profile &rarr;
+          </button>
+        </div>
+      </div>
+    `;
+  },
+
+  buildBenchmarkCard(b) {
+    const isBat = b.discipline === "Batting";
+    const avatarBg = isBat ? "batting" : "bowling";
+    const initials = b.initials || "BM";
+
+    return `
+      <div class="scout-card" style="border-left: 3px solid ${b.candidate_category.includes('Ineligible') ? '#f43f5e' : '#f59e0b'};">
+        <div class="scout-card-header">
+          <div class="scout-avatar-wrap">
+            <div class="scout-avatar ${avatarBg}" style="opacity: 0.9;">
+              ${initials}
+            </div>
+          </div>
+          <div class="scout-header-info">
+            <div class="scout-player-name" title="${b.player_name}">${b.player_name}</div>
+            <div class="scout-meta-row">
+              <span class="scout-country-pill">${b.country}</span>
+              <span class="scout-role-pill">${b.tactical_role}</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-bottom: 10px;">
+          ${this.getCategoryBadge(b.candidate_category)}
+        </div>
+        <div class="scout-metrics-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 10px;">
+          <div class="scout-metric-cell">
+            <div class="label" style="color: var(--rr-pink);">Pressure (PR)</div>
+            <div class="val text-pink">${b.performance_rating.toFixed(1)}</div>
+          </div>
+          <div class="scout-metric-cell">
+            <div class="label" style="color: #fbbf24;">Stability (SSS)</div>
+            <div class="val text-gold">${b.statistical_stability_score ? b.statistical_stability_score.toFixed(1) : '—'}</div>
+          </div>
+        </div>
+        <div class="scout-rationale-box" style="border-left-color: #64748b; font-size: 11.5px;">
+          <strong>Comparative Benchmark Role:</strong>
+          ${b.scouting_rationale}
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: auto; padding-top: 8px;">
+          * Strict Governance: Non-actionable for recruitment.
+        </div>
+      </div>
+    `;
   },
 
   // ---------------------------------------------------------------------------

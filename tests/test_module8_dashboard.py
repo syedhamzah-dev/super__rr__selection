@@ -146,3 +146,46 @@ class TestModule8Dashboard:
         assert "overview" in text
         assert "batters" in text
         assert "bowlers" in text
+
+    def test_top_10_recommendations_and_governance_invariants(self, dashboard_data):
+        ov = dashboard_data["overview"]
+        assert "top_10_actionable_batters" in ov
+        assert "top_10_actionable_bowlers" in ov
+
+        top_b = ov["top_10_actionable_batters"]
+        top_bw = ov["top_10_actionable_bowlers"]
+
+        assert len(top_b) == 10, f"Expected 10 actionable batters, found {len(top_b)}"
+        assert len(top_bw) == 10, f"Expected 10 actionable bowlers, found {len(top_bw)}"
+
+        # Strict governance checks: NO ineligible Pakistani players, NO rival retentions, NO retired
+        ineligible_pids = {34485, 3578, 7364, 2490, 7690, 2933, 1699, 781, 4708, 143}
+        for b in top_b:
+            assert b["candidate_category"] == "Viable Auction Target"
+            assert b["country"] != "Pakistan"
+            assert b["player_id"] not in ineligible_pids
+            assert b["scouting_rationale"] and len(b["scouting_rationale"]) > 15
+            assert b["initials"] and len(b["initials"]) in (2, 3)
+            assert 0.0 <= b["recruitment_decision_score"] <= 90.0
+
+        for bw in top_bw:
+            assert bw["candidate_category"] == "Viable Auction Target"
+            assert bw["country"] != "Pakistan"
+            assert bw["player_id"] not in ineligible_pids
+            assert bw["scouting_rationale"] and len(bw["scouting_rationale"]) > 15
+            assert bw["initials"] and len(bw["initials"]) in (2, 3)
+            assert 0.0 <= bw["recruitment_decision_score"] <= 90.0
+
+        # Monotonicity of RDH score in top 10
+        for i in range(len(top_b) - 1):
+            assert top_b[i]["recruitment_decision_score"] >= top_b[i+1]["recruitment_decision_score"]
+        for i in range(len(top_bw) - 1):
+            assert top_bw[i]["recruitment_decision_score"] >= top_bw[i+1]["recruitment_decision_score"]
+
+    def test_dashboard_metadata_and_developer_persona(self, dashboard_data):
+        ov = dashboard_data["overview"]
+        assert "metadata" in ov
+        meta = ov["metadata"]
+        assert "Syed Mohammad Hamzah" in meta["lead_analytics_engineer"]
+        assert "SupeRR Selector" in meta["system_title"]
+        assert "2022" in meta["data_timestamp"] and "2026" in meta["data_timestamp"]

@@ -2,6 +2,7 @@
   {
     "player_id": 6396,
     "player_name": "Tim David",
+    "initials": "TD",
     "discipline": "Batting",
     "country": "Australia",
     "is_overseas": true,
@@ -23,11 +24,20 @@
     "recommendation_priority": "High Priority",
     "squad_gap_addressed": "Fill Finisher Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Elite death-overs boundary striker (179.3 clutch SR, 25.0% boundary rate). Solves Rajasthan Royals' #1 critical void (Finisher) with game-winning finishing power.",
+    "clutch_stats": {
+      "bf_clutch": 400,
+      "runs_clutch": 717,
+      "sr_clutch": 179.25,
+      "bnd_pct_clutch": 25.0,
+      "dot_pct_clutch": 30.5
+    }
   },
   {
     "player_id": 37052,
     "player_name": "Naman Dhir",
+    "initials": "ND",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -49,11 +59,20 @@
     "recommendation_priority": "High Priority",
     "squad_gap_addressed": "Reinforce Batting All-Rounder Depth",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "High-ceiling domestic power hitter with 84.48 Pressure Rating and 165+ clutch strike rate. Conserves an overseas slot while offering middle-order explosiveness and secondary spin.",
+    "clutch_stats": {
+      "bf_clutch": 216,
+      "runs_clutch": 395,
+      "sr_clutch": 182.87,
+      "bnd_pct_clutch": 26.39,
+      "dot_pct_clutch": 28.24
+    }
   },
   {
     "player_id": 796,
     "player_name": "Matthew Wade",
+    "initials": "MW",
     "discipline": "Batting",
     "country": "Australia",
     "is_overseas": true,
@@ -75,11 +94,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Wicketkeeper-Batter Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Battle-tested international wicketkeeper-finisher (81.39 PR, 78.01 stability). Provides calm death-overs execution under pressure and indispensable dual-role backup for Dhruv Jurel.",
+    "clutch_stats": {
+      "bf_clutch": 157,
+      "runs_clutch": 270,
+      "sr_clutch": 171.97,
+      "bnd_pct_clutch": 21.66,
+      "dot_pct_clutch": 26.75
+    }
   },
   {
     "player_id": 8101,
     "player_name": "Ashutosh Sharma",
+    "initials": "AS",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -101,11 +129,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Finisher Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Dynamic lower-order domestic aggressor with exceptional clutch boundary rate (84.44 TFS). Delivers game-breaking acceleration and fearless chase execution.",
+    "clutch_stats": {
+      "bf_clutch": 243,
+      "runs_clutch": 423,
+      "sr_clutch": 174.07,
+      "bnd_pct_clutch": 25.1,
+      "dot_pct_clutch": 35.39
+    }
   },
   {
     "player_id": 4821,
     "player_name": "Mahipal Lomror",
+    "initials": "ML",
     "discipline": "Batting",
     "country": "India (Domestic)",
     "is_overseas": false,
@@ -127,11 +164,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Middle-Order Batter Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Proven domestic left-handed middle-order striker (85.26 PR, 84.50 TFS). Demolishes spin through middle overs and provides formidable power hitting at the death.",
+    "clutch_stats": {
+      "bf_clutch": 51,
+      "runs_clutch": 105,
+      "sr_clutch": 205.88,
+      "bnd_pct_clutch": 33.33,
+      "dot_pct_clutch": 31.37
+    }
   },
   {
     "player_id": 7260,
     "player_name": "Dhruv Jurel",
+    "initials": "DJ",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -153,11 +199,20 @@
     "recommendation_priority": "Internal Asset (Retention Candidate)",
     "squad_gap_addressed": "Fill Wicketkeeper-Batter Void",
     "candidate_category": "Existing RR Player (Internal Asset)",
-    "availability_status": "Existing RR Squad Member (Internal Retention / Roster Core)"
+    "availability_status": "Existing RR Squad Member (Internal Retention / Roster Core)",
+    "scouting_rationale": "RR Internal Cornerstone: High-calibre domestic wicketkeeper-finisher with exceptional temperament, agile glovework, and death-phase acceleration.",
+    "clutch_stats": {
+      "bf_clutch": 205,
+      "runs_clutch": 351,
+      "sr_clutch": 171.22,
+      "bnd_pct_clutch": 25.37,
+      "dot_pct_clutch": 28.78
+    }
   },
   {
     "player_id": 6281,
     "player_name": "Abhishek Sharma",
+    "initials": "AS",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -179,11 +234,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Reinforce Batting All-Rounder Depth",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Explosive domestic top-order engine with 190+ powerplay strike rate. Provides lightning-fast starts against pace and spin while offering tactical bowling versatility.",
+    "clutch_stats": {
+      "bf_clutch": 118,
+      "runs_clutch": 202,
+      "sr_clutch": 171.19,
+      "bnd_pct_clutch": 26.27,
+      "dot_pct_clutch": 34.75
+    }
   },
   {
     "player_id": 6460,
     "player_name": "Ayush Badoni",
+    "initials": "AB",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -205,11 +269,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Reinforce Batting All-Rounder Depth",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Composed domestic middle-overs stabilizer with 61.40 stability. Excels at crisis recovery, strike rotation, and tempo shifts in high-pressure chases.",
+    "clutch_stats": {
+      "bf_clutch": 431,
+      "runs_clutch": 662,
+      "sr_clutch": 153.6,
+      "bnd_pct_clutch": 18.79,
+      "dot_pct_clutch": 27.38
+    }
   },
   {
     "player_id": 1699,
     "player_name": "Suryakumar Yadav",
+    "initials": "SY",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -231,11 +304,20 @@
     "recommendation_priority": "Strategic Benchmark (Rival Core)",
     "squad_gap_addressed": "Fill Middle-Order Batter Void",
     "candidate_category": "Strategic Benchmark (Rival Core)",
-    "availability_status": "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)"
+    "availability_status": "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)",
+    "scouting_rationale": "Rival Core Benchmark (Non-Actionable): World #1 360-degree boundary striker; analytical benchmark for middle-overs field manipulation and boundary striking.",
+    "clutch_stats": {
+      "bf_clutch": 477,
+      "runs_clutch": 799,
+      "sr_clutch": 167.51,
+      "bnd_pct_clutch": 24.74,
+      "dot_pct_clutch": 33.33
+    }
   },
   {
     "player_id": 4708,
     "player_name": "Rinku Singh",
+    "initials": "RS",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -257,11 +339,20 @@
     "recommendation_priority": "Strategic Benchmark (Rival Core)",
     "squad_gap_addressed": "Fill Finisher Void",
     "candidate_category": "Strategic Benchmark (Rival Core)",
-    "availability_status": "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)"
+    "availability_status": "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)",
+    "scouting_rationale": "Rival Core Benchmark (Non-Actionable): Elite domestic finisher with ice-cold death-overs boundary hitting and clutch chase execution.",
+    "clutch_stats": {
+      "bf_clutch": 437,
+      "runs_clutch": 664,
+      "sr_clutch": 151.95,
+      "bnd_pct_clutch": 21.05,
+      "dot_pct_clutch": 35.7
+    }
   },
   {
     "player_id": 143,
     "player_name": "Dinesh Karthik",
+    "initials": "DK",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -283,11 +374,20 @@
     "recommendation_priority": "Strategic Benchmark (Retired)",
     "squad_gap_addressed": "Fill Wicketkeeper-Batter Void",
     "candidate_category": "Strategic Benchmark (Retired)",
-    "availability_status": "Retired from IPL Competition (Historical Reference Benchmark)"
+    "availability_status": "Retired from IPL Competition (Historical Reference Benchmark)",
+    "scouting_rationale": "Historical Reference (Retired): Veteran finisher and wicketkeeper benchmark illustrating late-career pressure execution and situational mastery.",
+    "clutch_stats": {
+      "bf_clutch": 262,
+      "runs_clutch": 438,
+      "sr_clutch": 167.18,
+      "bnd_pct_clutch": 24.05,
+      "dot_pct_clutch": 31.3
+    }
   },
   {
     "player_id": 2639,
     "player_name": "Marcus Stoinis",
+    "initials": "MS",
     "discipline": "Batting",
     "country": "Australia",
     "is_overseas": true,
@@ -309,11 +409,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Reinforce Batting All-Rounder Depth",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Experienced international powerhouse (71.32 PR) offering proven multi-phase boundary striking and handy middle-overs seam bowling under pressure.",
+    "clutch_stats": {
+      "bf_clutch": 390,
+      "runs_clutch": 653,
+      "sr_clutch": 167.44,
+      "bnd_pct_clutch": 22.56,
+      "dot_pct_clutch": 31.54
+    }
   },
   {
     "player_id": 4369,
     "player_name": "Shai Hope",
+    "initials": "SH",
     "discipline": "Batting",
     "country": "West Indies",
     "is_overseas": true,
@@ -335,11 +444,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Wicketkeeper-Batter Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Technically adept wicketkeeper-anchor (79.99 PR) with strong tempo control, elite boundary placement, and anchor versatility in challenging batting conditions.",
+    "clutch_stats": {
+      "bf_clutch": 157,
+      "runs_clutch": 278,
+      "sr_clutch": 177.07,
+      "bnd_pct_clutch": 24.84,
+      "dot_pct_clutch": 28.66
+    }
   },
   {
     "player_id": 152,
     "player_name": "Ravindra Jadeja",
+    "initials": "RJ",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -361,11 +479,20 @@
     "recommendation_priority": "Internal Asset (Retention Candidate)",
     "squad_gap_addressed": "Reinforce Batting All-Rounder Depth",
     "candidate_category": "Existing RR Player (Internal Asset)",
-    "availability_status": "Existing RR Squad Member (Internal Retention / Roster Core)"
+    "availability_status": "Existing RR Squad Member (Internal Retention / Roster Core)",
+    "scouting_rationale": "RR Internal Cornerstone: Premier international all-rounder providing miserly left-arm spin, world-class fielding, and lower-order boundary power.",
+    "clutch_stats": {
+      "bf_clutch": 431,
+      "runs_clutch": 618,
+      "sr_clutch": 143.39,
+      "bnd_pct_clutch": 15.78,
+      "dot_pct_clutch": 26.68
+    }
   },
   {
     "player_id": 2258,
     "player_name": "Sanju Samson",
+    "initials": "SS",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -387,11 +514,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Wicketkeeper-Batter Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "High-impact wicketkeeper-batter (71.01 PR) capable of accelerating against both pace and spin across all batting phases with deep franchise familiarity.",
+    "clutch_stats": {
+      "bf_clutch": 199,
+      "runs_clutch": 329,
+      "sr_clutch": 165.33,
+      "bnd_pct_clutch": 24.62,
+      "dot_pct_clutch": 35.68
+    }
   },
   {
     "player_id": 6725,
     "player_name": "Sherfane Rutherford",
+    "initials": "SR",
     "discipline": "Batting",
     "country": "West Indies",
     "is_overseas": true,
@@ -413,11 +549,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Middle-Order Batter Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Explosive West Indian middle-order power hitter with exceptional bat speed; clears the ropes under extreme death-overs pressure.",
+    "clutch_stats": {
+      "bf_clutch": 226,
+      "runs_clutch": 408,
+      "sr_clutch": 180.53,
+      "bnd_pct_clutch": 27.88,
+      "dot_pct_clutch": 37.17
+    }
   },
   {
     "player_id": 1077,
     "player_name": "David Miller",
+    "initials": "DM",
     "discipline": "Batting",
     "country": "South Africa",
     "is_overseas": true,
@@ -439,11 +584,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Middle-Order Batter Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "World-renowned international finisher with ice-cold temperament in pressure chases; provides elite left-handed middle-overs stability.",
+    "clutch_stats": {
+      "bf_clutch": 510,
+      "runs_clutch": 815,
+      "sr_clutch": 159.8,
+      "bnd_pct_clutch": 21.37,
+      "dot_pct_clutch": 30.39
+    }
   },
   {
     "player_id": 813,
     "player_name": "Jos Buttler",
+    "initials": "JB",
     "discipline": "Batting",
     "country": "England",
     "is_overseas": true,
@@ -465,11 +619,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Wicketkeeper-Batter Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "World-class wicketkeeper-batter with transcendent powerplay boundary striking and elite tournament-winning pedigree.",
+    "clutch_stats": {
+      "bf_clutch": 247,
+      "runs_clutch": 427,
+      "sr_clutch": 172.87,
+      "bnd_pct_clutch": 23.48,
+      "dot_pct_clutch": 27.53
+    }
   },
   {
     "player_id": 5553,
     "player_name": "Phil Salt",
+    "initials": "PS",
     "discipline": "Batting",
     "country": "England",
     "is_overseas": true,
@@ -491,11 +654,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Wicketkeeper-Batter Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Ultra-aggressive top-order wicketkeeper-batter with 180+ strike rate in the powerplay; dismantles new-ball bowling attacks.",
+    "clutch_stats": {
+      "bf_clutch": 85,
+      "runs_clutch": 162,
+      "sr_clutch": 190.59,
+      "bnd_pct_clutch": 24.71,
+      "dot_pct_clutch": 22.35
+    }
   },
   {
     "player_id": 6423,
     "player_name": "Riyan Parag",
+    "initials": "RP",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -517,11 +689,20 @@
     "recommendation_priority": "Internal Asset (Retention Candidate)",
     "squad_gap_addressed": "Reinforce Batting All-Rounder Depth",
     "candidate_category": "Existing RR Player (Internal Asset)",
-    "availability_status": "Existing RR Squad Member (Internal Retention / Roster Core)"
+    "availability_status": "Existing RR Squad Member (Internal Retention / Roster Core)",
+    "scouting_rationale": "RR Internal Cornerstone: Dynamic middle-order aggressor with proven ability to anchor and explode against spin and pace.",
+    "clutch_stats": {
+      "bf_clutch": 319,
+      "runs_clutch": 483,
+      "sr_clutch": 151.41,
+      "bnd_pct_clutch": 19.75,
+      "dot_pct_clutch": 32.92
+    }
   },
   {
     "player_id": 7897,
     "player_name": "Namboori Tilak Varma",
+    "initials": "NT",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -543,11 +724,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Reinforce Batting All-Rounder Depth",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Polished domestic left-handed middle-order batter with composed strike rotation and proven ability to rebuild after top-order collapses.",
+    "clutch_stats": {
+      "bf_clutch": 699,
+      "runs_clutch": 1018,
+      "sr_clutch": 145.64,
+      "bnd_pct_clutch": 17.88,
+      "dot_pct_clutch": 33.33
+    }
   },
   {
     "player_id": 2756,
     "player_name": "Shashank Singh",
+    "initials": "SS",
     "discipline": "Batting",
     "country": "India (Domestic)",
     "is_overseas": false,
@@ -569,11 +759,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Reinforce Batting All-Rounder Depth",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Fearless domestic finisher with lightning boundary hitting in the death overs; proven clutch match-winner in tight finishes.",
+    "clutch_stats": {
+      "bf_clutch": 266,
+      "runs_clutch": 404,
+      "sr_clutch": 151.88,
+      "bnd_pct_clutch": 18.8,
+      "dot_pct_clutch": 28.95
+    }
   },
   {
     "player_id": 4755,
     "player_name": "Shivam Dube",
+    "initials": "SD",
     "discipline": "Batting",
     "country": "India",
     "is_overseas": false,
@@ -595,11 +794,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Reinforce Batting All-Rounder Depth",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Formidable domestic power hitter who dismantles spin with ease through the middle overs and provides auxiliary seam bowling.",
+    "clutch_stats": {
+      "bf_clutch": 424,
+      "runs_clutch": 650,
+      "sr_clutch": 153.3,
+      "bnd_pct_clutch": 19.81,
+      "dot_pct_clutch": 31.13
+    }
   },
   {
     "player_id": 838,
     "player_name": "Glenn Maxwell",
+    "initials": "GM",
     "discipline": "Batting",
     "country": "Australia",
     "is_overseas": true,
@@ -621,11 +829,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Wicketkeeper-Batter Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Dynamic multi-phase game-changer capable of 360-degree boundary striking, explosive finishing, and handy off-spin overs.",
+    "clutch_stats": {
+      "bf_clutch": 215,
+      "runs_clutch": 358,
+      "sr_clutch": 166.51,
+      "bnd_pct_clutch": 26.51,
+      "dot_pct_clutch": 37.67
+    }
   },
   {
     "player_id": 3605,
     "player_name": "Aiden Markram",
+    "initials": "AM",
     "discipline": "Batting",
     "country": "South Africa",
     "is_overseas": true,
@@ -647,11 +864,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Reinforce Batting All-Rounder Depth",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Authoritative top/middle-order batting all-rounder with excellent technique, steady leadership temperament, and off-spin utility.",
+    "clutch_stats": {
+      "bf_clutch": 365,
+      "runs_clutch": 569,
+      "sr_clutch": 155.89,
+      "bnd_pct_clutch": 21.37,
+      "dot_pct_clutch": 33.7
+    }
   },
   {
     "player_id": 34485,
     "player_name": "Sufiyan Muqeem",
+    "initials": "SM",
     "discipline": "Bowling",
     "country": "Pakistan",
     "is_overseas": true,
@@ -673,11 +899,20 @@
     "recommendation_priority": "Strategic Benchmark (BCCI Ineligible)",
     "squad_gap_addressed": "Fill Middle-Overs Spinner Void",
     "candidate_category": "Strategic Benchmark (BCCI Ineligible)",
-    "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)"
+    "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)",
+    "scouting_rationale": "BCCI Regulatory Benchmark (Non-Actionable): Elite international wrist-spinner with exceptional clutch turn; analytical model benchmark for world-class middle-overs spin.",
+    "clutch_stats": {
+      "legal_balls_clutch": 126,
+      "economy_clutch": 5.71,
+      "wickets_clutch": 9,
+      "true_dot_pct_clutch": 46.83,
+      "bnd_pct_clutch": 10.32
+    }
   },
   {
     "player_id": 3578,
     "player_name": "Imad Wasim",
+    "initials": "IW",
     "discipline": "Bowling",
     "country": "Pakistan",
     "is_overseas": true,
@@ -699,11 +934,20 @@
     "recommendation_priority": "Strategic Benchmark (BCCI Ineligible)",
     "squad_gap_addressed": "Fill Bowling All-Rounder Void",
     "candidate_category": "Strategic Benchmark (BCCI Ineligible)",
-    "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)"
+    "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)",
+    "scouting_rationale": "BCCI Regulatory Benchmark (Non-Actionable): World-class left-arm orthodox powerplay control spinner; comparative benchmark for restrictive opening bowling.",
+    "clutch_stats": {
+      "legal_balls_clutch": 114,
+      "economy_clutch": 6.0,
+      "wickets_clutch": 9,
+      "true_dot_pct_clutch": 36.84,
+      "bnd_pct_clutch": 7.02
+    }
   },
   {
     "player_id": 4856,
     "player_name": "Benjamin Sears",
+    "initials": "BS",
     "discipline": "Bowling",
     "country": "New Zealand",
     "is_overseas": true,
@@ -725,11 +969,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill All-Phase Bowler Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Express pace (145+ kph) with lethal yorker execution and 75.30 PR. Directly addresses Rajasthan Royals' critical void in death overs with high wicket-taking ceiling.",
+    "clutch_stats": {
+      "legal_balls_clutch": 129,
+      "economy_clutch": 7.91,
+      "wickets_clutch": 15,
+      "true_dot_pct_clutch": 40.31,
+      "bnd_pct_clutch": 17.83
+    }
   },
   {
     "player_id": 722,
     "player_name": "Liam Dawson",
+    "initials": "LD",
     "discipline": "Bowling",
     "country": "England",
     "is_overseas": true,
@@ -751,11 +1004,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Middle-Overs Spinner Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Masterful middle-overs left-arm control spinner (72.68 PR, 6.45 clutch economy). Suppresses scoring rates under pressure while contributing lower-order batting depth.",
+    "clutch_stats": {
+      "legal_balls_clutch": 131,
+      "economy_clutch": 7.05,
+      "wickets_clutch": 12,
+      "true_dot_pct_clutch": 29.01,
+      "bnd_pct_clutch": 9.92
+    }
   },
   {
     "player_id": 2933,
     "player_name": "Jasprit Bumrah",
+    "initials": "JB",
     "discipline": "Bowling",
     "country": "India",
     "is_overseas": false,
@@ -777,11 +1039,20 @@
     "recommendation_priority": "Strategic Benchmark (Rival Core)",
     "squad_gap_addressed": "Fill Death-Overs Specialist Void",
     "candidate_category": "Strategic Benchmark (Rival Core)",
-    "availability_status": "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)"
+    "availability_status": "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)",
+    "scouting_rationale": "Rival Core Benchmark (Non-Actionable): Gold standard T20 pace enforcer with unparalleled death yorker execution and sub-6.5 economy under extreme leverage.",
+    "clutch_stats": {
+      "legal_balls_clutch": 541,
+      "economy_clutch": 7.99,
+      "wickets_clutch": 22,
+      "true_dot_pct_clutch": 31.61,
+      "bnd_pct_clutch": 15.16
+    }
   },
   {
     "player_id": 781,
     "player_name": "Sunil Narine",
+    "initials": "SN",
     "discipline": "Bowling",
     "country": "West Indies",
     "is_overseas": true,
@@ -803,11 +1074,20 @@
     "recommendation_priority": "Strategic Benchmark (Rival Core)",
     "squad_gap_addressed": "Fill Middle-Overs Spinner Void",
     "candidate_category": "Strategic Benchmark (Rival Core)",
-    "availability_status": "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)"
+    "availability_status": "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)",
+    "scouting_rationale": "Rival Core Benchmark (Non-Actionable): Master mystery spinner and explosive opening pinch-hitter with unmatched tournament longevity.",
+    "clutch_stats": {
+      "legal_balls_clutch": 548,
+      "economy_clutch": 7.84,
+      "wickets_clutch": 32,
+      "true_dot_pct_clutch": 34.49,
+      "bnd_pct_clutch": 13.5
+    }
   },
   {
     "player_id": 39657,
     "player_name": "Eshan Malinga",
+    "initials": "EM",
     "discipline": "Bowling",
     "country": "Sri Lanka",
     "is_overseas": true,
@@ -829,11 +1109,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Death-Overs Specialist Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Slingy death-overs execution specialist with 80.89 TFS. Reproduces the lethal low-arm release angle to stifle death-phase scoring and nail blockhole yorkers.",
+    "clutch_stats": {
+      "legal_balls_clutch": 280,
+      "economy_clutch": 8.31,
+      "wickets_clutch": 20,
+      "true_dot_pct_clutch": 33.21,
+      "bnd_pct_clutch": 15.0
+    }
   },
   {
     "player_id": 2984,
     "player_name": "Sikandar Raza",
+    "initials": "SR",
     "discipline": "Bowling",
     "country": "Zimbabwe",
     "is_overseas": true,
@@ -855,11 +1144,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Bowling All-Rounder Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Battle-tested international all-rounder with 75.27 TFS. Delivers clutch breakthroughs in middle overs, mystery spin variations, and explosive late batting.",
+    "clutch_stats": {
+      "legal_balls_clutch": 314,
+      "economy_clutch": 7.74,
+      "wickets_clutch": 21,
+      "true_dot_pct_clutch": 32.17,
+      "bnd_pct_clutch": 13.06
+    }
   },
   {
     "player_id": 7364,
     "player_name": "Haris Rauf",
+    "initials": "HR",
     "discipline": "Bowling",
     "country": "Pakistan",
     "is_overseas": true,
@@ -881,11 +1179,20 @@
     "recommendation_priority": "Strategic Benchmark (BCCI Ineligible)",
     "squad_gap_addressed": "Fill Death-Overs Specialist Void",
     "candidate_category": "Strategic Benchmark (BCCI Ineligible)",
-    "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)"
+    "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)",
+    "scouting_rationale": "BCCI Regulatory Benchmark (Non-Actionable): Express pace death bowler capable of 150+ kph rockets and blockhole yorkers under extreme pressure.",
+    "clutch_stats": {
+      "legal_balls_clutch": 367,
+      "economy_clutch": 9.07,
+      "wickets_clutch": 35,
+      "true_dot_pct_clutch": 34.88,
+      "bnd_pct_clutch": 17.71
+    }
   },
   {
     "player_id": 2681,
     "player_name": "Taskin Ahmed",
+    "initials": "TA",
     "discipline": "Bowling",
     "country": "Bangladesh",
     "is_overseas": true,
@@ -907,11 +1214,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Reinforce New-Ball / Powerplay Fast Bowler Depth",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "High-velocity new-ball strike bowler (69.81 PR) capable of early breakthroughs, steep bounce, and aggressive hard-length bowling in the powerplay.",
+    "clutch_stats": {
+      "legal_balls_clutch": 222,
+      "economy_clutch": 8.08,
+      "wickets_clutch": 21,
+      "true_dot_pct_clutch": 36.94,
+      "bnd_pct_clutch": 16.22
+    }
   },
   {
     "player_id": 6450,
     "player_name": "Mujeeb Ur Rahman",
+    "initials": "MU",
     "discipline": "Bowling",
     "country": "Afghanistan",
     "is_overseas": true,
@@ -933,11 +1249,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Middle-Overs Spinner Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "World-class finger mystery spinner (73.06 TFS) with exceptional dot-ball percentage across Powerplay and Middle phases with varied carrom balls.",
+    "clutch_stats": {
+      "legal_balls_clutch": 158,
+      "economy_clutch": 8.24,
+      "wickets_clutch": 14,
+      "true_dot_pct_clutch": 37.34,
+      "bnd_pct_clutch": 17.09
+    }
   },
   {
     "player_id": 1101,
     "player_name": "George Dockrell",
+    "initials": "GD",
     "discipline": "Bowling",
     "country": "Ireland",
     "is_overseas": true,
@@ -959,11 +1284,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Bowling All-Rounder Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Versatile left-arm orthodox spinner and finisher with 83.05 PR and 85.12 TFS. Provides tactical bowling flexibility, clutch economy, and boundary hitting at #7/8.",
+    "clutch_stats": {
+      "legal_balls_clutch": 59,
+      "economy_clutch": 5.29,
+      "wickets_clutch": 4,
+      "true_dot_pct_clutch": 37.29,
+      "bnd_pct_clutch": 3.39
+    }
   },
   {
     "player_id": 2687,
     "player_name": "Roston Chase",
+    "initials": "RC",
     "discipline": "Bowling",
     "country": "West Indies",
     "is_overseas": true,
@@ -985,11 +1319,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Bowling All-Rounder Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Tall off-spinning all-rounder with 74.42 TFS. Provides miserly middle-overs economy against left-handers, excellent boundary containment, and steady batting stability.",
+    "clutch_stats": {
+      "legal_balls_clutch": 204,
+      "economy_clutch": 8.09,
+      "wickets_clutch": 16,
+      "true_dot_pct_clutch": 32.84,
+      "bnd_pct_clutch": 15.2
+    }
   },
   {
     "player_id": 4658,
     "player_name": "Nasum Ahmed",
+    "initials": "NA",
     "discipline": "Bowling",
     "country": "Bangladesh",
     "is_overseas": true,
@@ -1011,11 +1354,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Middle-Overs Spinner Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Accurate left-arm dart specialist (75.42 TFS) with proven powerplay and middle-overs run suppression in low-scoring thrillers and spin-friendly tracks.",
+    "clutch_stats": {
+      "legal_balls_clutch": 192,
+      "economy_clutch": 7.5,
+      "wickets_clutch": 10,
+      "true_dot_pct_clutch": 36.98,
+      "bnd_pct_clutch": 14.06
+    }
   },
   {
     "player_id": 2490,
     "player_name": "Mohammad Nawaz",
+    "initials": "MN",
     "discipline": "Bowling",
     "country": "Pakistan",
     "is_overseas": true,
@@ -1037,11 +1389,20 @@
     "recommendation_priority": "Strategic Benchmark (BCCI Ineligible)",
     "squad_gap_addressed": "Fill Bowling All-Rounder Void",
     "candidate_category": "Strategic Benchmark (BCCI Ineligible)",
-    "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)"
+    "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)",
+    "scouting_rationale": "BCCI Regulatory Benchmark (Non-Actionable): Experienced all-rounder providing dependable left-arm spin containment and late-order power hitting.",
+    "clutch_stats": {
+      "legal_balls_clutch": 227,
+      "economy_clutch": 8.06,
+      "wickets_clutch": 20,
+      "true_dot_pct_clutch": 28.63,
+      "bnd_pct_clutch": 13.66
+    }
   },
   {
     "player_id": 4219,
     "player_name": "Krunal Pandya",
+    "initials": "KP",
     "discipline": "Bowling",
     "country": "India (Domestic)",
     "is_overseas": false,
@@ -1063,11 +1424,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Bowling All-Rounder Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Astute domestic all-rounder with 77.19 TFS. Provides veteran middle-overs spin squeeze and crucial batting depth without consuming an overseas slot.",
+    "clutch_stats": {
+      "legal_balls_clutch": 472,
+      "economy_clutch": 8.34,
+      "wickets_clutch": 24,
+      "true_dot_pct_clutch": 30.08,
+      "bnd_pct_clutch": 14.83
+    }
   },
   {
     "player_id": 22471,
     "player_name": "Matthew Humphreys",
+    "initials": "MH",
     "discipline": "Bowling",
     "country": "Ireland",
     "is_overseas": true,
@@ -1089,11 +1459,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill All-Phase Bowler Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Young international left-arm spinner with sharp drift and restrictive line-and-length control under high match pressure.",
+    "clutch_stats": {
+      "legal_balls_clutch": 71,
+      "economy_clutch": 6.68,
+      "wickets_clutch": 6,
+      "true_dot_pct_clutch": 33.8,
+      "bnd_pct_clutch": 9.86
+    }
   },
   {
     "player_id": 305,
     "player_name": "Ravichandran Ashwin",
+    "initials": "RA",
     "discipline": "Bowling",
     "country": "India",
     "is_overseas": false,
@@ -1115,11 +1494,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Bowling All-Rounder Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Legendary tactical mastermind with elite carrom ball and variations; controls the tempo of the middle overs with unmatched game awareness.",
+    "clutch_stats": {
+      "legal_balls_clutch": 490,
+      "economy_clutch": 8.57,
+      "wickets_clutch": 24,
+      "true_dot_pct_clutch": 27.55,
+      "bnd_pct_clutch": 14.08
+    }
   },
   {
     "player_id": 7920,
     "player_name": "Nathan Ellis",
+    "initials": "NE",
     "discipline": "Bowling",
     "country": "Australia",
     "is_overseas": true,
@@ -1141,11 +1529,20 @@
     "recommendation_priority": "Medium Priority",
     "squad_gap_addressed": "Fill Death-Overs Specialist Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Renowned back-of-the-hand slower ball and yorker specialist (60.13 RDH, 86.20 TFS) with proven death-overs boundary containment in high-leverage situations.",
+    "clutch_stats": {
+      "legal_balls_clutch": 389,
+      "economy_clutch": 8.82,
+      "wickets_clutch": 26,
+      "true_dot_pct_clutch": 33.16,
+      "bnd_pct_clutch": 17.99
+    }
   },
   {
     "player_id": 7690,
     "player_name": "Saim Ayub",
+    "initials": "SA",
     "discipline": "Bowling",
     "country": "Pakistan",
     "is_overseas": true,
@@ -1167,11 +1564,20 @@
     "recommendation_priority": "Strategic Benchmark (BCCI Ineligible)",
     "squad_gap_addressed": "Fill Middle-Overs Spinner Void",
     "candidate_category": "Strategic Benchmark (BCCI Ineligible)",
-    "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)"
+    "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)",
+    "scouting_rationale": "BCCI Regulatory Benchmark (Non-Actionable): Dynamic top-order aggressor and mystery spinner with rapid hand speed and fearless intent.",
+    "clutch_stats": {
+      "legal_balls_clutch": 170,
+      "economy_clutch": 8.08,
+      "wickets_clutch": 9,
+      "true_dot_pct_clutch": 31.76,
+      "bnd_pct_clutch": 14.12
+    }
   },
   {
     "player_id": 7503,
     "player_name": "Ravi Bishnoi",
+    "initials": "RB",
     "discipline": "Bowling",
     "country": "India",
     "is_overseas": false,
@@ -1193,11 +1599,20 @@
     "recommendation_priority": "Internal Asset (Retention Candidate)",
     "squad_gap_addressed": "Fill Middle-Overs Spinner Void",
     "candidate_category": "Existing RR Player (Internal Asset)",
-    "availability_status": "Existing RR Squad Member (Internal Retention / Roster Core)"
+    "availability_status": "Existing RR Squad Member (Internal Retention / Roster Core)",
+    "scouting_rationale": "RR Internal Cornerstone: Express leg-spinner with rapid arm action and unpickable googly; key middle-overs wicket-taker.",
+    "clutch_stats": {
+      "legal_balls_clutch": 850,
+      "economy_clutch": 8.85,
+      "wickets_clutch": 48,
+      "true_dot_pct_clutch": 32.82,
+      "bnd_pct_clutch": 18.82
+    }
   },
   {
     "player_id": 3276,
     "player_name": "Gudakesh Motie",
+    "initials": "GM",
     "discipline": "Bowling",
     "country": "West Indies",
     "is_overseas": true,
@@ -1219,11 +1634,20 @@
     "recommendation_priority": "Low Priority",
     "squad_gap_addressed": "Fill Middle-Overs Spinner Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Economical left-arm orthodox spinner with tight stump-to-stump accuracy and steady wicket-taking threat through the middle overs.",
+    "clutch_stats": {
+      "legal_balls_clutch": 307,
+      "economy_clutch": 8.11,
+      "wickets_clutch": 18,
+      "true_dot_pct_clutch": 29.64,
+      "bnd_pct_clutch": 13.03
+    }
   },
   {
     "player_id": 4900,
     "player_name": "Wanindu Hasaranga",
+    "initials": "WH",
     "discipline": "Bowling",
     "country": "Sri Lanka",
     "is_overseas": true,
@@ -1245,11 +1669,20 @@
     "recommendation_priority": "Low Priority",
     "squad_gap_addressed": "Fill Bowling All-Rounder Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Elite leg-spin all-rounder with deceptive googly and game-breaking wicket-taking strike rate in high-pressure middle overs.",
+    "clutch_stats": {
+      "legal_balls_clutch": 668,
+      "economy_clutch": 8.51,
+      "wickets_clutch": 42,
+      "true_dot_pct_clutch": 28.44,
+      "bnd_pct_clutch": 15.57
+    }
   },
   {
     "player_id": 8805,
     "player_name": "Ottneil Baartman",
+    "initials": "OB",
     "discipline": "Bowling",
     "country": "South Africa",
     "is_overseas": true,
@@ -1271,11 +1704,20 @@
     "recommendation_priority": "Low Priority",
     "squad_gap_addressed": "Fill Death-Overs Specialist Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "Skilled death-overs specialist with pin-point wide yorkers, heavy slower balls, and calm composure at the back end of the innings.",
+    "clutch_stats": {
+      "legal_balls_clutch": 118,
+      "economy_clutch": 8.75,
+      "wickets_clutch": 10,
+      "true_dot_pct_clutch": 38.14,
+      "bnd_pct_clutch": 19.49
+    }
   },
   {
     "player_id": 2636,
     "player_name": "Adam Zampa",
+    "initials": "AZ",
     "discipline": "Bowling",
     "country": "Australia",
     "is_overseas": true,
@@ -1297,6 +1739,14 @@
     "recommendation_priority": "Low Priority",
     "squad_gap_addressed": "Fill Middle-Overs Spinner Void",
     "candidate_category": "Viable Auction Target",
-    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)"
+    "availability_status": "Eligible for Auction (Conditional on IPL 2027 Registration)",
+    "scouting_rationale": "World-class leg-spin enforcer with sharp turn and drift; consistently breaks crucial middle-overs partnerships.",
+    "clutch_stats": {
+      "legal_balls_clutch": 460,
+      "economy_clutch": 8.7,
+      "wickets_clutch": 36,
+      "true_dot_pct_clutch": 30.0,
+      "bnd_pct_clutch": 17.39
+    }
   }
 ]

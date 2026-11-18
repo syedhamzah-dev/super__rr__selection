@@ -243,5 +243,56 @@ const DataManager = {
     } else {
       return this.data.bowlers.find(b => b.player_id === playerId);
     }
+  },
+
+  /**
+   * Get Authoritative Top 10 Actionable Batting Picks with optional sub-filters
+   */
+  getTop10Batters(filter = "all") {
+    let top10 = [];
+    if (this.data.overview && this.data.overview.top_10_actionable_batters) {
+      top10 = [...this.data.overview.top_10_actionable_batters];
+    } else {
+      top10 = this.filterBatters({ actionableOnly: true, sortKey: "recruitment_decision_score", sortDir: "desc" }).slice(0, 10);
+    }
+
+    if (!filter || filter === "all") return top10;
+    if (filter === "domestic") return top10.filter(p => !p.is_overseas);
+    if (filter === "overseas") return top10.filter(p => p.is_overseas);
+    return top10.filter(p => p.tactical_role === filter);
+  },
+
+  /**
+   * Get Authoritative Top 10 Actionable Bowling Picks with optional sub-filters
+   */
+  getTop10Bowlers(filter = "all") {
+    let top10 = [];
+    if (this.data.overview && this.data.overview.top_10_actionable_bowlers) {
+      top10 = [...this.data.overview.top_10_actionable_bowlers];
+    } else {
+      top10 = this.filterBowlers({ actionableOnly: true, sortKey: "recruitment_decision_score", sortDir: "desc" }).slice(0, 10);
+    }
+
+    if (!filter || filter === "all") return top10;
+    if (filter === "domestic") return top10.filter(p => !p.is_overseas);
+    if (filter === "overseas") return top10.filter(p => p.is_overseas);
+    return top10.filter(p => p.tactical_role === filter);
+  },
+
+  /**
+   * Get Strategic Comparative Benchmarks
+   */
+  getStrategicBenchmarks(discipline = "ALL") {
+    let list = [];
+    if (this.data.overview && this.data.overview.strategic_benchmarks) {
+      list = [...this.data.overview.strategic_benchmarks];
+    } else {
+      list = (this.data.recruitmentMatrix || []).filter(p => p.candidate_category.includes("Benchmark"));
+    }
+
+    if (discipline !== "ALL") {
+      list = list.filter(p => p.discipline === discipline);
+    }
+    return list;
   }
 };

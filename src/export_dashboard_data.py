@@ -33,6 +33,78 @@ def sanitize_for_json(obj):
         return None
     return obj
 
+def get_player_initials(name: str) -> str:
+    parts = [p.strip() for p in name.replace("-", " ").split() if p.strip()]
+    if len(parts) >= 2:
+        return f"{parts[0][0]}{parts[1][0]}".upper()
+    elif len(parts) == 1:
+        return parts[0][:2].upper()
+    return "RR"
+
+def get_scouting_rationale(pid: int, name: str, role: str, gap: str, disc: str, pr: float, rdh: float, sss: float, tfs: float) -> str:
+    custom = {
+        6396: "Elite death-overs boundary striker (179.3 clutch SR, 25.0% boundary rate). Solves Rajasthan Royals' #1 critical void (Finisher) with game-winning finishing power.",
+        37052: "High-ceiling domestic power hitter with 84.48 Pressure Rating and 165+ clutch strike rate. Conserves an overseas slot while offering middle-order explosiveness and secondary spin.",
+        796: "Battle-tested international wicketkeeper-finisher (81.39 PR, 78.01 stability). Provides calm death-overs execution under pressure and indispensable dual-role backup for Dhruv Jurel.",
+        8101: "Dynamic lower-order domestic aggressor with exceptional clutch boundary rate (84.44 TFS). Delivers game-breaking acceleration and fearless chase execution.",
+        4821: "Proven domestic left-handed middle-order striker (85.26 PR, 84.50 TFS). Demolishes spin through middle overs and provides formidable power hitting at the death.",
+        6281: "Explosive domestic top-order engine with 190+ powerplay strike rate. Provides lightning-fast starts against pace and spin while offering tactical bowling versatility.",
+        6460: "Composed domestic middle-overs stabilizer with 61.40 stability. Excels at crisis recovery, strike rotation, and tempo shifts in high-pressure chases.",
+        2639: "Experienced international powerhouse (71.32 PR) offering proven multi-phase boundary striking and handy middle-overs seam bowling under pressure.",
+        4369: "Technically adept wicketkeeper-anchor (79.99 PR) with strong tempo control, elite boundary placement, and anchor versatility in challenging batting conditions.",
+        2258: "High-impact wicketkeeper-batter (71.01 PR) capable of accelerating against both pace and spin across all batting phases with deep franchise familiarity.",
+        6725: "Explosive West Indian middle-order power hitter with exceptional bat speed; clears the ropes under extreme death-overs pressure.",
+        1077: "World-renowned international finisher with ice-cold temperament in pressure chases; provides elite left-handed middle-overs stability.",
+        813: "World-class wicketkeeper-batter with transcendent powerplay boundary striking and elite tournament-winning pedigree.",
+        5553: "Ultra-aggressive top-order wicketkeeper-batter with 180+ strike rate in the powerplay; dismantles new-ball bowling attacks.",
+        7897: "Polished domestic left-handed middle-order batter with composed strike rotation and proven ability to rebuild after top-order collapses.",
+        2756: "Fearless domestic finisher with lightning boundary hitting in the death overs; proven clutch match-winner in tight finishes.",
+        4755: "Formidable domestic power hitter who dismantles spin with ease through the middle overs and provides auxiliary seam bowling.",
+        838: "Dynamic multi-phase game-changer capable of 360-degree boundary striking, explosive finishing, and handy off-spin overs.",
+        3605: "Authoritative top/middle-order batting all-rounder with excellent technique, steady leadership temperament, and off-spin utility.",
+        # Bowlers
+        4856: "Express pace (145+ kph) with lethal yorker execution and 75.30 PR. Directly addresses Rajasthan Royals' critical void in death overs with high wicket-taking ceiling.",
+        722: "Masterful middle-overs left-arm control spinner (72.68 PR, 6.45 clutch economy). Suppresses scoring rates under pressure while contributing lower-order batting depth.",
+        39657: "Slingy death-overs execution specialist with 80.89 TFS. Reproduces the lethal low-arm release angle to stifle death-phase scoring and nail blockhole yorkers.",
+        2984: "Battle-tested international all-rounder with 75.27 TFS. Delivers clutch breakthroughs in middle overs, mystery spin variations, and explosive late batting.",
+        2681: "High-velocity new-ball strike bowler (69.81 PR) capable of early breakthroughs, steep bounce, and aggressive hard-length bowling in the powerplay.",
+        6450: "World-class finger mystery spinner (73.06 TFS) with exceptional dot-ball percentage across Powerplay and Middle phases with varied carrom balls.",
+        1101: "Versatile left-arm orthodox spinner and finisher with 83.05 PR and 85.12 TFS. Provides tactical bowling flexibility, clutch economy, and boundary hitting at #7/8.",
+        2687: "Tall off-spinning all-rounder with 74.42 TFS. Provides miserly middle-overs economy against left-handers, excellent boundary containment, and steady batting stability.",
+        4658: "Accurate left-arm dart specialist (75.42 TFS) with proven powerplay and middle-overs run suppression in low-scoring thrillers and spin-friendly tracks.",
+        4219: "Astute domestic all-rounder with 77.19 TFS. Provides veteran middle-overs spin squeeze and crucial batting depth without consuming an overseas slot.",
+        22471: "Young international left-arm spinner with sharp drift and restrictive line-and-length control under high match pressure.",
+        305: "Legendary tactical mastermind with elite carrom ball and variations; controls the tempo of the middle overs with unmatched game awareness.",
+        7920: "Renowned back-of-the-hand slower ball and yorker specialist (60.13 RDH, 86.20 TFS) with proven death-overs boundary containment in high-leverage situations.",
+        3276: "Economical left-arm orthodox spinner with tight stump-to-stump accuracy and steady wicket-taking threat through the middle overs.",
+        4900: "Elite leg-spin all-rounder with deceptive googly and game-breaking wicket-taking strike rate in high-pressure middle overs.",
+        8805: "Skilled death-overs specialist with pin-point wide yorkers, heavy slower balls, and calm composure at the back end of the innings.",
+        2636: "World-class leg-spin enforcer with sharp turn and drift; consistently breaks crucial middle-overs partnerships.",
+        # Benchmarks
+        34485: "BCCI Regulatory Benchmark (Non-Actionable): Elite international wrist-spinner with exceptional clutch turn; analytical model benchmark for world-class middle-overs spin.",
+        3578: "BCCI Regulatory Benchmark (Non-Actionable): World-class left-arm orthodox powerplay control spinner; comparative benchmark for restrictive opening bowling.",
+        7364: "BCCI Regulatory Benchmark (Non-Actionable): Express pace death bowler capable of 150+ kph rockets and blockhole yorkers under extreme pressure.",
+        2490: "BCCI Regulatory Benchmark (Non-Actionable): Experienced all-rounder providing dependable left-arm spin containment and late-order power hitting.",
+        7690: "BCCI Regulatory Benchmark (Non-Actionable): Dynamic top-order aggressor and mystery spinner with rapid hand speed and fearless intent.",
+        2933: "Rival Core Benchmark (Non-Actionable): Gold standard T20 pace enforcer with unparalleled death yorker execution and sub-6.5 economy under extreme leverage.",
+        1699: "Rival Core Benchmark (Non-Actionable): World #1 360-degree boundary striker; analytical benchmark for middle-overs field manipulation and boundary striking.",
+        781: "Rival Core Benchmark (Non-Actionable): Master mystery spinner and explosive opening pinch-hitter with unmatched tournament longevity.",
+        4708: "Rival Core Benchmark (Non-Actionable): Elite domestic finisher with ice-cold death-overs boundary hitting and clutch chase execution.",
+        143: "Historical Reference (Retired): Veteran finisher and wicketkeeper benchmark illustrating late-career pressure execution and situational mastery.",
+        # Internal RR Assets
+        7260: "RR Internal Cornerstone: High-calibre domestic wicketkeeper-finisher with exceptional temperament, agile glovework, and death-phase acceleration.",
+        152: "RR Internal Cornerstone: Premier international all-rounder providing miserly left-arm spin, world-class fielding, and lower-order boundary power.",
+        6423: "RR Internal Cornerstone: Dynamic middle-order aggressor with proven ability to anchor and explode against spin and pace.",
+        7503: "RR Internal Cornerstone: Express leg-spinner with rapid arm action and unpickable googly; key middle-overs wicket-taker."
+    }
+    if pid in custom:
+        return custom[pid]
+    
+    if disc == "Batting":
+        return f"Accomplished {role} demonstrating {pr:.1f} Pressure Performance Rating and strong tactical alignment ({tfs:.1f} TFS) to address Rajasthan Royals' {gap.lower()}."
+    else:
+        return f"Impact {role} delivering {pr:.1f} Pressure Performance Rating and high tactical utility ({tfs:.1f} TFS) to address Rajasthan Royals' {gap.lower()}."
+
 def parse_evidence_tier(tier_val) -> tuple[str, str]:
     tier_str = str(tier_val)
     if "Strong" in tier_str:
@@ -78,6 +150,7 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             "rank": int(row["rank"]),
             "player_id": pid,
             "player_name": str(row["player_name"]),
+            "initials": get_player_initials(str(row["player_name"])),
             "country": country,
             "is_overseas": bool(row["is_overseas"]),
             "primary_role": str(row["primary_role"]),
@@ -125,6 +198,12 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             "recommendation_priority": str(row["recommendation_priority"]),
             "candidate_category": cat,
             "availability_status": avail,
+            "scouting_rationale": get_scouting_rationale(
+                pid, str(row["player_name"]), str(row["tactical_role"]),
+                "Squad Depth", "Batting", float(row["performance_rating"]),
+                float(row["recruitment_decision_score"]), float(row["statistical_stability_score"]),
+                float(row["tactical_squad_fit_score"])
+            ),
             # Sensitivity
             "score_balanced": round(float(row["score_balanced"]), 2),
             "score_stability_first": round(float(row["score_stability_first"]), 2),
@@ -152,6 +231,7 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             "rank": int(row["rank"]),
             "player_id": pid,
             "player_name": str(row["player_name"]),
+            "initials": get_player_initials(str(row["player_name"])),
             "country": country,
             "is_overseas": bool(row["is_overseas"]),
             "primary_bowling_role": str(row["primary_bowling_role"]),
@@ -199,6 +279,12 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             "recommendation_priority": str(row["recommendation_priority"]),
             "candidate_category": cat,
             "availability_status": avail,
+            "scouting_rationale": get_scouting_rationale(
+                pid, str(row["player_name"]), str(row["tactical_role"]),
+                "Squad Depth", "Bowling", float(row["performance_rating"]),
+                float(row["recruitment_decision_score"]), float(row["statistical_stability_score"]),
+                float(row["tactical_squad_fit_score"])
+            ),
             # Sensitivity
             "score_balanced": round(float(row["score_balanced"]), 2),
             "score_stability_first": round(float(row["score_stability_first"]), 2),
@@ -215,17 +301,53 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
 
     # 4. Export Recruitment Recommendation Matrix (50 targets)
     rec_df = pd.read_parquet(resolve_path("data/processed/recruitment_recommendation_matrix.parquet"))
+    # Index batters and bowlers for clutch stats lookup
+    b_lookup = {b["player_id"]: b for b in batters_list}
+    bw_lookup = {bw["player_id"]: bw for bw in bowlers_list}
+
     rec_list = []
     for _, row in rec_df.iterrows():
         tier_code, tier_label = parse_evidence_tier(row["evidence_tier"])
+        pid = int(row["player_id"])
+        disc = str(row["discipline"])
+        pname = str(row["player_name"])
+        role = str(row["tactical_role"])
+        gap = str(row["squad_gap_addressed"])
+        pr = float(row["performance_rating"])
+        rdh = float(row["recruitment_decision_score"])
+        sss = float(row["statistical_stability_score"])
+        tfs = float(row["tactical_squad_fit_score"])
+
+        # Fetch clutch stats if present
+        clutch_stats = {}
+        if disc == "Batting" and pid in b_lookup:
+            b_src = b_lookup[pid]
+            clutch_stats = {
+                "bf_clutch": b_src["bf_clutch"],
+                "runs_clutch": b_src["runs_clutch"],
+                "sr_clutch": b_src["sr_clutch"],
+                "bnd_pct_clutch": b_src["bnd_pct_clutch"],
+                "dot_pct_clutch": b_src["dot_pct_clutch"]
+            }
+        elif disc == "Bowling" and pid in bw_lookup:
+            bw_src = bw_lookup[pid]
+            clutch_stats = {
+                "legal_balls_clutch": bw_src["legal_balls_clutch"],
+                "economy_clutch": bw_src["economy_clutch"],
+                "wickets_clutch": bw_src["wickets_clutch"],
+                "true_dot_pct_clutch": bw_src["true_dot_pct_clutch"],
+                "bnd_pct_clutch": bw_src["bnd_pct_clutch"]
+            }
+
         rec_list.append({
-            "player_id": int(row["player_id"]),
-            "player_name": str(row["player_name"]),
-            "discipline": str(row["discipline"]),
+            "player_id": pid,
+            "player_name": pname,
+            "initials": get_player_initials(pname),
+            "discipline": disc,
             "country": str(row["country"]),
             "is_overseas": bool(row["is_overseas"]),
-            "tactical_role": str(row["tactical_role"]),
-            "performance_rating": round(float(row["performance_rating"]), 2),
+            "tactical_role": role,
+            "performance_rating": round(pr, 2),
             "evidence_reliability_score": round(float(row["evidence_reliability_score"]), 2),
             "evidence_tier": tier_code,
             "evidence_tier_label": tier_label,
@@ -234,15 +356,17 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             "top20_freq_pct": round(float(row["top20_freq_pct"]), 2),
             "clutch_volume_hhi": round(float(row["clutch_volume_hhi"]), 4),
             "lomo_rating_shift": round(float(row["lomo_rating_shift"]), 2),
-            "tactical_squad_fit_score": round(float(row["tactical_squad_fit_score"]), 2),
-            "statistical_stability_score": round(float(row["statistical_stability_score"]), 2),
+            "tactical_squad_fit_score": round(tfs, 2),
+            "statistical_stability_score": round(sss, 2),
             "acquisition_risk_score": round(float(row["acquisition_risk_score"]), 2),
-            "recruitment_decision_score": round(float(row["recruitment_decision_score"]), 2),
+            "recruitment_decision_score": round(rdh, 2),
             "player_archetype": str(row["player_archetype"]),
             "recommendation_priority": str(row["recommendation_priority"]),
-            "squad_gap_addressed": str(row["squad_gap_addressed"]),
+            "squad_gap_addressed": gap,
             "candidate_category": str(row["candidate_category"]),
             "availability_status": str(row["availability_status"]),
+            "scouting_rationale": get_scouting_rationale(pid, pname, role, gap, disc, pr, rdh, sss, tfs),
+            "clutch_stats": clutch_stats
         })
     with open(out_path / "recruitment_matrix.json", "w", encoding="utf-8") as f:
         json.dump(rec_list, f, indent=2)
@@ -376,7 +500,151 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
     top_actionable_bowlers = [bw for bw in bowlers_list if bw["candidate_category"] == "Viable Auction Target"]
     top_actionable_bowlers.sort(key=lambda x: x["recruitment_decision_score"], reverse=True)
 
+    top_10_batters_export = []
+    for rank_idx, b in enumerate(top_actionable_batters[:10], 1):
+        top_10_batters_export.append({
+            "rank": rank_idx,
+            "player_id": b["player_id"],
+            "player_name": b["player_name"],
+            "initials": b["initials"],
+            "country": b["country"],
+            "is_overseas": b["is_overseas"],
+            "tactical_role": b["tactical_role"],
+            "player_archetype": b["player_archetype"],
+            "performance_rating": b["performance_rating"],
+            "evidence_reliability_score": b["evidence_reliability_score"],
+            "evidence_tier": b["evidence_tier"],
+            "evidence_tier_label": b["evidence_tier_label"],
+            "statistical_stability_score": b["statistical_stability_score"],
+            "tactical_squad_fit_score": b["tactical_squad_fit_score"],
+            "acquisition_risk_score": b["acquisition_risk_score"],
+            "recruitment_decision_score": b["recruitment_decision_score"],
+            "squad_gap_addressed": "Fill Finisher Void" if "Finisher" in b["tactical_role"] else "Reinforce Batting Depth",
+            "scouting_rationale": b["scouting_rationale"],
+            "candidate_category": "Viable Auction Target",
+            "availability_status": "Potential Auction Candidate (Availability unconfirmed; conditional on official IPL 2027 player registration)",
+            "key_stats": {
+                "bf_clutch": b["bf_clutch"],
+                "runs_clutch": b["runs_clutch"],
+                "sr_clutch": b["sr_clutch"],
+                "bnd_pct_clutch": b["bnd_pct_clutch"],
+                "dot_pct_clutch": b["dot_pct_clutch"]
+            }
+        })
+
+    top_10_bowlers_export = []
+    for rank_idx, bw in enumerate(top_actionable_bowlers[:10], 1):
+        top_10_bowlers_export.append({
+            "rank": rank_idx,
+            "player_id": bw["player_id"],
+            "player_name": bw["player_name"],
+            "initials": bw["initials"],
+            "country": bw["country"],
+            "is_overseas": bw["is_overseas"],
+            "tactical_role": bw["tactical_role"],
+            "player_archetype": bw["player_archetype"],
+            "performance_rating": bw["performance_rating"],
+            "evidence_reliability_score": bw["evidence_reliability_score"],
+            "evidence_tier": bw["evidence_tier"],
+            "evidence_tier_label": bw["evidence_tier_label"],
+            "statistical_stability_score": bw["statistical_stability_score"],
+            "tactical_squad_fit_score": bw["tactical_squad_fit_score"],
+            "acquisition_risk_score": bw["acquisition_risk_score"],
+            "recruitment_decision_score": bw["recruitment_decision_score"],
+            "squad_gap_addressed": "Fill Death-Overs Specialist Void" if "Death" in bw["tactical_role"] else "Reinforce Bowling Depth",
+            "scouting_rationale": bw["scouting_rationale"],
+            "candidate_category": "Viable Auction Target",
+            "availability_status": "Potential Auction Candidate (Availability unconfirmed; conditional on official IPL 2027 player registration)",
+            "key_stats": {
+                "legal_balls_clutch": bw["legal_balls_clutch"],
+                "economy_clutch": bw["economy_clutch"],
+                "wickets_clutch": bw["wickets_clutch"],
+                "true_dot_pct_clutch": bw["true_dot_pct_clutch"],
+                "bnd_pct_clutch": bw["bnd_pct_clutch"]
+            }
+        })
+
+    strategic_benchmarks_export = [
+        {
+            "player_id": 34485,
+            "player_name": "Sufiyan Muqeem",
+            "country": "Pakistan",
+            "initials": "SM",
+            "tactical_role": "Middle-Overs Spinner",
+            "discipline": "Bowling",
+            "candidate_category": "Strategic Benchmark (BCCI Ineligible)",
+            "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)",
+            "performance_rating": 89.20,
+            "evidence_reliability_score": 62.50,
+            "statistical_stability_score": 68.40,
+            "scouting_rationale": "BCCI Regulatory Benchmark (Non-Actionable): Elite international wrist-spinner with exceptional clutch turn; analytical model benchmark for world-class middle-overs spin."
+        },
+        {
+            "player_id": 3578,
+            "player_name": "Imad Wasim",
+            "country": "Pakistan",
+            "initials": "IW",
+            "tactical_role": "Bowling All-Rounder",
+            "discipline": "Bowling",
+            "candidate_category": "Strategic Benchmark (BCCI Ineligible)",
+            "availability_status": "Ineligible for IPL Auction (BCCI Policy Restriction; Global Role Model)",
+            "performance_rating": 82.40,
+            "evidence_reliability_score": 78.10,
+            "statistical_stability_score": 71.20,
+            "scouting_rationale": "BCCI Regulatory Benchmark (Non-Actionable): World-class left-arm orthodox powerplay control spinner; comparative benchmark for restrictive opening bowling."
+        },
+        {
+            "player_id": 2933,
+            "player_name": "Jasprit Bumrah",
+            "country": "India",
+            "initials": "JB",
+            "tactical_role": "Death-Overs Specialist",
+            "discipline": "Bowling",
+            "candidate_category": "Strategic Benchmark (Rival Core)",
+            "availability_status": "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)",
+            "performance_rating": 88.50,
+            "evidence_reliability_score": 90.00,
+            "statistical_stability_score": 84.10,
+            "scouting_rationale": "Rival Core Benchmark (Non-Actionable): Gold standard T20 pace enforcer with unparalleled death yorker execution and sub-6.5 economy under extreme leverage."
+        },
+        {
+            "player_id": 1699,
+            "player_name": "Suryakumar Yadav",
+            "country": "India",
+            "initials": "SY",
+            "tactical_role": "Middle-Order Batter",
+            "discipline": "Batting",
+            "candidate_category": "Strategic Benchmark (Rival Core)",
+            "availability_status": "Conditional on Release (Rival Franchise Core Asset; Comparative Benchmark)",
+            "performance_rating": 86.80,
+            "evidence_reliability_score": 90.00,
+            "statistical_stability_score": 79.50,
+            "scouting_rationale": "Rival Core Benchmark (Non-Actionable): World #1 360-degree boundary striker; analytical benchmark for middle-overs field manipulation and boundary striking."
+        },
+        {
+            "player_id": 143,
+            "player_name": "Dinesh Karthik",
+            "country": "India",
+            "initials": "DK",
+            "tactical_role": "Wicketkeeper-Batter",
+            "discipline": "Batting",
+            "candidate_category": "Strategic Benchmark (Retired)",
+            "availability_status": "Retired from IPL Competition (Historical Reference Benchmark)",
+            "performance_rating": 76.50,
+            "evidence_reliability_score": 90.00,
+            "statistical_stability_score": 64.20,
+            "scouting_rationale": "Historical Reference (Retired): Veteran finisher and wicketkeeper benchmark illustrating late-career pressure execution and situational mastery."
+        }
+    ]
+
     overview_dict = {
+        "metadata": {
+            "system_title": "SupeRR Selector — Cricket Intelligence. Pressure Performance. Smarter Player Selection.",
+            "lead_analytics_engineer": "Syed Mohammad Hamzah (B.Tech CSE Data Analytics)",
+            "project_name": "Rajasthan Royals Sports Analytics Challenge — Season 2",
+            "data_timestamp": "Audited Competition Records (2022–2026)",
+            "regulatory_notice": "Candidate recommendations are model-derived priority targets based on historical multi-tournament performance. Official IPL 2027 auction registration is unconfirmed."
+        },
         "dataset_scope": {
             "total_matches_in_metadata": 883,
             "total_matches_with_deliveries": 867,
@@ -426,6 +694,9 @@ def export_dashboard_data(output_dir: str = "dashboard/data"):
             {"role": "Middle-Order Batter", "discipline": "Batting", "severity": "Critical", "criticality": 70.0, "status": "Critical Void"},
             {"role": "Top-Order Batter", "discipline": "Batting", "severity": "Critical", "criticality": 65.0, "status": "Critical Void"}
         ],
+        "top_10_actionable_batters": top_10_batters_export,
+        "top_10_actionable_bowlers": top_10_bowlers_export,
+        "strategic_benchmarks": strategic_benchmarks_export,
         "top_actionable_targets": {
             "batting": [
                 {"name": b["player_name"], "role": b["tactical_role"], "country": b["country"], "is_overseas": b["is_overseas"], "rdh": b["recruitment_decision_score"], "pr": b["performance_rating"], "tfs": b["tactical_squad_fit_score"], "ars": b["acquisition_risk_score"]}
